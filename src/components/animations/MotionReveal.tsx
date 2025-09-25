@@ -8,11 +8,16 @@ export function MotionReveal({
   children,
   direction = "up",
   delay = 0,
+  onAnimationComplete,
+  onViewportEnter,
 }: {
   children: React.ReactNode;
   direction?: Dir;
   delay?: number;
+  onAnimationComplete?: () => void;
+  onViewportEnter?: () => void; // <-- add this
 }) {
+  // <--- this was missing!
   const hidden =
     direction === "up"
       ? { opacity: 0, y: 60 }
@@ -31,6 +36,8 @@ export function MotionReveal({
         damping: 18,
         delay: delay / 1000,
       }}
+      onAnimationComplete={onAnimationComplete}
+      onViewportEnter={onViewportEnter} // <-- pass this
     >
       {children}
     </motion.div>

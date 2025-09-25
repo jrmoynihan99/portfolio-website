@@ -6,7 +6,7 @@ import { SiteNav } from "@/components/layout/SiteNav";
 import { useActiveSection } from "@/hooks/useActiveSection";
 
 // Sections (create these mirroring your current JSX)
-import { Hero } from "@/components/sections/Hero";
+import { Home } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
 import { Skills } from "@/components/sections/Skills";
 import { Experience } from "@/components/sections/Experience";
@@ -19,10 +19,10 @@ export default function HomePage() {
 
   return (
     <div className="relative min-h-screen">
-      <Background />
+      <Background variant="sunset" />
       <SiteNav active={active} />
 
-      <Hero registry={registry} />
+      <Home registry={registry} />
       <About registry={registry} />
       <Skills registry={registry} />
       <Experience registry={registry} />

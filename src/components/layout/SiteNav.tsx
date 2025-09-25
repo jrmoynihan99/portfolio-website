@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export function SiteNav({ active }: { active: string }) {
   const sections = [
-    "hero",
+    "home",
     "about",
     "skills",
     "experience",

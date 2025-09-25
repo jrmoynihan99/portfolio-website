@@ -3,15 +3,12 @@
 
 /* —— Your design tokens (Tailwind v4) —— */
 @theme {
-  /* Base (light) */
   --color-base-50: 248 250 252; /* slate-50 */
   --color-base-100: 241 245 249; /* slate-100 */
   --color-base-900: 15 23 42; /* slate-900 */
-  /* Accents */
   --color-accent-400: 99 102 241; /* indigo-500 */
   --color-accent-500: 79 70 229; /* indigo-600 */
   --color-accent-600: 67 56 202; /* indigo-700 */
-  /* Glass */
   --color-glass-fill: 255 255 255;
   --color-glass-border: 255 255 255;
 }
@@ -27,10 +24,10 @@
   }
 }
 
-/* Page background */
-html,
-body {
-  height: 100%;
+/* Page background — only on <html> */
+html {
+  /* Remove height: 100% to fix double scrollbars! */
+  scroll-behavior: smooth;
   background: radial-gradient(
       1200px 600px at 10% -10%,
       rgba(99, 102, 241, 0.12),
@@ -47,12 +44,15 @@ body {
       transparent
     ),
     rgb(var(--color-base-50));
+}
+
+body {
+  /* Remove height: 100% and min-height! Just inherit from html and stretch as content grows. */
   color: rgb(var(--color-base-900));
 }
 
 /* Utilities */
 .glass {
-  /* bg-glass-fill/60 + blur + subtle border + shadow */
   background-color: rgb(var(--color-glass-fill) / 0.6);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -72,16 +72,11 @@ body {
 
 .section-pad {
   padding-block: 6rem;
-} /* py-24 */
+}
 @media (min-width: 768px) {
   .section-pad {
     padding-block: 8rem;
-  } /* md:py-32 */
-}
-
-/* Smooth anchor scroll */
-html {
-  scroll-behavior: smooth;
+  }
 }
 
 /* Selection color */

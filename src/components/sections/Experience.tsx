@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { MotionParallax } from "@/components/animations/MotionParallax";
 import { MotionReveal } from "@/components/animations/MotionReveal";
 import { Section } from "@/components/ui/Section";
@@ -13,14 +13,32 @@ export function Experience({
 }: {
   registry: React.RefObject<Record<string, HTMLElement | null>>;
 }) {
+  // Track when to animate the underline
+  const [underlineActive, setUnderlineActive] = useState(false);
+
   return (
     <Section
       id="experience"
       registry={registry}
-      className="relative py-32 px-4 z-20"
+      className="relative py-16 md:py-24 px-4 z-20"
     >
       <MotionParallax range={40}>
-        <SectionHeader>Experience</SectionHeader>
+        {/* Animate underline after heading is revealed */}
+        <MotionReveal
+          direction="up"
+          delay={0}
+          onViewportEnter={() => {
+            // Add a small delay for perfect timing, or set to 0 for exactly in sync
+            setTimeout(() => setUnderlineActive(true), 400);
+          }}
+        >
+          <SectionHeader
+            activateUnderline={underlineActive}
+            underlineDelay={80}
+          >
+            Experience
+          </SectionHeader>
+        </MotionReveal>
 
         <div className="space-y-12 max-w-4xl mx-auto">
           {experiences.map((exp, index) => (

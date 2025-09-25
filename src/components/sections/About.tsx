@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { MotionParallax } from "@/components/animations/MotionParallax";
 import { MotionReveal } from "@/components/animations/MotionReveal";
 import { Section } from "@/components/ui/Section";
@@ -11,15 +11,32 @@ export function About({
 }: {
   registry: React.RefObject<Record<string, HTMLElement | null>>;
 }) {
+  const [underlineActive, setUnderlineActive] = useState(false);
+
   return (
     <Section
       id="about"
       registry={registry}
-      className="relative py-32 px-4 z-20"
+      className="relative py-16 md:py-24 px-4 z-20"
     >
       <MotionParallax range={40}>
         <div className="max-w-6xl mx-auto">
-          <SectionHeader>About</SectionHeader>
+          {/* Animate underline in sync with reveal (using onViewportEnter) */}
+          <MotionReveal
+            direction="up"
+            delay={0}
+            onViewportEnter={() => {
+              // Add a small delay for perfect timing, or set to 0 for exactly in sync
+              setTimeout(() => setUnderlineActive(true), 400);
+            }}
+          >
+            <SectionHeader
+              activateUnderline={underlineActive}
+              underlineDelay={0} // The delay is handled above!
+            >
+              About
+            </SectionHeader>
+          </MotionReveal>
 
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <MotionReveal direction="right">

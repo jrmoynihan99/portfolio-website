@@ -18,8 +18,10 @@ export function Section({
 
   useEffect(() => {
     registry.current[id] = ref.current;
+    console.log(`[Section] Registered: ${id}`, ref.current);
     return () => {
       registry.current[id] = null;
+      console.log(`[Section] Unregistered: ${id}`);
     };
   }, [id, registry]);
 

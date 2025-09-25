@@ -12,7 +12,7 @@ export default function Home() {
       <GlassNav />
 
       {/* HERO */}
-      <section id="hero" className="section-pad">
+      <section id="home" className="section-pad">
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid items-center gap-10 md:grid-cols-2">
             <div>

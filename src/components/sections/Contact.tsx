@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { MotionParallax } from "@/components/animations/MotionParallax";
 import { MotionReveal } from "@/components/animations/MotionReveal";
 import { Section } from "@/components/ui/Section";
@@ -11,7 +11,7 @@ export function Contact({
   email = "your.email@example.com",
   linkedin = "https://linkedin.com/in/yourprofile",
   github = "https://github.com/yourusername",
-  footnote = "© 2024 Your Name. Built with Next.js, TypeScript, and Tailwind CSS.",
+  footnote = "© 2025 Jason Moynihan. All rights reserved.",
 }: {
   registry: React.RefObject<Record<string, HTMLElement | null>>;
   email?: string;
@@ -19,14 +19,31 @@ export function Contact({
   github?: string;
   footnote?: string;
 }) {
+  const [underlineActive, setUnderlineActive] = useState(false);
+
   return (
     <Section
       id="contact"
       registry={registry}
-      className="relative py-32 px-4 z-20"
+      className="relative py-16 md:py-24 px-4 z-20"
     >
       <MotionParallax range={35}>
-        <SectionHeader>Let's Connect</SectionHeader>
+        {/* Section header reveal + underline animation */}
+        <MotionReveal
+          direction="up"
+          delay={0}
+          onViewportEnter={() => {
+            // Add a small delay for perfect timing, or set to 0 for exactly in sync
+            setTimeout(() => setUnderlineActive(true), 400);
+          }}
+        >
+          <SectionHeader
+            activateUnderline={underlineActive}
+            underlineDelay={80}
+          >
+            Let's Connect
+          </SectionHeader>
+        </MotionReveal>
 
         <MotionReveal direction="up">
           <div className="max-w-4xl mx-auto text-center">
