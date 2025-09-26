@@ -21,83 +21,131 @@ export function About({
     >
       <MotionParallax range={40}>
         <div className="max-w-6xl mx-auto">
-          {/* Animate underline in sync with reveal (using onViewportEnter) */}
+          {/* Header + underline timing */}
           <MotionReveal
             direction="up"
             delay={0}
-            onViewportEnter={() => {
-              // Add a small delay for perfect timing, or set to 0 for exactly in sync
-              setTimeout(() => setUnderlineActive(true), 400);
-            }}
+            onViewportEnter={() =>
+              setTimeout(() => setUnderlineActive(true), 240)
+            }
           >
             <SectionHeader
               activateUnderline={underlineActive}
-              underlineDelay={0} // The delay is handled above!
+              underlineDelay={80}
             >
               About
             </SectionHeader>
           </MotionReveal>
 
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
+            {/* Left: brief professional summary (no fluff) */}
             <MotionReveal direction="right">
               <div className="space-y-6">
-                <p className="text-lg text-white/70 leading-relaxed font-light">
-                  Computer Science graduate with a unique blend of technical
-                  expertise and entrepreneurial spirit. After three years
-                  developing embedded software for critical medical devices, I
-                  took a leap into entrepreneurship, founding and running a
-                  successful clothing brand.
+                <p className="text-lg text-white/80 leading-relaxed font-light">
+                  I’m a product-minded front-end engineer focused on React/Next
+                  and AI-powered UX. I started my software journey in embedded
+                  medical devices. I then founded and ran a 7 figure clothing
+                  brand with my wife. Now, I'm applying that mix of rigor and
+                  customer empathy along with a passion for intuitive design to
+                  building fast, beautiful user interfaces.
                 </p>
                 <p className="text-lg text-white/70 leading-relaxed font-light">
-                  This journey taught me the importance of user experience,
-                  design, and business strategy. Now, I'm channeling these
-                  insights back into tech, specializing in creating beautiful,
-                  performant React applications with a focus on AI integration
-                  and cutting-edge frontend technologies.
-                </p>
-                <p className="text-lg text-white/70 leading-relaxed font-light">
-                  I believe great software isn't just functional—it should
-                  delight users with thoughtful interactions, smooth
-                  performance, and intuitive design.
+                  Today my work centers on clean architecture, smooth
+                  interaction design, and measurable performance— shipping
+                  interfaces that feel intuitive, solve real problems, and make
+                  users lives better.
                 </p>
               </div>
             </MotionReveal>
 
-            <MotionReveal direction="left" delay={80}>
-              <Card>
-                <div className="space-y-6">
+            {/* Right: single concise facts/availability card */}
+            <MotionReveal direction="left" delay={60}>
+              <Card className="hover:bg-white/10 transition-colors">
+                <div className="space-y-5">
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 bg-green-400 rounded-full" />
-                    <span className="text-white/60 font-medium">
-                      Available for opportunities
+                    <span className="text-white/80 font-medium">
+                      Open to opportunities
                     </span>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
                       <p className="text-xs text-white/40 font-medium uppercase tracking-wider mb-1">
-                        Location
+                        Role
                       </p>
                       <p className="text-white font-light">
-                        Open to Remote / Relocation
+                        AI Frontend / Full-Stack Engineer
                       </p>
                     </div>
                     <div>
                       <p className="text-xs text-white/40 font-medium uppercase tracking-wider mb-1">
-                        Focus Areas
+                        Focus
                       </p>
                       <p className="text-white font-light">
-                        React • AI Integration • UI/UX • Performance
+                        React • Next.js • TypeScript • AI
                       </p>
                     </div>
-                    <div>
-                      <p className="text-xs text-white/40 font-medium uppercase tracking-wider mb-1">
-                        Interests
-                      </p>
-                      <p className="text-white font-light">
-                        Design Systems • WebGL • Creative Coding
-                      </p>
-                    </div>
+                  </div>
+
+                  <div className="pt-1 flex flex-wrap gap-4">
+                    <a
+                      href="#projects"
+                      className="inline-flex items-center gap-2 text-white/80 hover:text-white font-medium group"
+                    >
+                      View Projects
+                      <svg
+                        className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M17 8l4 4m0 0-4 4m4-4H3"
+                        />
+                      </svg>
+                    </a>
+                    <a
+                      href="#experience"
+                      className="inline-flex items-center gap-2 text-white/80 hover:text-white font-medium group"
+                    >
+                      Experience
+                      <svg
+                        className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M17 8l4 4m0 0-4 4m4-4H3"
+                        />
+                      </svg>
+                    </a>
+                    <a
+                      href="#contact"
+                      className="inline-flex items-center gap-2 text-white/80 hover:text-white font-medium group"
+                    >
+                      Contact
+                      <svg
+                        className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M17 8l4 4m0 0-4 4m4-4H3"
+                        />
+                      </svg>
+                    </a>
                   </div>
                 </div>
               </Card>

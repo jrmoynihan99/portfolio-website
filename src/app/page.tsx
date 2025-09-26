@@ -24,9 +24,9 @@ export default function HomePage() {
 
       <Home registry={registry} />
       <About registry={registry} />
+      <Projects registry={registry} />
       <Skills registry={registry} />
       <Experience registry={registry} />
-      <Projects registry={registry} />
       <Contact registry={registry} />
     </div>
   );

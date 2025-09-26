@@ -1,37 +1,158 @@
-export interface ProjectItem {
-  title: string;
-  description: string;
-  tech: string[];
-  link: string;
+// src/data/projects.ts
+
+export type ProjectLinkType = "appstore" | "live" | "github" | "case";
+
+export interface ProjectLink {
+  type: ProjectLinkType;
+  label?: string;
+  href: string;
 }
 
-export const projects: ProjectItem[] = [
+export interface ProjectMedia {
+  type: "video" | "image";
+  src: string;
+  poster?: string;
+  alt?: string;
+}
+
+export interface Project {
+  title: string;
+  slug?: string;
+  summary: string;
+  tech: string[];
+  media: ProjectMedia[]; // Changed to array for gallery
+  links?: ProjectLink[];
+  featured?: boolean; // Added back for layout control
+}
+
+export const projects: Project[] = [
   {
-    title: "AI-Powered Chat Interface",
-    description:
-      "Modern chat app with AI integration, real-time responses, markdown rendering, and a sleek dark mode interface.",
-    tech: ["React", "Next.js", "OpenAI API", "TypeScript", "Tailwind CSS"],
-    link: "#",
+    title: "Anchor",
+    slug: "anchor",
+    summary:
+      "Anonymous accountability app with push notifications, moderation tools, and scheduled AI-generated daily content.",
+    tech: ["React Native", "Expo", "Firebase", "Cloud Functions", "OpenAI"],
+    media: [
+      {
+        type: "image",
+        src: "/media/anchor-1.jpg",
+        alt: "Anchor app home screen",
+      },
+      {
+        type: "image",
+        src: "/media/anchor-2.jpg",
+        alt: "Anchor app goal setting",
+      },
+      {
+        type: "image",
+        src: "/media/anchor-3.jpg",
+        alt: "Anchor app notifications",
+      },
+      {
+        type: "video",
+        src: "/media/anchor-demo.mp4",
+        poster: "/media/anchor-poster.jpg",
+        alt: "Anchor app demo video",
+      },
+    ],
+    links: [
+      {
+        type: "appstore",
+        label: "App Store",
+        href: "https://apps.apple.com/your-app",
+      },
+      { type: "case", label: "Case Study", href: "/projects/anchor" },
+    ],
+    featured: true,
+  },
+  {
+    title: "AI Meal Planner",
+    slug: "meal-planner",
+    summary:
+      "Guided planning with streaming GPT + structured JSON and an optimizer to hit calorie/protein targets.",
+    tech: ["Next.js", "TypeScript", "Zustand", "GLPK.js", "OpenAI"],
+    media: [
+      {
+        type: "image",
+        src: "/media/meal-planner-1.jpg",
+        alt: "AI Meal Planner dashboard",
+      },
+      {
+        type: "image",
+        src: "/media/meal-planner-2.jpg",
+        alt: "Meal optimization interface",
+      },
+      {
+        type: "image",
+        src: "/media/meal-planner-3.jpg",
+        alt: "Recipe suggestions",
+      },
+    ],
+    links: [
+      { type: "live", label: "Live Demo", href: "https://your-demo-url.com" },
+      {
+        type: "github",
+        label: "GitHub",
+        href: "https://github.com/you/meal-planner",
+      },
+      { type: "case", label: "Case Study", href: "/projects/meal-planner" },
+    ],
   },
   {
     title: "Interactive Data Visualization",
-    description:
-      "Dynamic data visualization tools with D3.js and React, featuring smooth animations and responsive design.",
-    tech: ["React", "D3.js", "TypeScript", "REST APIs"],
-    link: "#",
-  },
-  {
-    title: "E-Commerce Platform",
-    description:
-      "Full-featured e-commerce solution with cart functionality, payment integration, and an admin dashboard.",
-    tech: ["Next.js", "Stripe", "PostgreSQL", "Prisma", "Tailwind CSS"],
-    link: "#",
+    slug: "viz",
+    summary:
+      "Dynamic D3 + React visualizations with smooth animations and responsive layouts for complex datasets.",
+    tech: ["React", "D3.js", "TypeScript", "WebGL", "REST APIs"],
+    media: [
+      {
+        type: "image",
+        src: "/media/viz-1.jpg",
+        alt: "Data visualization dashboard",
+      },
+      {
+        type: "image",
+        src: "/media/viz-2.jpg",
+        alt: "Interactive chart controls",
+      },
+      {
+        type: "video",
+        src: "/media/viz-demo.mp4",
+        poster: "/media/viz-poster.jpg",
+        alt: "Data visualization demo",
+      },
+    ],
+    links: [
+      { type: "live", href: "https://viz-demo.com" },
+      { type: "github", href: "https://github.com/you/viz" },
+    ],
   },
   {
     title: "Real-time Collaboration Tool",
-    description:
-      "Collaborative workspace with WebSocket integration, multi-user live cursors, and real-time updates.",
-    tech: ["React", "Socket.io", "Node.js", "MongoDB"],
-    link: "#",
+    slug: "collab",
+    summary:
+      "Multi-user live cursors, presence indicators, and synced state over WebSockets with conflict resolution.",
+    tech: ["React", "Socket.io", "Node.js", "MongoDB", "Redis"],
+    media: [
+      {
+        type: "image",
+        src: "/media/collab-1.jpg",
+        alt: "Realtime collaboration interface",
+      },
+      {
+        type: "image",
+        src: "/media/collab-2.jpg",
+        alt: "User presence indicators",
+      },
+      {
+        type: "image",
+        src: "/media/collab-3.jpg",
+        alt: "Live cursor tracking",
+      },
+    ],
+    links: [
+      { type: "live", href: "https://collab-demo.com" },
+      { type: "github", href: "https://github.com/you/collab" },
+    ],
   },
 ];

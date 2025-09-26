@@ -6,9 +6,9 @@ export function SiteNav({ active }: { active: string }) {
   const sections = [
     "home",
     "about",
+    "projects",
     "skills",
     "experience",
-    "projects",
     "contact",
   ];
   const [open, setOpen] = React.useState(false);
