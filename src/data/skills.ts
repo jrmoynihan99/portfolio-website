@@ -73,6 +73,7 @@ export const skillGroups: SkillGroup[] = [
         icon: "llms / neural nets",
       },
       { name: "C/C++", level: "Expert", icon: "c/c++ (embedded)" },
+      { name: "Python", level: "Expert", icon: "python" },
       { name: "Agile/Scrum", level: "Proficient" }, // conceptual -> fallback
       { name: "CI/CD", level: "Expert" }, // conceptual -> fallback
       { name: "Shopify", level: "Expert", icon: "shopify" },

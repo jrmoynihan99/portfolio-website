@@ -53,6 +53,7 @@ const ALIASES: Record<string, string> = {
   openai: "logos:openai-icon",
   "llms / neural nets": "logos:openai-icon",
   "c/c++ (embedded)": "devicon:cplusplus",
+  python: "logos:python",
   shopify: "logos:shopify",
   stripe: "logos:stripe",
   "prompt engineering": "logos:openai-icon", // OpenAI for prompt engineering

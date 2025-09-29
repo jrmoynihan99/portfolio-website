@@ -2,13 +2,14 @@
 import React, { useEffect, useRef, useState } from "react";
 
 export function HeadshotProgress({
-  src = "/assets/headshot.png",
+  src,
   alt = "Jason Moynihan",
   size = 160,
   gap = 8,
   border = 2,
   duration = 350,
   trigger = false,
+  image,
 }: {
   src?: string;
   alt?: string;
@@ -17,6 +18,7 @@ export function HeadshotProgress({
   border?: number;
   duration?: number;
   trigger?: boolean;
+  image?: string;
 }) {
   const [progress, setProgress] = useState(0);
   const [showSweep, setShowSweep] = useState(false);
@@ -25,6 +27,10 @@ export function HeadshotProgress({
   const ringRadius = (size - border) / 2;
   const circumference = 2 * Math.PI * ringRadius;
   const imgSize = size - 2 * gap - border;
+
+  // Determine image source based on props
+  const imageSrc =
+    src || (image ? `/assets/${image}.png` : "/assets/headshot.png");
 
   // Animate sweep when trigger becomes true
   useEffect(() => {
@@ -76,6 +82,7 @@ export function HeadshotProgress({
           }}
         />
       </svg>
+
       {/* 2. ANIMATED sweep ring */}
       <svg
         className="absolute top-0 left-0 z-20 pointer-events-none"
@@ -101,6 +108,7 @@ export function HeadshotProgress({
           }}
         />
       </svg>
+
       {/* --- Headshot Image --- */}
       <div
         className="absolute top-0 left-0 z-30 flex items-center justify-center rounded-full"
@@ -110,7 +118,7 @@ export function HeadshotProgress({
         }}
       >
         <img
-          src={src}
+          src={imageSrc}
           alt={alt}
           draggable={false}
           className="rounded-full object-cover"

@@ -2,15 +2,13 @@
 import * as React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-export function SiteNav({ active }: { active: string }) {
-  const sections = [
-    "home",
-    "about",
-    "projects",
-    "skills",
-    "experience",
-    "contact",
-  ];
+export function SiteNav({
+  active,
+  sections,
+}: {
+  active: string;
+  sections: { id: string; label: string }[];
+}) {
   const [open, setOpen] = React.useState(false);
 
   // Lock body scroll while menu is open
@@ -46,18 +44,18 @@ export function SiteNav({ active }: { active: string }) {
       <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden md:block">
         <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl px-6 py-3 lg:px-8 lg:py-4 shadow-2xl">
           <ul className="flex gap-4 lg:gap-8 text-sm font-medium">
-            {sections.map((s) => (
-              <li key={s}>
+            {sections.map((section) => (
+              <li key={section.id}>
                 <a
-                  href={`#${s}`}
-                  onClick={onLinkClick(s)}
-                  className={`relative py-2 px-3 lg:px-4 rounded-lg transition-all duration-300 ${
-                    active === s
+                  href={`#${section.id}`}
+                  onClick={onLinkClick(section.id)}
+                  className={`relative py-2 px-3 lg:px-4 rounded-lg transition-all duration-300 whitespace-nowrap ${
+                    active === section.id
                       ? "text-white bg-white/10"
                       : "text-white/60 hover:text-white hover:bg-white/5"
                   }`}
                 >
-                  {s[0].toUpperCase() + s.slice(1)}
+                  {section.label}
                 </a>
               </li>
             ))}
@@ -85,7 +83,7 @@ export function SiteNav({ active }: { active: string }) {
         <motion.div
           className="relative bg-white/10 backdrop-blur-xl border border-white/15 shadow-xl overflow-hidden"
           animate={{
-            width: open ? 280 : 44,
+            width: open ? 240 : 44,
             height: open ? "auto" : 44,
             borderRadius: open ? 16 : 22,
           }}
@@ -138,7 +136,7 @@ export function SiteNav({ active }: { active: string }) {
                   exit={{ opacity: 0 }}
                   transition={{
                     duration: 0.2,
-                    delay: 0.1, // Slight delay so container starts morphing first
+                    delay: 0.1,
                   }}
                 >
                   {/* Header */}
@@ -170,12 +168,11 @@ export function SiteNav({ active }: { active: string }) {
 
                   {/* Menu items */}
                   <ul className="space-y-1">
-                    {sections.map((s, index) => {
-                      const label = s[0].toUpperCase() + s.slice(1);
-                      const isActive = active === s;
+                    {sections.map((section, index) => {
+                      const isActive = active === section.id;
                       return (
                         <motion.li
-                          key={s}
+                          key={section.id}
                           initial={{ opacity: 0, x: 20 }}
                           animate={{ opacity: 1, x: 0 }}
                           exit={{ opacity: 0, x: 20 }}
@@ -188,17 +185,19 @@ export function SiteNav({ active }: { active: string }) {
                           }}
                         >
                           <a
-                            href={`#${s}`}
-                            onClick={onLinkClick(s)}
+                            href={`#${section.id}`}
+                            onClick={onLinkClick(section.id)}
                             className={`flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 ${
                               isActive
                                 ? "bg-white/15 text-white"
                                 : "bg-white/5 text-white/80 hover:bg-white/10 hover:text-white"
                             }`}
                           >
-                            <span className="text-sm font-medium">{label}</span>
+                            <span className="text-sm font-medium whitespace-nowrap">
+                              {section.label}
+                            </span>
                             <span
-                              className={`h-1.5 w-1.5 rounded-full transition-colors ${
+                              className={`h-1.5 w-1.5 rounded-full transition-colors ml-2 ${
                                 isActive ? "bg-white" : "bg-white/30"
                               }`}
                             />

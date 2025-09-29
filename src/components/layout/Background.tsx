@@ -9,29 +9,18 @@ type BackgroundVariant =
   | "midnight"
   | "sunset"
   | "ocean"
-  | "purple";
+  | "purple"
+  | "anchor";
 
 const backgroundVariants = {
-  // Original dark slate
   slate: "bg-gradient-to-br from-slate-950 via-gray-900 to-slate-950",
-
-  // Dark warm beige/brown tones
   beige: "bg-gradient-to-br from-stone-950 via-neutral-900 to-slate-950",
-
-  // Muted forest (more gray-green)
   forest: "bg-gradient-to-br from-slate-900 via-gray-800 to-stone-900",
-
-  // Muted midnight (subtle blue-gray)
   midnight: "bg-gradient-to-br from-slate-950 via-blue-950/50 to-gray-950",
-
-  // Muted sunset (subtle warm grays)
   sunset: "bg-gradient-to-br from-stone-900 via-slate-800 to-gray-900",
-
-  // Muted ocean (gray-blue)
   ocean: "bg-gradient-to-br from-slate-900 via-gray-800 to-slate-950",
-
-  // Muted purple (gray-purple)
   purple: "bg-gradient-to-br from-slate-900 via-gray-900 to-stone-950",
+  anchor: "bg-gradient-to-br from-[#4A3D35] via-[#A48374] to-[#4A3D35]",
 };
 
 export function Background({
@@ -56,18 +45,7 @@ export function Background({
       </div>
 
       {/* Mouse glow w/ trailing tail */}
-      {/*<MouseGlowLayer /> */}
+      {/* <MouseGlowLayer /> */}
     </>
   );
 }
-
-// Usage examples in comments:
-/*
-<Background variant="slate" />    // Original dark slate
-<Background variant="beige" />    // Dark warm stone/neutral tones
-<Background variant="forest" />   // Muted gray-green
-<Background variant="midnight" /> // Subtle blue-gray
-<Background variant="sunset" />   // Muted warm grays
-<Background variant="ocean" />    // Muted gray-blue
-<Background variant="purple" />   // Subtle gray-purple
-*/

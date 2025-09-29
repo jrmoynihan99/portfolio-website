@@ -189,8 +189,8 @@ export function Contact({
             </Card>
 
             <p className="text-xl text-white/70 font-light max-w-2xl mx-auto mb-12 text-center">
-              I'm actively seeking new frontend development opportunities. Let's
-              discuss how I can contribute to your team.
+              I'm actively seeking new frontend/full-stack development
+              opportunities!
             </p>
 
             <div className="grid md:grid-cols-2 gap-12 items-start">

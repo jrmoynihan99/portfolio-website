@@ -30,8 +30,15 @@ export const projects: Project[] = [
     title: "Anchor",
     slug: "anchor",
     summary:
-      "Anonymous accountability app with push notifications, moderation tools, and scheduled AI-generated daily content.",
-    tech: ["React Native", "Expo", "Firebase", "Cloud Functions", "OpenAI"],
+      "Anonymous, non-profit accountability app with push notifications, moderation tools, and scheduled AI-generated daily content.",
+    tech: [
+      "React",
+      "Expo",
+      "Firebase",
+      "Cloud Functions",
+      "AI Integration",
+      "Typescript",
+    ],
     media: [
       {
         type: "image",

@@ -5,13 +5,23 @@ import { Background } from "@/components/layout/Background";
 import { SiteNav } from "@/components/layout/SiteNav";
 import { useActiveSection } from "@/hooks/useActiveSection";
 
-// Sections (create these mirroring your current JSX)
+// Sections
 import { Home } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
 import { Skills } from "@/components/sections/Skills";
 import { Experience } from "@/components/sections/Experience";
 import { Projects } from "@/components/sections/Projects";
 import { Contact } from "@/components/sections/Contact";
+
+// Define portfolio sections
+const portfolioSections = [
+  { id: "home", label: "Home" },
+  { id: "about", label: "About" },
+  { id: "projects", label: "Projects" },
+  { id: "skills", label: "Skills" },
+  { id: "experience", label: "Experience" },
+  { id: "contact", label: "Contact" },
+];
 
 export default function HomePage() {
   const registry = useRef<Record<string, HTMLElement | null>>({});
@@ -20,7 +30,7 @@ export default function HomePage() {
   return (
     <div className="relative min-h-screen">
       <Background variant="sunset" />
-      <SiteNav active={active} />
+      <SiteNav active={active} sections={portfolioSections} />
 
       <Home registry={registry} />
       <About registry={registry} />
