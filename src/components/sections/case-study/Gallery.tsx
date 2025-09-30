@@ -49,7 +49,7 @@ export function Gallery({
           </MotionReveal>
 
           {/* Intro */}
-          <MotionReveal direction="up" delay={100}>
+          <MotionReveal direction="up">
             <div className="mb-12">
               <p className="text-lg md:text-xl text-white/70 leading-relaxed">
                 {galleryData.intro}
@@ -60,7 +60,7 @@ export function Gallery({
           {/* Gallery Grid */}
           <div className="grid md:grid-cols-2 gap-8">
             {galleryData.media.map((item, index) => (
-              <MotionReveal key={index} direction="up" delay={180 + index * 60}>
+              <MotionReveal key={index} direction="up">
                 <Card padding="p-0" className="overflow-hidden group">
                   {/* Media Container - Placeholder for now */}
                   <div className="relative aspect-video bg-gradient-to-br from-white/5 to-white/10 flex items-center justify-center">

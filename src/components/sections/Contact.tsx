@@ -133,7 +133,7 @@ export function Contact({
           </SectionHeader>
         </MotionReveal>
 
-        <MotionReveal direction="up" delay={100}>
+        <MotionReveal direction="up">
           <div className="max-w-4xl mx-auto">
             {/* Contact Info Card */}
             <Card padding="p-4" className="mb-12 max-w-md mx-auto mt-6">

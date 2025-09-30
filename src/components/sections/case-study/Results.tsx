@@ -49,41 +49,18 @@ export function Results({
           </MotionReveal>
 
           {/* Intro */}
-          <MotionReveal direction="up" delay={100}>
+          <MotionReveal direction="up">
             <div className="mb-16">
-              <p className="text-lg md:text-xl text-white/70 leading-relaxed">
+              <p className="text-lg md:text-xl text-white/70 leading-relaxed text-center">
                 {resultsData.intro}
               </p>
-            </div>
-          </MotionReveal>
-
-          {/* Metrics Grid */}
-          <MotionReveal direction="up" delay={180}>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-              {resultsData.metrics.map((metric, index) => (
-                <Card
-                  key={index}
-                  padding="p-6 md:p-8"
-                  className="text-center group hover:scale-105 transition-transform"
-                >
-                  <div className="text-4xl md:text-5xl font-light text-white mb-2">
-                    {metric.value}
-                  </div>
-                  <div className="text-white/90 font-medium mb-2">
-                    {metric.label}
-                  </div>
-                  <div className="text-sm text-white/50">
-                    {metric.description}
-                  </div>
-                </Card>
-              ))}
             </div>
           </MotionReveal>
 
           {/* Outcomes */}
           <div className="space-y-8">
             {resultsData.outcomes.map((outcome, index) => (
-              <MotionReveal key={index} direction="up" delay={260 + index * 80}>
+              <MotionReveal key={index} direction="up">
                 <Card padding="p-8 md:p-10">
                   <h3 className="text-2xl md:text-3xl text-white font-light mb-6">
                     {outcome.title}

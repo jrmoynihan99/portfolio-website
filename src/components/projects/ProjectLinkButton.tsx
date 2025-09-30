@@ -45,7 +45,7 @@ export function ProjectLinkButton({
     <Button
       as="a"
       href={link.href}
-      variant="outline"
+      variant={link.type === "case" ? "primary" : "outline"}
       target={link.type !== "case" ? "_blank" : undefined}
       rel={link.type !== "case" ? "noopener noreferrer" : undefined}
       className={`gap-2 group ${

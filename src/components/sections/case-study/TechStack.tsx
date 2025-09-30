@@ -18,6 +18,7 @@ export function TechStack({
 
   // Fetch project data based on slug
   const caseStudy = caseStudies[slug];
+
   if (!caseStudy) {
     return null;
   }
@@ -49,7 +50,7 @@ export function TechStack({
           </MotionReveal>
 
           {/* Intro */}
-          <MotionReveal direction="up" delay={100}>
+          <MotionReveal direction="up" delay={0}>
             <div className="mb-12">
               <p className="text-lg md:text-xl text-white/70 leading-relaxed text-center">
                 {techStackData.intro}
@@ -59,28 +60,32 @@ export function TechStack({
 
           {/* Tech Categories */}
           <div className="grid md:grid-cols-2 gap-8">
-            {techStackData.categories.map((category, index) => (
-              <MotionReveal key={index} direction="up" delay={180 + index * 80}>
-                <Card padding="p-8">
-                  {/* Category Title */}
-                  <h3 className="text-xl md:text-2xl text-white/90 font-medium mb-6">
-                    {category.title}
-                  </h3>
+            {techStackData.categories.map((category, index) => {
+              // Calculate column (0 = left, 1 = right)
+              const col = index % 2;
 
-                  {/* Technologies List */}
-                  <div className="flex flex-wrap gap-3">
-                    {category.technologies.map((tech, idx) => (
-                      <div
-                        key={idx}
-                        className="px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/80 font-medium text-sm hover:bg-white/10 hover:border-white/20 transition-all cursor-default"
-                      >
-                        {tech}
-                      </div>
-                    ))}
-                  </div>
-                </Card>
-              </MotionReveal>
-            ))}
+              return (
+                <MotionReveal key={index} direction="up" delay={col * 80}>
+                  <Card padding="p-8">
+                    {/* Category Title */}
+                    <h3 className="text-xl md:text-2xl text-white/90 font-medium mb-6">
+                      {category.title}
+                    </h3>
+                    {/* Technologies List */}
+                    <div className="flex flex-wrap gap-3">
+                      {category.technologies.map((tech, idx) => (
+                        <div
+                          key={idx}
+                          className="px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/80 font-medium text-sm hover:bg-white/10 hover:border-white/20 transition-all cursor-default"
+                        >
+                          {tech}
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                </MotionReveal>
+              );
+            })}
           </div>
         </div>
       </MotionParallax>

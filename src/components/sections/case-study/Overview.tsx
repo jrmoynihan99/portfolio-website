@@ -77,7 +77,7 @@ export function Overview({
             </SectionHeader>
           </MotionReveal>
           {/* Two-Column Layout: Content Left, Media Right */}
-          <MotionReveal direction="up" delay={100}>
+          <MotionReveal direction="up">
             <div className="flex flex-col lg:flex-row gap-12 mb-16 lg:items-start">
               {/* Left Column: Description + Goals */}
               <div ref={leftColumnRef} className="space-y-12 flex-1">

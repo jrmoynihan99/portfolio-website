@@ -18,7 +18,7 @@ import { Gallery } from "@/components/sections/case-study/Gallery";
 
 // Define case study sections for navigation
 const caseStudySections = [
-  { id: "hero", label: "Anchor" },
+  { id: "hero", label: "Home" },
   { id: "overview", label: "Overview" },
   { id: "problem-solution", label: "Problems & Solutions" },
   { id: "features", label: "Features" },
@@ -39,8 +39,8 @@ export default function CaseStudyPage({
   const { slug } = React.use(params);
 
   return (
-    <div className="relative min-h-screen">
-      <Background variant="anchor" />
+    <div className="relative min-h-screen ">
+      <Background variant={slug} />
       <BackButton href="/#projects" />
       <SiteNav active={active} sections={caseStudySections} />
 

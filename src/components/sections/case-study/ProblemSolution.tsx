@@ -16,6 +16,7 @@ export function ProblemSolution({
   slug: string;
 }) {
   const [underlineActive, setUnderlineActive] = useState(false);
+
   const caseStudy = caseStudies[slug];
 
   if (!caseStudy) {
@@ -56,7 +57,7 @@ export function ProblemSolution({
                 className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-4 lg:gap-6 lg:items-stretch"
               >
                 {/* Problem Card */}
-                <MotionReveal direction="up" delay={100 + index * 80}>
+                <MotionReveal direction="up" delay={0}>
                   <Card padding="p-8" className="h-full flex items-center">
                     <div className="w-full">
                       <div className="flex items-start gap-4 mb-4">
@@ -76,7 +77,7 @@ export function ProblemSolution({
 
                 {/* Arrow - visible only on large screens */}
                 <div className="hidden lg:flex items-center justify-center px-4">
-                  <MotionReveal direction="up" delay={140 + index * 80}>
+                  <MotionReveal direction="up" delay={40}>
                     <svg
                       width="40"
                       height="40"
@@ -97,7 +98,7 @@ export function ProblemSolution({
                 </div>
 
                 {/* Solution Card */}
-                <MotionReveal direction="up" delay={180 + index * 80}>
+                <MotionReveal direction="up" delay={80}>
                   <Card padding="p-8" className="h-full bg-white/[0.07]">
                     <div className="flex items-start gap-4 mb-4">
                       <div className="shrink-0 w-10 h-10 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400 font-medium">

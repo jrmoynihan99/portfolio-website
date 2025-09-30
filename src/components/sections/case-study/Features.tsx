@@ -52,7 +52,7 @@ export function Features({
           </MotionReveal>
 
           {/* Intro */}
-          <MotionReveal direction="up" delay={100}>
+          <MotionReveal direction="up" delay={60}>
             <div className="mb-12">
               <p className="text-lg md:text-xl text-white/70 leading-relaxed">
                 {featuresData.intro}
@@ -65,6 +65,8 @@ export function Features({
             {featuresData.features.map((feature, index) => {
               // Calculate which row this item is in (0-indexed)
               const row = Math.floor(index / 2);
+              // Calculate column (0 = left, 1 = right)
+              const col = index % 2;
               // Even rows (0, 2, 4...) have media on right, odd rows (1, 3, 5...) on left
               const mediaOnRight = row % 2 === 0;
 
@@ -74,11 +76,7 @@ export function Features({
               ] as React.ComponentType<{ className?: string }>;
 
               return (
-                <MotionReveal
-                  key={index}
-                  direction="up"
-                  delay={180 + index * 60}
-                >
+                <MotionReveal key={index} direction="up" delay={col * 80}>
                   <div
                     className={clsx(
                       "flex flex-col h-full group",

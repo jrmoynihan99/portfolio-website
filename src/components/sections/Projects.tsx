@@ -48,7 +48,7 @@ export function Projects({
           {/* Featured project layout */}
           <div className="max-w-7xl mx-auto mb-16">
             {featured.map((project, i) => (
-              <MotionReveal key={project.title} direction="up" delay={100}>
+              <MotionReveal key={project.title} direction="up" delay={0}>
                 <FeaturedProjectCard project={project} />
               </MotionReveal>
             ))}
@@ -57,15 +57,20 @@ export function Projects({
           {/* Regular projects grid */}
           {regular.length > 0 && (
             <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-6">
-              {regular.map((project, i) => (
-                <MotionReveal
-                  key={project.title}
-                  direction="up"
-                  delay={150 + i * 50}
-                >
-                  <RegularProjectCard project={project} />
-                </MotionReveal>
-              ))}
+              {regular.map((project, i) => {
+                // Calculate column position (0 = left, 1 = middle, 2 = right)
+                const col = i % 3;
+
+                return (
+                  <MotionReveal
+                    key={project.title}
+                    direction="up"
+                    delay={col * 50}
+                  >
+                    <RegularProjectCard project={project} />
+                  </MotionReveal>
+                );
+              })}
             </div>
           )}
         </div>

@@ -12,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="overflow-x-hidden scroll-smooth">
+    <html lang="en" className="overflow-x-hidden scroll-smooth scrollbar-thin">
       <body className="min-h-[100svh] overflow-x-hidden antialiased selection:bg-accent-500/20 selection:text-accent-600">
         {children}
       </body>

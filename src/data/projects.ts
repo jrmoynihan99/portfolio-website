@@ -63,18 +63,18 @@ export const projects: Project[] = [
       },
     ],
     links: [
+      { type: "case", label: "Case Study", href: "/projects/anchor" },
       {
         type: "appstore",
         label: "App Store",
         href: "https://apps.apple.com/your-app",
       },
-      { type: "case", label: "Case Study", href: "/projects/anchor" },
     ],
     featured: true,
   },
   {
-    title: "AI Meal Planner",
-    slug: "meal-planner",
+    title: "Dialed - AI Meal Planner",
+    slug: "dialed",
     summary:
       "Guided planning with streaming GPT + structured JSON and an optimizer to hit calorie/protein targets.",
     tech: ["Next.js", "TypeScript", "Zustand", "GLPK.js", "OpenAI"],
@@ -102,7 +102,7 @@ export const projects: Project[] = [
         label: "GitHub",
         href: "https://github.com/you/meal-planner",
       },
-      { type: "case", label: "Case Study", href: "/projects/meal-planner" },
+      { type: "case", label: "Case Study", href: "/projects/dialed" },
     ],
   },
   {

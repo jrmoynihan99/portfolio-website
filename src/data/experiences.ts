@@ -8,9 +8,9 @@ export interface ExperienceItem {
 
 export const experiences: ExperienceItem[] = [
   {
-    title: "Founder & Lead Developer",
+    title: "Founder & Solo Developer",
     company: "Anchor – Nonprofit Mobile App",
-    period: "2024 – Present",
+    period: "2025 – Present",
     description:
       "Built and launched a nonprofit accountability app helping young men overcome pornography addiction. Available free on the App Store, with daily AI-generated content, streak tracking, and anonymous community features.",
     highlights: [

@@ -123,7 +123,7 @@ export function Skills({
             {skillGroups.map((group, gi) => (
               <div key={group.title}>
                 {/* Subheader */}
-                <MotionReveal direction="up" delay={80}>
+                <MotionReveal direction="up" delay={0}>
                   <div className="mb-6 flex items-center justify-between">
                     <h3 className="text-xl md:text-2xl text-white/90 font-medium tracking-tight">
                       {group.title}
@@ -133,7 +133,7 @@ export function Skills({
                 </MotionReveal>
 
                 {/* Single MotionReveal for entire grid instead of individual cards */}
-                <MotionReveal direction="up" delay={gi * 120 + 160}>
+                <MotionReveal direction="up" delay={0}>
                   <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     {group.items.map((skill, i) => (
                       <div
@@ -141,7 +141,7 @@ export function Skills({
                         className="skill-card-container"
                         style={{
                           // CSS animation delay for staggered reveal
-                          animationDelay: `${i * 80}ms`,
+                          animationDelay: `${i * 50}ms`,
                         }}
                       >
                         <SkillCard skill={skill} groupTitle={group.title} />
@@ -162,7 +162,6 @@ export function Skills({
           transform: translateY(20px);
           animation: skillCardFadeIn 0.6s ease-out forwards;
         }
-
         @keyframes skillCardFadeIn {
           to {
             opacity: 1;

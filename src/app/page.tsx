@@ -28,7 +28,7 @@ export default function HomePage() {
   const active = useActiveSection(registry);
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen ">
       <Background variant="sunset" />
       <SiteNav active={active} sections={portfolioSections} />
 
