@@ -20,7 +20,7 @@ import { Gallery } from "@/components/sections/case-study/Gallery";
 const caseStudySections = [
   { id: "hero", label: "Anchor" },
   { id: "overview", label: "Overview" },
-  { id: "problem-solution", label: "Solutions" },
+  { id: "problem-solution", label: "Problems & Solutions" },
   { id: "features", label: "Features" },
   { id: "tech", label: "Tech Stack" },
   { id: "technical-challenges", label: "Technical Challenges" },

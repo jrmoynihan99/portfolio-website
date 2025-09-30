@@ -87,7 +87,7 @@ export function Features({
                     )}
                   >
                     {/* Media Section - Separate from card */}
-                    <div className="w-full sm:w-2/5 flex-shrink-0 relative overflow-hidden bg-white/5 rounded-3xl">
+                    <div className="w-full sm:w-2/5 flex-shrink-0 relative overflow-hidden bg-white/5 rounded-3xl shadow-2xl">
                       {feature.media ? (
                         feature.media.type === "image" ? (
                           <img

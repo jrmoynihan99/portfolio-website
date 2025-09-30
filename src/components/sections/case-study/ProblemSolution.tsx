@@ -5,6 +5,7 @@ import { MotionReveal } from "@/components/animations/MotionReveal";
 import { Section } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Card } from "@/components/ui/Card";
+import { Tag } from "@/components/ui/Tag";
 import { caseStudies } from "@/data/case-studies";
 
 export function ProblemSolution({
@@ -113,12 +114,7 @@ export function ProblemSolution({
                     {pair.solution.tech && (
                       <div className="flex flex-wrap gap-2 mt-4">
                         {pair.solution.tech.map((tech, idx) => (
-                          <span
-                            key={idx}
-                            className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-white/70 font-medium"
-                          >
-                            {tech}
-                          </span>
+                          <Tag key={idx}>{tech}</Tag>
                         ))}
                       </div>
                     )}

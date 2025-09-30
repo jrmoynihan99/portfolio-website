@@ -1,33 +1,134 @@
 "use client";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import clsx from "clsx";
 import { MotionParallax } from "@/components/animations/MotionParallax";
 import { MotionReveal } from "@/components/animations/MotionReveal";
 import { Section } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Card } from "@/components/ui/Card";
+import { Tag } from "@/components/ui/Tag";
 import { caseStudies } from "@/data/case-studies";
+import { Copy, ChevronDown, ChevronUp, Maximize2 } from "lucide-react";
+
+type Registry = React.RefObject<Record<string, HTMLElement | null>>;
+
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      onClick={async () => {
+        await navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1200);
+      }}
+      className="inline-flex items-center gap-2 rounded-lg border border-white/10 px-2 py-1 text-xs text-white/70 hover:bg-white/5"
+      aria-label="Copy snippet"
+    >
+      <Copy className="h-3.5 w-3.5" />
+      {copied ? "Copied" : "Copy"}
+    </button>
+  );
+}
+
+function MetricBadge({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl bg-white/5 px-3 py-1.5 text-xs text-white/80">
+      <span className="font-semibold text-white">{value}</span>
+      <span className="ml-2 text-white/50">{label}</span>
+    </div>
+  );
+}
+
+function MediaLightbox({
+  src,
+  alt,
+  type,
+  open,
+  onClose,
+}: {
+  src: string;
+  alt?: string;
+  type: "image" | "video";
+  open: boolean;
+  onClose: () => void;
+}) {
+  if (!open) return null;
+  return (
+    <div
+      className="fixed inset-0 z-[200] bg-black/80 flex items-center justify-center p-4"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div
+        className="relative max-w-5xl w-full"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {type === "image" ? (
+          <img src={src} alt={alt} className="w-full h-auto rounded-2xl" />
+        ) : (
+          <video src={src} controls className="w-full rounded-2xl" />
+        )}
+        <button
+          onClick={onClose}
+          className="absolute -top-10 right-0 text-white/80 text-sm hover:text-white"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function CodePeek({
+  language,
+  snippet,
+  caption,
+}: {
+  language: string;
+  snippet: string;
+  caption?: string;
+}) {
+  return (
+    <div className="mt-4 rounded-2xl border border-white/10 bg-black/40">
+      <div className="flex items-center justify-between px-3 py-2">
+        <span className="text-xs uppercase tracking-wider text-white/50">
+          {language}
+        </span>
+        <CopyButton text={snippet} />
+      </div>
+      <pre className="overflow-x-auto px-3 pb-3 text-[12.5px] leading-relaxed text-white/80">
+        <code>{snippet}</code>
+      </pre>
+      {caption && (
+        <div className="border-t border-white/10 px-3 py-2 text-xs text-white/50">
+          {caption}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function TechnicalChallenges({
   registry,
   slug,
 }: {
-  registry: React.RefObject<Record<string, HTMLElement | null>>;
+  registry: Registry;
   slug: string;
 }) {
   const [underlineActive, setUnderlineActive] = useState(false);
+  const [expanded, setExpanded] = useState<number | null>(null);
+  const [lightbox, setLightbox] = useState<{
+    src: string;
+    alt?: string;
+    type: "image" | "video";
+  } | null>(null);
 
-  // Fetch project data based on slug
-  const caseStudy = caseStudies[slug];
+  const cs = caseStudies[slug];
+  const data = cs?.technicalChallenges;
+  const items = useMemo(() => data?.challenges ?? [], [data]);
 
-  if (!caseStudy) {
-    return null;
-  }
-
-  const challengesData = caseStudy.technicalChallenges;
-
-  if (!challengesData) {
-    return null;
-  }
+  if (!cs || !data) return null;
 
   return (
     <Section
@@ -36,8 +137,7 @@ export function TechnicalChallenges({
       className="relative py-16 md:py-24 px-4 z-20"
     >
       <MotionParallax range={30}>
-        <div className="max-w-5xl mx-auto">
-          {/* Section Header */}
+        <div className="mx-auto max-w-5xl">
           <MotionReveal
             direction="up"
             delay={0}
@@ -52,74 +152,245 @@ export function TechnicalChallenges({
               Technical Challenges
             </SectionHeader>
           </MotionReveal>
+          {data.intro && (
+            <MotionReveal direction="up" delay={80}>
+              <p className="mb-8 text-white/70 text-center">{data.intro}</p>
+            </MotionReveal>
+          )}
+          <div className="space-y-6">
+            {items.map((c, i) => {
+              const isOpen = expanded === i;
+              const hasLegacy = !c.context && (c.problem || c.solution);
+              const hasMedia = !!c.media;
+              const hasCode = !!c.code;
 
-          {/* Intro */}
-          <MotionReveal direction="up" delay={100}>
-            <div className="mb-12">
-              <p className="text-lg md:text-xl text-white/70 leading-relaxed">
-                {challengesData.intro}
-              </p>
-            </div>
-          </MotionReveal>
-
-          {/* Challenges List */}
-          <div className="space-y-8">
-            {challengesData.challenges.map((challenge, index) => (
-              <MotionReveal key={index} direction="up" delay={180 + index * 80}>
-                <Card padding="p-6 md:p-8" className="group">
-                  <div className="space-y-4">
-                    {/* Challenge Title */}
-                    <div className="flex items-start gap-4">
-                      <div className="shrink-0 w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white/60 font-medium text-sm group-hover:bg-white/20 transition-colors">
-                        {index + 1}
+              return (
+                <MotionReveal key={i} direction="up" delay={80 + i * 40}>
+                  <Card
+                    padding="p-5 md:p-7"
+                    className={clsx(
+                      "group transition-all",
+                      isOpen ? "bg-white/[0.06]" : "hover:bg-white/[0.04]"
+                    )}
+                  >
+                    {/* Header */}
+                    <button
+                      className="flex w-full items-start gap-4 text-left"
+                      onClick={() => setExpanded(isOpen ? null : i)}
+                      aria-expanded={isOpen}
+                      aria-controls={`challenge-${i}`}
+                    >
+                      <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/10 text-sm font-medium text-white/70 group-hover:bg-white/20">
+                        {i + 1}
                       </div>
-                      <h3 className="text-xl md:text-2xl text-white font-medium pt-0.5">
-                        {challenge.title}
-                      </h3>
-                    </div>
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between gap-4">
+                          <h3 className="text-xl md:text-2xl font-medium text-white">
+                            {c.title}
+                          </h3>
+                          <div className="mt-1">
+                            {isOpen ? (
+                              <ChevronUp className="h-5 w-5 text-white/60" />
+                            ) : (
+                              <ChevronDown className="h-5 w-5 text-white/60" />
+                            )}
+                          </div>
+                        </div>
+                        {/* Metrics badges */}
+                        {c.impact?.length ? (
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {c.impact.map((m, idx) => (
+                              <MetricBadge
+                                key={idx}
+                                label={m.label}
+                                value={m.value}
+                              />
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    </button>
+                    {/* Collapsible content */}
+                    <div
+                      id={`challenge-${i}`}
+                      className={clsx(
+                        "grid overflow-hidden transition-[grid-template-rows,opacity] duration-300",
+                        isOpen
+                          ? "grid-rows-[1fr] opacity-100"
+                          : "grid-rows-[0fr] opacity-0"
+                      )}
+                    >
+                      <div className="min-h-0">
+                        <div className="mt-5 space-y-5">
+                          {/* Context or Problem (legacy) */}
+                          {(c.context || c.problem) && (
+                            <div>
+                              <h4 className="text-xs uppercase tracking-wider text-white/50 mb-2">
+                                {c.context
+                                  ? "Context / Constraints"
+                                  : "Challenge"}
+                              </h4>
+                              <p className="text-white/70">
+                                {c.context ?? c.problem}
+                              </p>
+                            </div>
+                          )}
+                          {/* Approach or Solution (legacy) */}
+                          {(c.approach?.length || c.solution) && (
+                            <div>
+                              <h4 className="text-xs uppercase tracking-wider text-white/50 mb-2">
+                                {c.approach?.length ? "Approach" : "Solution"}
+                              </h4>
+                              {c.approach?.length ? (
+                                <ul className="list-disc pl-5 text-white/80 space-y-1.5">
+                                  {c.approach.map((a, idx) => (
+                                    <li key={idx}>{a}</li>
+                                  ))}
+                                </ul>
+                              ) : (
+                                <p className="text-white/80">{c.solution}</p>
+                              )}
+                            </div>
+                          )}
+                          {/* Trade-offs */}
+                          {c.tradeoffs?.length ? (
+                            <div>
+                              <h4 className="text-xs uppercase tracking-wider text-white/50 mb-2">
+                                Trade-offs
+                              </h4>
+                              <ul className="list-disc pl-5 text-white/70 space-y-1.5">
+                                {c.tradeoffs.map((t, idx) => (
+                                  <li key={idx}>{t}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          ) : null}
+                          {/* Outcome */}
+                          {(c.outcome || c.impact?.length) && (
+                            <div>
+                              <h4 className="text-xs uppercase tracking-wider text-white/50 mb-2">
+                                Outcome
+                              </h4>
+                              {c.outcome && (
+                                <p className="text-white/80">{c.outcome}</p>
+                              )}
+                            </div>
+                          )}
+                          {/* Technologies */}
+                          {c.technologies?.length ? (
+                            <div>
+                              <h4 className="text-xs uppercase tracking-wider text-white/50 mb-2">
+                                Technologies
+                              </h4>
+                              <div className="flex flex-wrap gap-2">
+                                {c.technologies.map((t, idx) => (
+                                  <Tag key={idx}>{t}</Tag>
+                                ))}
+                              </div>
+                            </div>
+                          ) : null}
 
-                    {/* Problem */}
-                    <div className="ml-12">
-                      <h4 className="text-sm font-medium text-white/50 uppercase tracking-wider mb-2">
-                        Challenge
-                      </h4>
-                      <p className="text-white/70 leading-relaxed">
-                        {challenge.problem}
-                      </p>
-                    </div>
-
-                    {/* Solution */}
-                    <div className="ml-12">
-                      <h4 className="text-sm font-medium text-white/50 uppercase tracking-wider mb-2">
-                        Solution
-                      </h4>
-                      <p className="text-white/80 leading-relaxed">
-                        {challenge.solution}
-                      </p>
-                    </div>
-
-                    {/* Technologies Used (if any) */}
-                    {challenge.technologies && (
-                      <div className="ml-12">
-                        <div className="flex flex-wrap gap-2 mt-3">
-                          {challenge.technologies.map((tech, techIndex) => (
-                            <span
-                              key={techIndex}
-                              className="px-3 py-1 text-xs font-medium text-white/70 bg-white/10 rounded-full"
+                          {/* Media + Code - Side by side with 30/70 split */}
+                          {(hasMedia || hasCode) && (
+                            <div
+                              className={clsx(
+                                "grid gap-4",
+                                hasMedia && hasCode
+                                  ? "md:grid-cols-[3fr_7fr]"
+                                  : hasMedia
+                                  ? "md:grid-cols-1 max-w-md"
+                                  : "md:grid-cols-1"
+                              )}
                             >
-                              {tech}
-                            </span>
-                          ))}
+                              {/* Media */}
+                              {hasMedia && (
+                                <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+                                  {c.media!.type === "image" ? (
+                                    <img
+                                      src={c.media!.src}
+                                      alt={c.media!.alt || c.title}
+                                      className="h-48 w-full object-cover"
+                                    />
+                                  ) : (
+                                    <video
+                                      src={c.media!.src}
+                                      autoPlay
+                                      loop
+                                      muted
+                                      playsInline
+                                      className="h-48 w-full object-cover"
+                                    />
+                                  )}
+                                  <button
+                                    onClick={() =>
+                                      setLightbox({
+                                        src: c.media!.src,
+                                        alt: c.media!.alt,
+                                        type: c.media!.type,
+                                      })
+                                    }
+                                    className="absolute right-2 top-2 inline-flex items-center gap-2 rounded-lg bg-black/50 px-2 py-1 text-xs text-white hover:bg-black/60"
+                                  >
+                                    <Maximize2 className="h-3.5 w-3.5" />
+                                    View
+                                  </button>
+                                </div>
+                              )}
+
+                              {/* Code */}
+                              {hasCode && (
+                                <CodePeek
+                                  language={c.code!.language.toUpperCase()}
+                                  snippet={c.code!.snippet}
+                                  caption={c.code!.caption}
+                                />
+                              )}
+                            </div>
+                          )}
+
+                          {/* Links */}
+                          {c.links?.length ? (
+                            <div className="pt-1">
+                              <div className="flex flex-wrap gap-3">
+                                {c.links.map((l, idx) => (
+                                  <a
+                                    key={idx}
+                                    href={l.href}
+                                    target="_blank"
+                                    className="text-sm text-blue-300 hover:text-blue-200 underline underline-offset-4"
+                                  >
+                                    {l.label}
+                                  </a>
+                                ))}
+                              </div>
+                            </div>
+                          ) : null}
+                          {/* Legacy fallback note if only problem/solution exist */}
+                          {hasLegacy && !c.context && !c.approach && (
+                            <div className="text-xs text-white/40">
+                              (Rendered in legacy mode — add{" "}
+                              <code>context/approach/impact</code> for the full
+                              deep-dive UI.)
+                            </div>
+                          )}
                         </div>
                       </div>
-                    )}
-                  </div>
-                </Card>
-              </MotionReveal>
-            ))}
+                    </div>
+                  </Card>
+                </MotionReveal>
+              );
+            })}
           </div>
         </div>
       </MotionParallax>
+      {/* Lightbox */}
+      <MediaLightbox
+        open={!!lightbox}
+        onClose={() => setLightbox(null)}
+        src={lightbox?.src || ""}
+        alt={lightbox?.alt}
+        type={lightbox?.type || "image"}
+      />
     </Section>
   );
 }

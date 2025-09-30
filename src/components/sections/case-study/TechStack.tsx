@@ -51,7 +51,7 @@ export function TechStack({
           {/* Intro */}
           <MotionReveal direction="up" delay={100}>
             <div className="mb-12">
-              <p className="text-lg md:text-xl text-white/70 leading-relaxed">
+              <p className="text-lg md:text-xl text-white/70 leading-relaxed text-center">
                 {techStackData.intro}
               </p>
             </div>
