@@ -29,6 +29,8 @@ export interface CaseStudyProblemSolutionData {
       title: string;
       description: string;
       tech?: string[];
+      featureLink?: string; // Or specific anchor like "#feature-anonymity"
+      implementationLink?: string;
     };
   }>;
 }
@@ -162,6 +164,8 @@ export const caseStudies: Record<string, CaseStudy> = {
               "Anonymous Auth",
               "Real-time Database",
             ],
+            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
+            implementationLink: "#technical-challenges",
           },
         },
         {
@@ -175,6 +179,8 @@ export const caseStudies: Record<string, CaseStudy> = {
             description:
               "Implemented comprehensive content moderation using OpenAI that screens interactions before delivery. Filters harmful content, trolling, and inappropriate responses to protect users when they're most vulnerable.",
             tech: ["OpenAI API", "Approval UX", "Real-time Moderation"],
+            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
+            implementationLink: "#technical-challenges",
           },
         },
         {
@@ -192,6 +198,7 @@ export const caseStudies: Record<string, CaseStudy> = {
               "Anonymous Threaded Messaging",
               "Opt-In Chat Permissions",
             ],
+            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
           },
         },
         {
@@ -205,6 +212,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             description:
               "Added streak tracking, and built scheduled Cloud Functions that generate personalized daily Bible verses and prayers using OpenAI. Provides consistent daily value to encourage regular app usage and spiritual engagement.",
             tech: ["Scheduled Functions", "OpenAI API", "Cron Jobs"],
+            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
           },
         },
       ],
@@ -690,6 +698,8 @@ export const moderateAndPost = onCall(async (req) => {
             description:
               "A structured ingredient questionnaire feeds GPT to generate a curated set of realistic meals. Users approve/decline cards before anything becomes part of the plan.",
             tech: ["Next.js", "OpenAI API", "Zustand"],
+            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
+            implementationLink: "#technical-challenges",
           },
         },
         {
@@ -703,6 +713,8 @@ export const moderateAndPost = onCall(async (req) => {
             description:
               "Converted a Pyomo prototype to TypeScript with GLPK.js. The solver assigns portions for each meal to precisely hit daily targets while respecting fixed vs scalable ingredients.",
             tech: ["TypeScript", "GLPK.js", "Linear Programming"],
+            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
+            implementationLink: "#technical-challenges",
           },
         },
         {
@@ -716,6 +728,8 @@ export const moderateAndPost = onCall(async (req) => {
             description:
               "Once a meal is portioned in a position (e.g., lunch), its ingredients/amounts are locked and reused across unique days, preserving consistency.",
             tech: ["Zustand store", "Solver constraints"],
+            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
+            implementationLink: "#technical-challenges",
           },
         },
         {
@@ -729,6 +743,8 @@ export const moderateAndPost = onCall(async (req) => {
             description:
               "A drag-and-drop grid (15-minute snapping) for easy meal timing and reordering. Mobile/desktop UX tuned for speed.",
             tech: ["@dnd-kit", "Framer Motion", "Tailwind"],
+            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
+            implementationLink: "#technical-challenges",
           },
         },
       ],

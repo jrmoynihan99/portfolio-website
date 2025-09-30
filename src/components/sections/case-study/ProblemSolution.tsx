@@ -16,7 +16,6 @@ export function ProblemSolution({
   slug: string;
 }) {
   const [underlineActive, setUnderlineActive] = useState(false);
-
   const caseStudy = caseStudies[slug];
 
   if (!caseStudy) {
@@ -111,12 +110,62 @@ export function ProblemSolution({
                     <p className="text-white/70 leading-relaxed mb-4">
                       {pair.solution.description}
                     </p>
+
                     {/* Technical highlights */}
                     {pair.solution.tech && (
                       <div className="flex flex-wrap gap-2 mt-4">
                         {pair.solution.tech.map((tech, idx) => (
                           <Tag key={idx}>{tech}</Tag>
                         ))}
+                      </div>
+                    )}
+
+                    {/* Links */}
+                    {(pair.solution.featureLink ||
+                      pair.solution.implementationLink) && (
+                      <div className="flex flex-wrap gap-4 mt-6">
+                        {pair.solution.featureLink && (
+                          <a
+                            href={pair.solution.featureLink}
+                            className="inline-flex items-center gap-2 text-white/80 hover:text-white font-medium group"
+                          >
+                            View Feature
+                            <svg
+                              className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={1.5}
+                                d="M17 8l4 4m0 0-4 4m4-4H3"
+                              />
+                            </svg>
+                          </a>
+                        )}
+                        {pair.solution.implementationLink && (
+                          <a
+                            href={pair.solution.implementationLink}
+                            className="inline-flex items-center gap-2 text-white/80 hover:text-white font-medium group"
+                          >
+                            View Implementation
+                            <svg
+                              className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={1.5}
+                                d="M17 8l4 4m0 0-4 4m4-4H3"
+                              />
+                            </svg>
+                          </a>
+                        )}
                       </div>
                     )}
                   </Card>
