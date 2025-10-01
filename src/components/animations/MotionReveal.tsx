@@ -29,7 +29,7 @@ export function MotionReveal({
     <motion.div
       initial={hidden}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: true, amount: 0.25 }}
       transition={{
         type: "spring",
         stiffness: 80,

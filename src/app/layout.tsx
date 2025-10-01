@@ -12,8 +12,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="overflow-x-hidden scroll-smooth scrollbar-thin">
-      <body className="min-h-[100svh] overflow-x-hidden antialiased selection:bg-accent-500/20 selection:text-accent-600">
+    <html lang="en">
+      <body className="min-h-[100svh] antialiased selection:bg-accent-500/20 selection:text-accent-600 scrollbar-thin">
         {children}
       </body>
     </html>

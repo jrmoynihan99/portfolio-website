@@ -6,7 +6,7 @@ export type BackgroundVariant =
   | "slate"
   | "beige"
   | "forest"
-  | "midnight"
+  | "dialed"
   | "sunset"
   | "ocean"
   | "purple"
@@ -16,7 +16,7 @@ const backgroundVariants = {
   slate: "bg-gradient-to-br from-slate-950 via-gray-900 to-slate-950",
   beige: "bg-gradient-to-br from-stone-950 via-neutral-900 to-slate-950",
   forest: "bg-gradient-to-br from-slate-900 via-gray-800 to-stone-900",
-  midnight: "bg-gradient-to-br from-slate-950 via-blue-950/50 to-gray-950",
+  dialed: "bg-gradient-to-br from-slate-950 via-blue-950/50 to-gray-950",
   sunset: "bg-gradient-to-br from-stone-900 via-slate-800 to-gray-900",
   ocean: "bg-gradient-to-br from-slate-900 via-gray-800 to-slate-950",
   purple: "bg-gradient-to-br from-slate-900 via-gray-900 to-stone-950",

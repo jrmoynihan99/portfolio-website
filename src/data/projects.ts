@@ -102,7 +102,11 @@ export const projects: Project[] = [
     ],
     links: [
       { type: "case", label: "Case Study", href: "/projects/dialed" },
-      { type: "live", label: "Demo", href: "https://your-demo-url.com" },
+      {
+        type: "live",
+        label: "Demo",
+        href: "https://meal-planner-ai-app.vercel.app/",
+      },
     ],
   },
   {

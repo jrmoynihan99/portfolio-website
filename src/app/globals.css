@@ -24,10 +24,11 @@
   }
 }
 
-/* Page background — only on <html> */
+/* Page background — on <html> */
 html {
-  /* Remove height: 100% to fix double scrollbars! */
   scroll-behavior: smooth;
+  height: 100vh; /* Change from 100% to 100vh */
+  overflow: hidden; /* Prevent HTML from scrolling */
   background: radial-gradient(
       1200px 600px at 10% -10%,
       rgba(99, 102, 241, 0.12),
@@ -47,8 +48,31 @@ html {
 }
 
 body {
-  /* Remove height: 100% and min-height! Just inherit from html and stretch as content grows. */
   color: rgb(var(--color-base-900));
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* Custom scrollbar on body */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+}
+
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
 }
 
 /* Utilities */
@@ -81,7 +105,7 @@ body {
   }
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar utility class for other scrollable containers */
 .scrollbar-thin {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;

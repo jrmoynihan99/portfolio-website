@@ -685,7 +685,7 @@ export const moderateAndPost = onCall(async (req) => {
         {
           type: "demo",
           label: "View Demo Site",
-          url: "https://your-site.com/dialed",
+          url: "https://meal-planner-ai-app.vercel.app/",
         },
         {
           type: "github",
