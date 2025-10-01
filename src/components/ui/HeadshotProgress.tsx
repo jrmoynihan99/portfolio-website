@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 export function HeadshotProgress({
   src,
@@ -45,12 +46,10 @@ export function HeadshotProgress({
         setProgress(pct);
         if (pct === 1) {
           clearInterval(intervalRef.current!);
-          // **DON'T hide sweep after it's done**
         }
       }, 16);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trigger]);
+  }, [trigger, duration]);
 
   return (
     <div
@@ -60,7 +59,7 @@ export function HeadshotProgress({
         height: size,
       }}
     >
-      {/* 1. STATIC faint base ring (white/20) */}
+      {/* 1. STATIC faint base ring */}
       <svg
         className="absolute top-0 left-0 z-10 pointer-events-none"
         width={size}
@@ -109,7 +108,7 @@ export function HeadshotProgress({
         />
       </svg>
 
-      {/* --- Headshot Image --- */}
+      {/* Headshot Image - Using Next.js Image */}
       <div
         className="absolute top-0 left-0 z-30 flex items-center justify-center rounded-full"
         style={{
@@ -117,21 +116,25 @@ export function HeadshotProgress({
           height: size,
         }}
       >
-        <img
-          src={imageSrc}
-          alt={alt}
-          draggable={false}
-          className="rounded-full object-cover"
+        <div
+          className="relative rounded-full overflow-hidden"
           style={{
             width: imgSize,
             height: imgSize,
-            borderRadius: "9999px",
             border: "2px solid rgba(255,255,255,0.14)",
             boxShadow: "0 2px 8px 0 rgba(0,0,0,0.18)",
-            userSelect: "none",
-            pointerEvents: "none",
           }}
-        />
+        >
+          <Image
+            src={imageSrc}
+            alt={alt}
+            fill
+            sizes={`${imgSize}px`}
+            className="object-cover select-none pointer-events-none"
+            draggable={false}
+            priority={trigger} // Load immediately if trigger is true (hero section)
+          />
+        </div>
       </div>
     </div>
   );

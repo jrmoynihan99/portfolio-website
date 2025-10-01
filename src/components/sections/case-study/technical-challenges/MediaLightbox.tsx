@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface MediaLightboxProps {
   src: string;
   alt?: string;
@@ -27,7 +29,16 @@ export function MediaLightbox({
         onClick={(e) => e.stopPropagation()}
       >
         {type === "image" ? (
-          <img src={src} alt={alt} className="w-full h-auto rounded-2xl" />
+          <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
+            <Image
+              src={src}
+              alt={alt || "Lightbox image"}
+              fill
+              sizes="(max-width: 1280px) 100vw, 1280px"
+              className="rounded-2xl object-contain"
+              quality={90}
+            />
+          </div>
         ) : (
           <video src={src} controls className="w-full rounded-2xl" />
         )}

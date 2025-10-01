@@ -127,6 +127,20 @@ export function ProblemSolution({
                         {pair.solution.featureLink && (
                           <a
                             href={pair.solution.featureLink}
+                            onClick={(e) => {
+                              e.preventDefault();
+
+                              const hash = pair.solution.featureLink!;
+                              const isSameHash = window.location.hash === hash;
+
+                              if (isSameHash) {
+                                window.dispatchEvent(
+                                  new HashChangeEvent("hashchange")
+                                );
+                              } else {
+                                window.location.hash = hash;
+                              }
+                            }}
                             className="inline-flex items-center gap-2 text-white/80 hover:text-white font-medium group"
                           >
                             View Feature
@@ -148,6 +162,23 @@ export function ProblemSolution({
                         {pair.solution.implementationLink && (
                           <a
                             href={pair.solution.implementationLink}
+                            onClick={(e) => {
+                              e.preventDefault(); // Always prevent default
+
+                              const hash = pair.solution.implementationLink!;
+                              const isSameHash = window.location.hash === hash;
+
+                              // Manually trigger the hash change
+                              if (isSameHash) {
+                                // Force a re-trigger by dispatching hashchange event
+                                window.dispatchEvent(
+                                  new HashChangeEvent("hashchange")
+                                );
+                              } else {
+                                // Set the hash normally
+                                window.location.hash = hash;
+                              }
+                            }}
                             className="inline-flex items-center gap-2 text-white/80 hover:text-white font-medium group"
                           >
                             View Implementation

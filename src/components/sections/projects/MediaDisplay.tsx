@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import type { ProjectMedia } from "@/data/projects";
+import Image from "next/image";
 
 export function MediaDisplay({ media }: { media: ProjectMedia }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -43,10 +44,12 @@ export function MediaDisplay({ media }: { media: ProjectMedia }) {
   }
 
   return (
-    <img
+    <Image
       src={media.src}
       alt={media.alt || ""}
-      className="h-full w-full object-cover"
+      fill
+      sizes="(max-width: 768px) 100vw, 50vw"
+      className="object-cover"
     />
   );
 }

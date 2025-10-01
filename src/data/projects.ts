@@ -69,6 +69,11 @@ export const projects: Project[] = [
         label: "App Store",
         href: "https://apps.apple.com/your-app",
       },
+      {
+        type: "github",
+        label: "GitHub",
+        href: "https://github.com/you/meal-planner",
+      },
     ],
     featured: true,
   },
@@ -96,50 +101,16 @@ export const projects: Project[] = [
       },
     ],
     links: [
-      { type: "live", label: "Live Demo", href: "https://your-demo-url.com" },
-      {
-        type: "github",
-        label: "GitHub",
-        href: "https://github.com/you/meal-planner",
-      },
       { type: "case", label: "Case Study", href: "/projects/dialed" },
+      { type: "live", label: "Demo", href: "https://your-demo-url.com" },
     ],
   },
   {
-    title: "Interactive Data Visualization",
-    slug: "viz",
+    title: "LiqGlass Component Library",
+    slug: "liqglass",
     summary:
-      "Dynamic D3 + React visualizations with smooth animations and responsive layouts for complex datasets.",
-    tech: ["React", "D3.js", "TypeScript", "WebGL", "REST APIs"],
-    media: [
-      {
-        type: "image",
-        src: "/media/viz-1.jpg",
-        alt: "Data visualization dashboard",
-      },
-      {
-        type: "image",
-        src: "/media/viz-2.jpg",
-        alt: "Interactive chart controls",
-      },
-      {
-        type: "video",
-        src: "/media/viz-demo.mp4",
-        poster: "/media/viz-poster.jpg",
-        alt: "Data visualization demo",
-      },
-    ],
-    links: [
-      { type: "live", href: "https://viz-demo.com" },
-      { type: "github", href: "https://github.com/you/viz" },
-    ],
-  },
-  {
-    title: "Real-time Collaboration Tool",
-    slug: "collab",
-    summary:
-      "Multi-user live cursors, presence indicators, and synced state over WebSockets with conflict resolution.",
-    tech: ["React", "Socket.io", "Node.js", "MongoDB", "Redis"],
+      "Modern React/Tailwind component library inspired by IOS 26's Liquid Glass",
+    tech: ["React", "Tailwind"],
     media: [
       {
         type: "image",
@@ -158,8 +129,34 @@ export const projects: Project[] = [
       },
     ],
     links: [
-      { type: "live", href: "https://collab-demo.com" },
+      { type: "live", label: "Demo", href: "https://collab-demo.com" },
       { type: "github", href: "https://github.com/you/collab" },
     ],
+  },
+  {
+    title: "AI Smart Light Intersection",
+    slug: "ai-light-intersection",
+    summary:
+      "Artificial Intelligence project where a light intersection learns through reinforcement learning. ",
+    tech: ["C++"],
+    media: [
+      {
+        type: "image",
+        src: "/media/viz-1.jpg",
+        alt: "Data visualization dashboard",
+      },
+      {
+        type: "image",
+        src: "/media/viz-2.jpg",
+        alt: "Interactive chart controls",
+      },
+      {
+        type: "video",
+        src: "/media/viz-demo.mp4",
+        poster: "/media/viz-poster.jpg",
+        alt: "Data visualization demo",
+      },
+    ],
+    links: [{ type: "github", href: "https://github.com/you/viz" }],
   },
 ];

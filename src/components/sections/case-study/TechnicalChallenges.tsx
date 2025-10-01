@@ -1,7 +1,12 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, lazy, Suspense } from "react";
 import clsx from "clsx";
-import { ChevronDown, ChevronUp, Maximize2 } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  Maximize2,
+} from "@/components/icons/lucide-icons";
+import Image from "next/image";
 import { MotionParallax } from "@/components/animations/MotionParallax";
 import { MotionReveal } from "@/components/animations/MotionReveal";
 import { Section } from "@/components/ui/Section";
@@ -12,7 +17,9 @@ import { caseStudies } from "@/data/case-studies";
 import { MetricBadge } from "./technical-challenges/MetricBadge";
 import { MediaLightbox } from "./technical-challenges/MediaLightbox";
 import { CodeLightbox } from "./technical-challenges/CodeLightbox";
-import { CodePeek } from "./technical-challenges/CodePeek";
+
+// Lazy load CodePeek to improve initial render performance
+const CodePeek = lazy(() => import("./technical-challenges/CodePeek"));
 
 type Registry = React.RefObject<Record<string, HTMLElement | null>>;
 
@@ -39,6 +46,32 @@ export function TechnicalChallenges({
   const cs = caseStudies[slug];
   const data = cs?.technicalChallenges;
   const items = useMemo(() => data?.challenges ?? [], [data]);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (typeof window !== "undefined" && window.location.hash) {
+        const hash = window.location.hash.substring(1);
+        const match = hash.match(/^technical-challenge-(\d+)$/);
+        if (match) {
+          const index = parseInt(match[1], 10);
+          setTimeout(() => {
+            setExpanded(index);
+            const element = document.getElementById(
+              `technical-challenge-${index}`
+            );
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+          }, 300);
+        }
+      }
+    };
+    handleHashChange();
+    window.addEventListener("hashchange", handleHashChange);
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
 
   if (!cs || !data) return null;
 
@@ -79,6 +112,7 @@ export function TechnicalChallenges({
               return (
                 <MotionReveal key={i} direction="up">
                   <Card
+                    id={`technical-challenge-${i}`}
                     padding="p-0"
                     className={clsx(
                       "group transition-all overflow-hidden",
@@ -125,7 +159,8 @@ export function TechnicalChallenges({
                         ) : null}
                       </div>
                     </button>
-                    {/* Collapsible content */}
+
+                    {/* Collapsible content - Animated */}
                     <div
                       id={`challenge-${i}`}
                       className={clsx(
@@ -150,6 +185,7 @@ export function TechnicalChallenges({
                               </p>
                             </div>
                           )}
+
                           {/* Approach or Solution (legacy) */}
                           {(c.approach?.length || c.solution) && (
                             <div>
@@ -167,6 +203,7 @@ export function TechnicalChallenges({
                               )}
                             </div>
                           )}
+
                           {/* Trade-offs */}
                           {c.tradeoffs?.length ? (
                             <div>
@@ -180,6 +217,7 @@ export function TechnicalChallenges({
                               </ul>
                             </div>
                           ) : null}
+
                           {/* Outcome */}
                           {(c.outcome || c.impact?.length) && (
                             <div>
@@ -191,6 +229,7 @@ export function TechnicalChallenges({
                               )}
                             </div>
                           )}
+
                           {/* Technologies */}
                           {c.technologies?.length ? (
                             <div>
@@ -205,7 +244,7 @@ export function TechnicalChallenges({
                             </div>
                           ) : null}
 
-                          {/* Media + Code - Side by side with 30/70 split */}
+                          {/* Media + Code - CodePeek only mounts when open */}
                           {(hasMedia || hasCode) && (
                             <div
                               className={clsx(
@@ -221,11 +260,15 @@ export function TechnicalChallenges({
                               {hasMedia && (
                                 <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5">
                                   {c.media!.type === "image" ? (
-                                    <img
-                                      src={c.media!.src}
-                                      alt={c.media!.alt || c.title}
-                                      className="h-48 w-full object-cover"
-                                    />
+                                    <div className="relative h-48 w-full">
+                                      <Image
+                                        src={c.media!.src}
+                                        alt={c.media!.alt || c.title}
+                                        fill
+                                        sizes="(max-width: 768px) 100vw, 300px"
+                                        className="object-cover"
+                                      />
+                                    </div>
                                   ) : (
                                     <video
                                       src={c.media!.src}
@@ -252,20 +295,31 @@ export function TechnicalChallenges({
                                 </div>
                               )}
 
-                              {/* Code */}
-                              {hasCode && (
-                                <CodePeek
-                                  language={c.code!.language.toUpperCase()}
-                                  snippet={c.code!.snippet}
-                                  caption={c.code!.caption}
-                                  onExpand={() =>
-                                    setCodeLightbox({
-                                      language: c.code!.language.toUpperCase(),
-                                      snippet: c.code!.snippet,
-                                      caption: c.code!.caption,
-                                    })
+                              {/* Code - Only mounts when open */}
+                              {hasCode && isOpen && (
+                                <Suspense
+                                  fallback={
+                                    <div className="h-48 rounded-2xl border border-white/10 bg-black/40 animate-pulse flex items-center justify-center">
+                                      <span className="text-xs text-white/40">
+                                        Loading code...
+                                      </span>
+                                    </div>
                                   }
-                                />
+                                >
+                                  <CodePeek
+                                    language={c.code!.language.toUpperCase()}
+                                    snippet={c.code!.snippet}
+                                    caption={c.code!.caption}
+                                    onExpand={() =>
+                                      setCodeLightbox({
+                                        language:
+                                          c.code!.language.toUpperCase(),
+                                        snippet: c.code!.snippet,
+                                        caption: c.code!.caption,
+                                      })
+                                    }
+                                  />
+                                </Suspense>
                               )}
                             </div>
                           )}
@@ -287,14 +341,6 @@ export function TechnicalChallenges({
                               </div>
                             </div>
                           ) : null}
-                          {/* Legacy fallback note if only problem/solution exist */}
-                          {hasLegacy && !c.context && !c.approach && (
-                            <div className="text-xs text-white/40">
-                              (Rendered in legacy mode — add{" "}
-                              <code>context/approach/impact</code> for the full
-                              deep-dive UI.)
-                            </div>
-                          )}
                         </div>
                       </div>
                     </div>
@@ -305,6 +351,7 @@ export function TechnicalChallenges({
           </div>
         </div>
       </MotionParallax>
+
       {/* Lightbox */}
       <MediaLightbox
         open={!!lightbox}
@@ -313,6 +360,7 @@ export function TechnicalChallenges({
         alt={lightbox?.alt}
         type={lightbox?.type || "image"}
       />
+
       {/* Code Lightbox */}
       <CodeLightbox
         open={!!codeLightbox}

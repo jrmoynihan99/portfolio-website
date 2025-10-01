@@ -16,10 +16,9 @@ export function CaseStudyHero({
 }) {
   const [underlineActive, setUnderlineActive] = useState(false);
 
-  // Fetch project data based on slug
   const caseStudy = caseStudies[slug];
   if (!caseStudy) {
-    return null; // Or handle missing case study
+    return null;
   }
 
   const projectData = caseStudy.hero;
@@ -43,7 +42,7 @@ export function CaseStudyHero({
               />
             </div>
           </MotionReveal>
-          {/* Project Title */}
+
           <MotionReveal
             direction="up"
             delay={120}
@@ -56,7 +55,6 @@ export function CaseStudyHero({
             </h1>
           </MotionReveal>
 
-          {/* Animated Divider line */}
           <MotionReveal direction="up" delay={120}>
             <div
               className="relative mx-auto w-24 h-px mb-8"
@@ -74,42 +72,43 @@ export function CaseStudyHero({
             </div>
           </MotionReveal>
 
-          {/* Tagline */}
           <MotionReveal direction="up" delay={200}>
             <p className="text-xl md:text-2xl text-white/70 font-light leading-relaxed max-w-3xl mx-auto mb-12">
               {projectData.tagline}
             </p>
           </MotionReveal>
 
-          {/* Action Buttons */}
           <MotionReveal direction="up" delay={300}>
             <div className="flex flex-wrap gap-4 justify-center">
-              {projectData.liveUrl && (
+              {projectData.buttons?.map((button, index) => (
                 <Button
-                  href={projectData.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="primary"
+                  key={index}
+                  href={button.url}
+                  target={button.url.startsWith("http") ? "_blank" : undefined}
+                  rel={
+                    button.url.startsWith("http")
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                  variant={
+                    button.type === "appStore" || button.type === "demo"
+                      ? "primary"
+                      : "outline"
+                  }
                 >
-                  <span className="relative z-10">View Live Site</span>
+                  {(button.type === "appStore" || button.type === "demo") && (
+                    <span className="relative z-10">{button.label}</span>
+                  )}
+                  {button.type !== "appStore" &&
+                    button.type !== "demo" &&
+                    button.label}
                 </Button>
-              )}
-              {projectData.githubUrl && (
-                <Button
-                  href={projectData.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="outline"
-                >
-                  View on GitHub
-                </Button>
-              )}
+              ))}
             </div>
           </MotionReveal>
         </div>
       </MotionParallax>
 
-      {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 transform z-20">
         <MotionReveal direction="up" delay={400}>
           <div className="w-px h-16 bg-gradient-to-b from-white/30 to-transparent" />

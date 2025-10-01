@@ -1,5 +1,7 @@
 import { Maximize2 } from "lucide-react";
 import { CopyButton } from "./CopyButton";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface CodePeekProps {
   language: string;
@@ -8,7 +10,7 @@ interface CodePeekProps {
   onExpand?: () => void;
 }
 
-export function CodePeek({
+export default function CodePeek({
   language,
   snippet,
   caption,
@@ -34,9 +36,26 @@ export function CodePeek({
           )}
         </div>
       </div>
-      <pre className="h-48 overflow-x-auto overflow-y-auto px-3 pb-3 text-[12.5px] leading-relaxed text-white/80 scrollbar-thin">
-        <code>{snippet}</code>
-      </pre>
+      <SyntaxHighlighter
+        language={language.toLowerCase()}
+        style={vscDarkPlus}
+        customStyle={{
+          margin: 0,
+          padding: "0.75rem",
+          background: "transparent",
+          fontSize: "12.5px",
+          lineHeight: "1.6",
+          maxHeight: "12rem",
+          borderRadius: 0,
+        }}
+        codeTagProps={{
+          style: {
+            fontFamily: "inherit",
+          },
+        }}
+      >
+        {snippet}
+      </SyntaxHighlighter>
       {caption && (
         <div className="border-t border-white/10 px-3 py-2 text-xs text-white/50">
           {caption}

@@ -2,7 +2,7 @@
 import React from "react";
 import { MouseGlowLayer } from "@/components/animations/MouseGlowLayer";
 
-type BackgroundVariant =
+export type BackgroundVariant =
   | "slate"
   | "beige"
   | "forest"

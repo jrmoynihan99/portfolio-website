@@ -1,13 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import clsx from "clsx";
-import * as LucideIcons from "lucide-react";
+import { icons } from "@/components/icons/lucide-icons";
 import { MotionParallax } from "@/components/animations/MotionParallax";
 import { MotionReveal } from "@/components/animations/MotionReveal";
 import { Section } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Card } from "@/components/ui/Card";
 import { caseStudies } from "@/data/case-studies";
+import Image from "next/image";
 
 export function Features({
   registry,
@@ -17,8 +18,8 @@ export function Features({
   slug: string;
 }) {
   const [underlineActive, setUnderlineActive] = useState(false);
+  const [highlightedFeatures, setHighlightedFeatures] = useState<number[]>([]);
 
-  // Fetch project data based on slug
   const caseStudy = caseStudies[slug];
 
   if (!caseStudy) {
@@ -26,6 +27,51 @@ export function Features({
   }
 
   const featuresData = caseStudy.features;
+
+  // Handle hash navigation to specific features
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (typeof window !== "undefined" && window.location.hash) {
+        const hash = window.location.hash.substring(1);
+
+        // Check for multiple features: #feature-0,1 or #feature-0
+        const multiMatch = hash.match(/^feature-(.+)$/);
+
+        if (multiMatch) {
+          // Split by comma and parse all indices
+          const indices = multiMatch[1]
+            .split(",")
+            .map((s) => parseInt(s.trim(), 10))
+            .filter((n) => !isNaN(n));
+
+          if (indices.length > 0) {
+            setTimeout(() => {
+              // Scroll to the first feature
+              const element = document.getElementById(`feature-${indices[0]}`);
+              if (element) {
+                element.scrollIntoView({ behavior: "smooth", block: "center" });
+              }
+
+              // Highlight all specified features
+              setHighlightedFeatures(indices);
+
+              // Remove highlights after 2 seconds
+              setTimeout(() => {
+                setHighlightedFeatures([]);
+              }, 2000);
+            }, 100);
+          }
+        }
+      }
+    };
+
+    handleHashChange();
+    window.addEventListener("hashchange", handleHashChange);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
 
   return (
     <Section
@@ -54,7 +100,7 @@ export function Features({
           {/* Intro */}
           <MotionReveal direction="up" delay={60}>
             <div className="mb-12">
-              <p className="text-lg md:text-xl text-white/70 leading-relaxed">
+              <p className="text-lg md:text-xl text-white/70 leading-relaxed text-center">
                 {featuresData.intro}
               </p>
             </div>
@@ -63,36 +109,40 @@ export function Features({
           {/* Features Grid - 2 columns */}
           <div className="grid md:grid-cols-2 gap-6">
             {featuresData.features.map((feature, index) => {
-              // Calculate which row this item is in (0-indexed)
               const row = Math.floor(index / 2);
-              // Calculate column (0 = left, 1 = right)
               const col = index % 2;
-              // Even rows (0, 2, 4...) have media on right, odd rows (1, 3, 5...) on left
               const mediaOnRight = row % 2 === 0;
+              const isHighlighted = highlightedFeatures.includes(index);
 
-              // Get the Lucide icon component
-              const IconComponent = LucideIcons[
-                feature.icon as keyof typeof LucideIcons
+              const IconComponent = icons[
+                feature.icon as keyof typeof icons
               ] as React.ComponentType<{ className?: string }>;
 
               return (
                 <MotionReveal key={index} direction="up" delay={col * 80}>
                   <div
+                    id={`feature-${index}`}
                     className={clsx(
                       "flex flex-col h-full group",
                       "sm:flex-row gap-3",
-                      mediaOnRight ? "sm:flex-row-reverse" : "sm:flex-row"
+                      mediaOnRight ? "sm:flex-row-reverse" : "sm:flex-row",
+                      "transition-all duration-500",
+                      isHighlighted && "ring-2 ring-blue-400/50 rounded-3xl"
                     )}
                   >
-                    {/* Media Section - Separate from card */}
+                    {/* Media Section */}
                     <div className="w-full sm:w-2/5 flex-shrink-0 relative overflow-hidden bg-white/5 rounded-3xl shadow-2xl">
                       {feature.media ? (
                         feature.media.type === "image" ? (
-                          <img
-                            src={feature.media.src}
-                            alt={feature.media.alt || feature.title}
-                            className="w-full h-48 sm:h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
+                          <div className="relative w-full h-48 sm:h-full">
+                            <Image
+                              src={feature.media.src}
+                              alt={feature.media.alt || feature.title}
+                              fill
+                              sizes="(max-width: 640px) 100vw, 40vw"
+                              className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                          </div>
                         ) : (
                           <video
                             src={feature.media.src}
@@ -115,7 +165,10 @@ export function Features({
                     {/* Content Card */}
                     <Card
                       padding="p-6 md:p-8"
-                      className="flex-1 hover:bg-white/[0.07] transition-all flex flex-col"
+                      className={clsx(
+                        "flex-1 hover:bg-white/[0.07] transition-all flex flex-col",
+                        isHighlighted && "bg-white/[0.1]"
+                      )}
                     >
                       {/* Icon */}
                       <div className="mb-3 group-hover:scale-110 transition-transform origin-left">

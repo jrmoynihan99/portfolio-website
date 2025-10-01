@@ -1,17 +1,48 @@
 "use client";
 
 import { useRef } from "react";
+import dynamic from "next/dynamic";
 import { Background } from "@/components/layout/Background";
 import { SiteNav } from "@/components/layout/SiteNav";
 import { useActiveSection } from "@/hooks/useActiveSection";
-
-// Sections
 import { Home } from "@/components/sections/Hero";
-import { About } from "@/components/sections/About";
-import { Skills } from "@/components/sections/Skills";
-import { Experience } from "@/components/sections/Experience";
-import { Projects } from "@/components/sections/Projects";
-import { Contact } from "@/components/sections/Contact";
+
+// Lazy load all sections below the fold
+const About = dynamic(
+  () =>
+    import("@/components/sections/About").then((m) => ({ default: m.About })),
+  { ssr: true }
+);
+
+const Projects = dynamic(
+  () =>
+    import("@/components/sections/Projects").then((m) => ({
+      default: m.Projects,
+    })),
+  { ssr: true }
+);
+
+const Skills = dynamic(
+  () =>
+    import("@/components/sections/Skills").then((m) => ({ default: m.Skills })),
+  { ssr: true }
+);
+
+const Experience = dynamic(
+  () =>
+    import("@/components/sections/Experience").then((m) => ({
+      default: m.Experience,
+    })),
+  { ssr: true }
+);
+
+const Contact = dynamic(
+  () =>
+    import("@/components/sections/Contact").then((m) => ({
+      default: m.Contact,
+    })),
+  { ssr: true }
+);
 
 // Define portfolio sections
 const portfolioSections = [
@@ -28,11 +59,14 @@ export default function HomePage() {
   const active = useActiveSection(registry);
 
   return (
-    <div className="relative min-h-screen ">
+    <div className="relative min-h-screen">
       <Background variant="sunset" />
       <SiteNav active={active} sections={portfolioSections} />
 
+      {/* Hero loads immediately */}
       <Home registry={registry} />
+
+      {/* All other sections lazy load */}
       <About registry={registry} />
       <Projects registry={registry} />
       <Skills registry={registry} />

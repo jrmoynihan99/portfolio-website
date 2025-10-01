@@ -2,6 +2,8 @@ import { CopyButton } from "./CopyButton";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface CodeLightboxProps {
   language: string;
@@ -60,9 +62,27 @@ export function CodeLightbox({
               </button>
             </div>
           </div>
-          <pre className="flex-1 overflow-auto px-4 py-3 text-sm leading-relaxed text-white/80 scrollbar-thin">
-            <code>{snippet}</code>
-          </pre>
+          <div className="flex-1 overflow-auto">
+            <SyntaxHighlighter
+              language={language.toLowerCase()}
+              style={vscDarkPlus}
+              customStyle={{
+                margin: 0,
+                padding: "1rem",
+                background: "transparent",
+                fontSize: "14px",
+                lineHeight: "1.6",
+                height: "100%",
+              }}
+              codeTagProps={{
+                style: {
+                  fontFamily: "inherit",
+                },
+              }}
+            >
+              {snippet}
+            </SyntaxHighlighter>
+          </div>
           {caption && (
             <div className="border-t border-white/10 px-4 py-3 text-sm text-white/50">
               {caption}

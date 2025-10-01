@@ -1,12 +1,17 @@
 // src/data/case-studies.ts
+type ButtonConfig = {
+  type: "demo" | "github" | "appStore" | "technicalChallenges";
+  label: string;
+  url: string;
+};
+
 export interface CaseStudyHeroData {
   title: string;
   tagline: string;
   role: string;
   timeline: string;
   year: string;
-  liveUrl?: string;
-  githubUrl?: string;
+  buttons?: ButtonConfig[];
 }
 
 export interface CaseStudyOverviewData {
@@ -130,7 +135,18 @@ export const caseStudies: Record<string, CaseStudy> = {
       role: "Solo Developer & Founder",
       timeline: "6 months",
       year: "2025",
-      liveUrl: "https://apps.apple.com/your-app",
+      buttons: [
+        {
+          type: "appStore",
+          label: "View on App Store",
+          url: "https://apps.apple.com/your-app",
+        },
+        {
+          type: "technicalChallenges",
+          label: "Technical Challenges",
+          url: "#technical-challenges",
+        },
+      ],
     },
     overview: {
       description:
@@ -163,9 +179,8 @@ export const caseStudies: Record<string, CaseStudy> = {
               "Firebase Cloud Functions",
               "Anonymous Auth",
               "Real-time Database",
-            ],
-            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
-            implementationLink: "#technical-challenges",
+            ], // Or specific anchor like "#feature-anonymity"
+            implementationLink: "#technical-challenge-3",
           },
         },
         {
@@ -179,8 +194,8 @@ export const caseStudies: Record<string, CaseStudy> = {
             description:
               "Implemented comprehensive content moderation using OpenAI that screens interactions before delivery. Filters harmful content, trolling, and inappropriate responses to protect users when they're most vulnerable.",
             tech: ["OpenAI API", "Approval UX", "Real-time Moderation"],
-            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
-            implementationLink: "#technical-challenges",
+            featureLink: "#feature-1", // Or specific anchor like "#feature-anonymity"
+            implementationLink: "#technical-challenge-0",
           },
         },
         {
@@ -198,7 +213,7 @@ export const caseStudies: Record<string, CaseStudy> = {
               "Anonymous Threaded Messaging",
               "Opt-In Chat Permissions",
             ],
-            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
+            featureLink: "#feature-4", // Or specific anchor like "#feature-anonymity"
           },
         },
         {
@@ -212,7 +227,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             description:
               "Added streak tracking, and built scheduled Cloud Functions that generate personalized daily Bible verses and prayers using OpenAI. Provides consistent daily value to encourage regular app usage and spiritual engagement.",
             tech: ["Scheduled Functions", "OpenAI API", "Cron Jobs"],
-            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
+            featureLink: "#feature-2,5", // Or specific anchor like "#feature-anonymity"
           },
         },
       ],
@@ -227,7 +242,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           icon: "AlertCircle",
           media: {
             type: "video",
-            src: "/media/anchor-sos.mp4",
+            src: "/media/anchor-sos.jpg",
             alt: "Anonymous SOS feature demonstration",
           },
         },
@@ -614,8 +629,7 @@ export const moderateAndPost = onCall(async (req) => {
       ],
     },
     gallery: {
-      intro:
-        "A look at Anchor's clean, intuitive interface designed to make accountability simple and stress-free.",
+      intro: "",
       media: [
         {
           type: "image",
@@ -663,21 +677,31 @@ export const moderateAndPost = onCall(async (req) => {
     hero: {
       title: "Dialed",
       tagline:
-        "An AI-powered meal planner that turns targets into portion-accurate days and a drag-and-drop weekly schedule",
+        "An AI-powered meal planner that turns food preferences and targets into portion-accurate days with dynamic variety",
       role: "Solo Developer",
       timeline: "8 months (ongoing)",
-      year: "2025",
-      liveUrl: "https://your-site.com/dialed",
-      githubUrl: "https://github.com/yourrepo/dialed",
+      year: "2024",
+      buttons: [
+        {
+          type: "demo",
+          label: "View Demo Site",
+          url: "https://your-site.com/dialed",
+        },
+        {
+          type: "github",
+          label: "View on GitHub",
+          url: "https://github.com/yourrepo/dialed",
+        },
+      ],
     },
     overview: {
       description:
-        "Dialed is a Next.js meal planning app that converts calorie and protein goals into realistic meals, portion-accurate daily plans, and a weekly schedule. Users first select ingredients via a guided questionnaire, approve AI-generated meals, then the app builds optimized day plans that hit targets by scaling ingredient portions. Finally, users arrange their week with smooth drag-and-drop and time-snapping.",
+        "Dialed is a React/Next.js meal planning app that converts calorie and protein goals into realistic meals, portion-accurate daily plans, and a weekly schedule iwth recipes and a grocery list. Users first select preferences via a guided questionnaire, approve AI-generated meals, then the app builds optimized day plans that hit targets by scaling ingredient portions. Finally, users arrange their week with dynamic variety and customization",
       goals: [
-        "Make meal planning fast and realistic with AI-generated meals users actually want to eat",
-        "Hit daily calorie/protein targets precisely via optimization (not guesswork)",
-        "Keep portions consistent across days once a meal is set",
-        "Deliver a polished UX: streaming AI, typewriter preview → Markdown, and fluid drag-and-drop scheduling",
+        "Make meal planning fast and amazing with dynamic AI powered meals",
+        "Hit daily calorie/protein targets precisely via optimization",
+        "Allow users to easily swap in new meals, auto portioned to fit",
+        "Give users recipes and a weekly grocery list to remove barriers to following the plan",
       ],
       media: {
         type: "gif",
@@ -689,74 +713,85 @@ export const moderateAndPost = onCall(async (req) => {
       pairs: [
         {
           problem: {
-            title: "Too Many Choices, Not Enough Structure",
+            title: "What do I eat?",
             description:
-              "Users freeze at a blank page: what meals should I eat, how many per day, how do I avoid repeats?",
+              "Most people freeze at a blank page. They don’t know what foods are healthy, realistic, or fit their tastes. The result is decision fatigue and never making a solid plan.",
           },
           solution: {
-            title: "Guided Questionnaire → Curated Meal Set",
+            title: "Guided Meal Discovery",
             description:
-              "A structured ingredient questionnaire feeds GPT to generate a curated set of realistic meals. Users approve/decline cards before anything becomes part of the plan.",
+              "Dialed starts with a short preference questionnaire, then uses AI to generate a curated set of meals with images and recipes. Users simply approve or decline cards, so their plan is built only from foods they actually want to eat.",
             tech: ["Next.js", "OpenAI API", "Zustand"],
-            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
-            implementationLink: "#technical-challenges",
+            featureLink: "#feature-1,2",
+            implementationLink: "#technical-challenge-0",
           },
         },
         {
           problem: {
-            title: "Calorie/Protein Math Is Hard",
+            title: "How much should I eat?",
             description:
-              "Hitting targets by hand is tedious, especially when portions need to scale realistically across ingredients.",
+              "Figuring out calories and protein portions is overwhelming. Not only do people not know how much protein or calories to consume, but it's also hard to do the portioning.",
           },
           solution: {
-            title: "Optimization, Not Guesswork",
+            title: "Automatic Portioning",
             description:
-              "Converted a Pyomo prototype to TypeScript with GLPK.js. The solver assigns portions for each meal to precisely hit daily targets while respecting fixed vs scalable ingredients.",
+              "Dialed calculates calorie and protein targets upfront, then uses a custom solver to portion meals automatically. Users never touch the math—meals scale to hit targets precisely, every day, with their chosen meals per day.",
             tech: ["TypeScript", "GLPK.js", "Linear Programming"],
-            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
-            implementationLink: "#technical-challenges",
+            featureLink: "#feature-0,3",
+            implementationLink: "#technical-challenge-1",
           },
         },
         {
           problem: {
-            title: "Inconsistent Portions Across Days",
+            title: "I want variety, but repeatability",
             description:
-              "If a meal’s ingredients change day-to-day, shopping and prep become chaotic.",
+              "Nobody wants to eat the same thing every day, but they also don't want cooking and shopping to be a nightmare.",
           },
           solution: {
-            title: "Portion Locking",
+            title: "Portion Locking + Unique Days",
             description:
-              "Once a meal is portioned in a position (e.g., lunch), its ingredients/amounts are locked and reused across unique days, preserving consistency.",
-            tech: ["Zustand store", "Solver constraints"],
-            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
-            implementationLink: "#technical-challenges",
+              "Once a meal is portioned in a position (e.g., lunch), it stays consistent across the week. Dialed then generates as many unique daily plans as possible using all users approved meals",
+            tech: ["Solver constraints", "Zustand store"],
+            featureLink: "#feature-3",
+            implementationLink: "#technical-challenge-2",
           },
         },
         {
           problem: {
-            title: "Planning ≠ Adherence",
+            title: "Meal plans get boring fast",
             description:
-              "Even a perfect plan fails if the UI is clunky. Users need quick scheduling, reordering, and time control.",
+              "Even the best plan wears thin after a few weeks. Most meal planners force you to stick with the same foods or redo the entire process from scratch.",
           },
           solution: {
-            title: "Weekly Grid with DnD + Time Snapping",
+            title: "Dynamic Swaps, Zero Effort",
             description:
-              "A drag-and-drop grid (15-minute snapping) for easy meal timing and reordering. Mobile/desktop UX tuned for speed.",
-            tech: ["@dnd-kit", "Framer Motion", "Tailwind"],
-            featureLink: "#features", // Or specific anchor like "#feature-anonymity"
-            implementationLink: "#technical-challenges",
+              "With Dialed, variety is built in. Approve a new meal or select from your approved set and swap it in for any existing meal. The solver instantly regenerates complete daily plans with updated recipes and grocery lists—no manual recalculation required.",
+            tech: ["Next.js", "Zustand", "Solver integration"],
+            featureLink: "#feature-7",
           },
         },
       ],
     },
+
     features: {
       intro:
-        "End-to-end flow from targets → meals → optimized days → weekly plan.",
+        "Dialed handles the entire meal planning workflow—from targets to recipes—so users don’t have to guess or do the math.",
       features: [
+        {
+          title: "Calorie + Protein Targets",
+          description:
+            "Dialed calculates personalized daily calorie and protein goals as the foundation for every plan. No guesswork, just clarity from the start.",
+          icon: "Gauge",
+          media: {
+            type: "image",
+            src: "/media/dialed-targets.jpg",
+            alt: "Calorie and protein targets UI",
+          },
+        },
         {
           title: "Ingredient Questionnaire",
           description:
-            "Pick proteins, carbs, veggies, and exclusions. Feeds GPT to generate on-target, realistic meals.",
+            "Pick proteins, carbs, veggies, and exclusions. Feeds GPT to generate on-target, realistic meals with recipes.",
           icon: "ListChecks",
           media: {
             type: "image",
@@ -765,9 +800,9 @@ export const moderateAndPost = onCall(async (req) => {
           },
         },
         {
-          title: "AI Meal Generation with Approval",
+          title: "AI Meal Generation with Images",
           description:
-            "Meals arrive as cards (with images). Approve to keep, skip to replace—no clutter, no overwhelm.",
+            "AI-generated meals arrive as cards with images and recipes. Approve to keep, skip to replace—no clutter, no overwhelm.",
           icon: "Sparkles",
           media: {
             type: "video",
@@ -778,8 +813,8 @@ export const moderateAndPost = onCall(async (req) => {
         {
           title: "Portion-Accurate Day Builder",
           description:
-            "LP solver scales ingredients to hit daily calorie/protein targets exactly, honoring fixed vs scalable items.",
-          icon: "Gauge",
+            "A custom solver scales meal ingredients to hit calorie and protein targets exactly, respecting fixed vs scalable items.",
+          icon: "Scale",
           media: {
             type: "image",
             src: "/media/dialed-optimizer.jpg",
@@ -789,7 +824,7 @@ export const moderateAndPost = onCall(async (req) => {
         {
           title: "Weekly Planner with Drag-and-Drop",
           description:
-            "Arrange unique days on a weekly grid. Drag to reorder; snap meals to precise times (15-min intervals).",
+            "Arrange unique days on a weekly grid. Drag to reorder, snap meals to precise times, and assign days in seconds.",
           icon: "CalendarDays",
           media: {
             type: "video",
@@ -798,61 +833,51 @@ export const moderateAndPost = onCall(async (req) => {
           },
         },
         {
-          title: "Three-Tab Meal Modal",
+          title: "Instant Meal Swaps",
           description:
-            "Quickly inspect Details, Ingredients, and Recipe in a clean overlay—no context switching.",
-          icon: "Utensils",
-          media: {
-            type: "image",
-            src: "/media/dialed-meal-modal.jpg",
-            alt: "Three-tab modal",
-          },
-        },
-        {
-          title: "Cheat Day Support",
-          description:
-            "Mark special days without new schema—tracked as DayPlan objects with `isCheatDay: true`.",
-          icon: "PartyPopper",
-          media: {
-            type: "image",
-            src: "/media/dialed-cheat.jpg",
-            alt: "Cheat day UI",
-          },
-        },
-        {
-          title: "Streaming Typewriter → Markdown",
-          description:
-            "Assistant messages type in smoothly while streaming, then swap to rich Markdown once complete.",
-          icon: "Type",
+            "Never get bored—approve a new meal or swap from your saved set, and Dialed instantly regenerates daily plans, recipes, and your grocery list.",
+          icon: "ArrowPath",
           media: {
             type: "video",
-            src: "/media/dialed-streaming.mp4",
-            alt: "Streaming UI",
+            src: "/media/dialed-swap.mp4",
+            alt: "Meal swap and regeneration",
           },
         },
         {
-          title: "Async Meal Images",
+          title: "Weekly Grocery List",
           description:
-            "Images generate after cards render—users don’t wait. Cards update in place when the image is ready.",
-          icon: "Image",
+            "Auto-generated shopping list updates with every plan change. Stay organized and shop exactly what you need—no more manual lists.",
+          icon: "ShoppingCart",
+          media: {
+            type: "image",
+            src: "/media/dialed-grocery.jpg",
+            alt: "Grocery list UI",
+          },
+        },
+        {
+          title: "Easy Variety Toggles",
+          description:
+            "Dialed keeps plans fresh without chaos. Use simple variety controls to shuffle through all valid daily plans while keeping portions locked and shopping consistent.",
+          icon: "Shuffle",
           media: {
             type: "video",
-            src: "/media/dialed-images.mp4",
-            alt: "Async image pipeline",
+            src: "/media/dialed-variety.mp4",
+            alt: "Variety toggle demo",
           },
         },
       ],
     },
+
     techStack: {
       intro:
-        "Modern web stack with mathematical optimization and a polished front-end experience.",
+        "Modern web stack with mathematical optimization, AI integration, and a polished front-end experience.",
       categories: [
         {
           title: "Frontend",
           technologies: [
-            "Next.js 14",
-            "TypeScript",
             "React",
+            "Next.js",
+            "TypeScript",
             "Zustand",
             "Tailwind CSS",
             "shadcn/ui",
@@ -861,19 +886,17 @@ export const moderateAndPost = onCall(async (req) => {
           ],
         },
         {
-          title: "Backend / APIs",
-          technologies: ["Next.js API Routes", "OpenAI API"],
-        },
-        {
-          title: "Optimization",
+          title: "Backend & Optimization",
           technologies: [
+            "Next.js API Routes",
+            "OpenAI API",
             "GLPK.js (Linear Programming)",
             "Deviation-based objective",
           ],
         },
         {
           title: "Tools & Services",
-          technologies: ["Vercel", "GitHub", "ESLint", "Prettier"],
+          technologies: ["Vercel", "GitHub", "ESLint"],
         },
         {
           title: "Development",
@@ -887,158 +910,390 @@ export const moderateAndPost = onCall(async (req) => {
     },
     technicalChallenges: {
       intro:
-        "Deep dives into the planner’s hardest problems: streaming UX, structured GPT, and mathematical optimization.",
+        "Engineering highlights across AI generation, mathematical optimization, randomized ordering search, and high-polish UX.",
       challenges: [
         {
-          title: "Guided, Phase-Aware GPT with Structured JSON",
+          title: "AI Meal Creation & Edit Pipeline",
           context:
-            "The assistant must follow a strict flow—brainstorm → confirm → optimize—while emitting machine-readable JSON chunks mid-stream.",
+            "Users begin with a structured ingredient preference questionnaire and then refine via chat. The system must generate new meals, edit existing ones in place, avoid duplicates, and stay snappy for a truly unique adn flexible meal creation system UX.",
           approach: [
-            "Single comprehensive system prompt with explicit phase tags appended to every message.",
-            "Server streaming via `streamText`; client typewriter renders partial tokens, then swaps to Markdown after completion.",
-            "Robust JSON parsing for meals/days with error-tolerant delimiters and schema validation.",
+            "Prompt builder composes a deterministic system prompt from questionnaire selections (proteins, carbs, veggies, exclusions).",
+            "Chat intent router classifies inputs as (generate more, or edit) applies append or in-place edit accordingly.",
+            "Dedup guard using a canonical meal signature (normalized name + top ingredients) to prevent near-duplicates.",
+            "Async images: render cards instantly with placeholders; enqueue image jobs; patch meals with URLs when ready (more on this below)",
           ],
           impact: [
-            { label: "UX", value: "Smooth streaming" },
-            { label: "Data integrity", value: "Strict JSON schema" },
+            { label: "TTI", value: "≈50% faster first render" },
+            { label: "Quality", value: "Edits don’t inflate card count" },
+            { label: "Consistency", value: "Stable schema for UI/state" },
           ],
           outcome:
-            "A conversational flow that never blocks UI and still yields clean, structured data for state updates.",
+            "A responsive creation/edit flow where users can iterate quickly—cards appear immediately, edits are surgical, and visuals catch up without blocking. This creates a truly unique personlized experience.",
           tradeoffs: [
-            "More complex parsing pipeline vs simple chat output.",
-            "Prompt needs periodic tuning as features evolve.",
+            "Slightly more complex routing and diff logic vs. a single ‘generate’ path.",
+            "Requires consistent canonicalization to keep dedup reliable across prompts.",
+            "Eventual consistency for images (brief placeholder state).",
           ],
-          technologies: ["Next.js", "OpenAI API", "Zustand"],
+          technologies: ["Next.js API Routes", "OpenAI API", "Zustand"],
           code: {
             language: "ts",
-            snippet: `// Pseudo: streaming handler extracts JSON blocks on the fly
-for await (const chunk of stream) {
-  typewriter.append(chunk.text);
-  const maybeJson = extractJsonBlocks(chunk.text);
-  if (maybeJson) {
-    const parsed = safeParseMealSchema(maybeJson);
-    if (parsed) store.setGeneratedMeals(parsed);
-  }
+            snippet: `// Minimal orchestration
+const intent = classify(state, action);
+
+if (intent === "generate") {
+  setState("loading");
+  const res = await fetch("/api/meal-brainstorm", {
+    method: "POST",
+    body: JSON.stringify({ prefs, mealsPerDay, approved, generated }),
+  });
+  const incoming: Meal[] = await res.json();
+  const unique = dedup(incoming, generated, approved);
+  const next = [...generated, ...unique];
+  setGenerated(next); setState("completed");
+
+  // async images (non-blocking)
+  unique.forEach(m => queueImage(m,
+    p => patchGenerated(list => list.map(x => x.id===p.id ? p : x))
+  ));
+} else {
+  // refine in place
+  const res = await fetch("/api/meal-edit", {
+    method:"POST",
+    body: JSON.stringify({ generatedMeals: generated, userRequest }),
+  });
+  const patch = await res.json(); // { replaceId?, editedMeal?, removedIds? }
+  let next = generated;
+  if (patch.replaceId && patch.editedMeal)
+    next = next.map(m => m.id===patch.replaceId ? patch.editedMeal : m);
+  if (patch.removedIds)
+    next = next.filter(m => !patch.removedIds.includes(m.id));
+  setGenerated(next);
+  if (patch.editedMeal) queueImage(patch.editedMeal,
+    p => patchGenerated(list => list.map(x => x.id===p.id ? p : x))
+  );
 }`,
             caption:
-              "Stream tokens to UI; opportunistically parse JSON blocks for live state.",
+              "Classify intent (generate vs. refine), dedup by signature, hydrate images asynchronously, and apply edits in place without inflating card count.",
           },
+
           media: {
             type: "image",
-            src: "/media/dialed-stream-parse.svg",
-            alt: "Streaming + JSON parse flow",
+            src: "/media/dialed-ai-pipeline.svg",
+            alt: "Questionnaire → GPT → Cards with async images",
           },
         },
+
         {
-          title:
-            "LP Solver: Portion Scaling with Fixed vs Scalable Ingredients",
+          title: "LP Solver with Portion Locking & Slot Constraints",
           context:
-            "Some ingredients (sauces/spices) shouldn’t scale; others must scale to hit targets.",
+            "Hit daily calorie/protein targets while sauces/spices remain fixed, primary ingredients scale, and portions stay consistent per (meal, slot).",
           approach: [
-            "Decision variables for scalable ingredients only; fixed items contribute macros but remain constant.",
-            "Deviation-based objective: minimize |calories−target| and |protein−target| with weights.",
-            "Return both fixed and scaled items back to UI with precise grams and display amounts.",
+            "Decision variables only for scalable ingredients; fixed items contribute macros but never scale.",
+            "Deviation-based objective: minimize |calories−target| + |protein−target| with tunable weights.",
+            "(mealId, slotIndex) portion locking: once solved for a slot, the portion is reused wherever that slot/meal appears.",
+            "Return precise grams and user-friendly amounts for display; persist locks to state.",
           ],
           impact: [
-            { label: "Target accuracy", value: "Tight error bounds" },
-            { label: "Meal realism", value: "Preserved" },
+            { label: "Accuracy", value: "Near-exact targets daily" },
+            { label: "Consistency", value: "Identical portions per slot" },
           ],
           outcome:
-            "Accurate daily targets without weird micro-adjustments to non-primary ingredients.",
-          tradeoffs: ["LP adds complexity and solver time vs heuristic rules."],
-          technologies: ["TypeScript", "GLPK.js"],
+            "Days that actually hit targets without weird micro-adjustments, and that stay consistent across the week for easier prep and shopping.",
+          tradeoffs: [
+            "LP modeling and debugging is more complex than heuristics.",
+            "Solver constraints must be curated to avoid infeasible problem setups.",
+          ],
+          technologies: ["TypeScript", "GLPK.js", "Linear Programming"],
           code: {
             language: "ts",
-            snippet: `// Objective (sketch): minimize weighted deviation
-minimize w1*abs(sum_i cal_i*x_i + cal_fixed - cal_target)
-       + w2*abs(sum_i pro_i*x_i + pro_fixed - pro_target);`,
-            caption: "Deviation-based objective balances calories and protein.",
+            snippet: `// solveDayPortions (super-compact)
+import initGLPK from "glpk.js";
+
+export async function solveDayPortions(dayMeals: Meal[], CalTarget: number, ProTarget: number, locks: Record<string,{totalCalories:number;totalProtein:number}>){
+  const glpk = await initGLPK();
+
+  // remaining targets after locked portions
+  const lockedCals = Object.values(locks).reduce((s,p)=>s+p.totalCalories,0);
+  const lockedProt = Object.values(locks).reduce((s,p)=>s+p.totalProtein,0);
+  const remCal = CalTarget-lockedCals, remPro = ProTarget-lockedProt;
+
+  // tolerances + main protein requirement
+  const CAL_LO=100, CAL_UP=100, PRO_LO=10, PRO_UP=30, MAIN_PCT=0.5, pctMul=MAIN_PCT/(1-MAIN_PCT);
+
+  // vars per meal: s_i (non-main scale), mp_i (main-protein multiplier)
+  const varNames:string[]=[]; const coefCal:number[]=[], coefPro:number[]=[]; const rows:any[]=[];
+  dayMeals.forEach((meal,i)=>{
+    const s=\`s_\${i}\`, mp=\`mp_\${i}\`; varNames.push(s,mp);
+    let nonMainCal=0, nonMainPro=0, mainCal=0, mainPro=0;
+    meal.ingredients.forEach(ing=>{
+      if(!ing.grams) return;
+      const calG=ing.calories_per_gram ?? (ing.calories||0)/(ing.grams||1);
+      const proG=ing.protein_per_gram ?? (ing.protein||0)/(ing.grams||1);
+      const cal=(ing.grams||0)*calG, pro=(ing.grams||0)*proG;
+      (ing.main===1 ? (mainCal+=cal, mainPro+=pro) : (nonMainCal+=cal, nonMainPro+=pro));
+    });
+    coefCal.push(nonMainCal, mainCal); coefPro.push(nonMainPro, mainPro);
+
+    // per-meal calorie guardrails around remaining calories
+    const base=1/Math.max(dayMeals.length,1), tol=0.1, lo=(base-tol)*remCal, up=Math.min(1.1,base+tol)*remCal;
+    const coef = Array(varNames.length).fill(0); coef[2*i]=nonMainCal; coef[2*i+1]=mainCal;
+    const mk = (name:string, type:number, lb:number, ub:number)=>({name, bnds:{type,lb,ub}, vars:varNames.map((v,j)=>({name:v,coef:coef[j]||0}))});
+    rows.push(mk(\`meal\${i}_lo\`, glpk.GLP_LO, Math.max(0,lo), 0), mk(\`meal\${i}_up\`, glpk.GLP_UP, 0, Math.max(0,up)));
+
+    // ≥50% of protein from main:  mainPro*mp_i >= pctMul*nonMainPro*s_i
+    const coefPct = Array(varNames.length).fill(0); coefPct[2*i+1]=mainPro; coefPct[2*i]=-pctMul*nonMainPro;
+    rows.push({name:\`mainPct_\${i}\`, bnds:{type:glpk.GLP_LO, lb:0, ub:0}, vars:varNames.map((v,j)=>({name:v,coef:coefPct[j]||0}))});
+  });
+
+  // day windows on remaining targets
+  const mkRow=(name:string, coefs:number[], type:number, lb:number, ub:number)=>({
+    name, bnds:{type,lb,ub}, vars:varNames.map((v,i)=>({name:v,coef:coefs[i]||0}))
+  });
+  const subjectTo = [
+    mkRow("dayCalLo", coefCal, glpk.GLP_LO, remCal-CAL_LO, 0),
+    mkRow("dayCalUp", coefCal, glpk.GLP_UP, 0, remCal+CAL_UP),
+    mkRow("dayProLo", coefPro, glpk.GLP_LO, remPro-PRO_LO, 0),
+    mkRow("dayProUp", coefPro, glpk.GLP_UP, 0, remPro+PRO_UP),
+    ...rows
+  ];
+
+  // bounds + objective
+  const bounds = varNames.map((v,i)=>({name:v, type:glpk.GLP_DB, lb:0, ub:(i%2===0)?100:10}));
+  const objective = { direction:glpk.GLP_MIN, name:"smooth", vars:varNames.map(n=>({name:n,coef:1})) };
+
+  const { result } = await glpk.solve({ name:"dayPlan", objective, subjectTo, bounds }, { msglev:0 }) as any;
+  if(!result) return { valid:false, meals:[], dayCalories:0, dayProtein:0 };
+
+  // map solution → portions
+  let dayCalories=0, dayProtein=0; const meals:PortionedMeal[]=[];
+  dayMeals.forEach((meal,i)=>{
+    const s=result.vars[\`s_\${i}\`]??1, mp=result.vars[\`mp_\${i}\`]??1; let cal=0, pro=0;
+    const ingredients = meal.ingredients.map(ing=>{
+      const scale = (ing.main===1)? mp : s; const grams=(ing.grams||0)*scale;
+      const calG=ing.calories_per_gram ?? (ing.calories||0)/(ing.grams||1);
+      const proG=ing.protein_per_gram ?? (ing.protein||0)/(ing.grams||1);
+      cal += grams*calG; pro += grams*proG; return { ...ing, grams };
+    });
+    dayCalories+=cal; dayProtein+=pro;
+    meals.push({ mealId:meal.id, mealName:meal.name, ingredients, totalCalories:cal, totalProtein:pro });
+  });
+
+  const valid = dayCalories>=CalTarget-CAL_LO && dayCalories<=CalTarget+CAL_UP &&
+                dayProtein>=ProTarget-PRO_LO && dayProtein<=ProTarget+PRO_UP;
+  return { valid, meals, dayCalories, dayProtein };
+}`,
+            caption:
+              "GLPK.js day solver: scale only what’s scalable (s_i, mp_i), constrain remaining calorie/protein windows, enforce per-meal calorie bands and ≥50% main-protein, then reuse portions via slot locks.",
           },
+
           media: {
             type: "image",
-            src: "/media/dialed-lp.svg",
-            alt: "LP variable/constraint diagram",
+            src: "/media/dialed-solver.svg",
+            alt: "Fixed vs scalable variables and slot-locked portions",
           },
         },
+
         {
-          title: "Weekly Grid with Drag-and-Drop + 15-Minute Snapping",
+          title: "Maximizing Unique Days via Randomized Ordering Search",
           context:
-            "Users should quickly re-time meals with precise snapping and buttery animations.",
+            "Given approved meals and meals-per-day, generate as many valid day plans as possible under slot/portion constraints—without exploding combinatorially.",
           approach: [
-            "Vertical DnD per day column using @dnd-kit sensors and collision detection.",
-            "Translate Y → nearest 15-minute slot; persist to `mealTime` in Zustand.",
-            "Optimized transforms and memoization to keep 60fps on desktop and mobile.",
+            "Enumerate candidate day compositions from approved meals under slot locking; bundle into weekly plan candidates.",
+            "For each weekly plan, sample K random orderings (rather than all permutations).",
+            "Sequential solve per ordering: optimize Day 1 → lock portions; then Day 2 using the locks; continue until infeasible.",
+            "Keep the ordering that yields the largest valid-day set for that weekly plan; repeat for all weekly plans.",
+            "Persist every resulting valid-day set to storage for downstream variety browsing.",
           ],
           impact: [
-            { label: "Interaction speed", value: "Instant" },
-            { label: "Perceived performance", value: "60fps feel" },
+            { label: "Variety yield", value: "Max valid days per time budget" },
+            { label: "Latency control", value: "Bounded via K (sampling)" },
           ],
           outcome:
-            "Scheduling feels tactile and precise; the grid behaves like a calendar.",
+            "Produces a rich library of feasible day plans within a predictable runtime budget, enabling meaningful variety without chaos.",
           tradeoffs: [
-            "Collision + snapping logic adds complexity for edge cases.",
+            "Random sampling is non-deterministic; best-found set can vary run-to-run.",
+            "Sequential locking can cause early commitments that block later days.",
+          ],
+          technologies: ["TypeScript", "GLPK.js", "Randomized search"],
+          code: {
+            language: "ts",
+            snippet: `// Randomized ordering search (compact, representative)
+const K = 8; // samples per set (tune for latency/quality)
+
+async function maximizeUniqueDays({
+  approvedMeals, mealsPerDay, calTarget, proTarget, variety,
+  setStepThreeData, router
+}: {
+  approvedMeals: Meal[]; mealsPerDay: number; calTarget: number; proTarget: number;
+  variety: "none"|"less"|"some"|"lots"; setStepThreeData: (p:any)=>void; router: any;
+}) {
+  // 1) Enumerate all slot-respecting day combos, then build slot-consistent sets
+  const combos = generateDayCombinations(approvedMeals, mealsPerDay);     // string[][] (meal names/ids per day)
+  const validSets = findValidDaySets(combos);                              // string[][][]
+
+  // Map names/ids → Meal
+  const mealData: Record<string, Meal> = Object.fromEntries(
+    approvedMeals.map(m => [m.name, m])
+  );
+
+  const chosenResults: OrderingResult[] = [];
+
+  // 2) For each set, sample K orderings; solve sequentially with locks; keep max-valid
+  for (const set of validSets) {
+    const orderings = generateRandomOrderings(set, K);                     // T[][][]
+    const results: (OrderingResult|null)[] = [];
+    for (const ordering of orderings) {
+      try {
+        const res = await solveOrderingSequence(ordering, mealData, calTarget, proTarget);
+        results.push(res);
+      } catch { results.push(null); }
+    }
+    const maxValid = results.reduce((m,r)=>r?Math.max(m,r.validDays):m, 0);
+    const best = results.filter((r): r is OrderingResult => !!r && r.validDays === maxValid);
+    if (best.length) chosenResults.push(best[Math.floor(Math.random()*best.length)]);
+  }
+
+  // 3) Format chosen sets into UI day plans and persist for variety browsing
+  const { allPlanOneDays, allPlanTwoDays, allPlanThreeDays } =
+    buildZustandDayPlans(chosenResults, approvedMeals);
+
+  const shuffleIndices = {
+    weeklySchedule: { none:0, less:0, some:0, lots:0 },
+    weeklyScheduleTwo: { none:0, less:0, some:0, lots:0 },
+    weeklyScheduleThree: { none:0, less:0, some:0, lots:0 },
+  };
+
+  setStepThreeData({
+    allPlanOneDays, allPlanTwoDays, allPlanThreeDays, variety, shuffleIndices
+  });
+
+  updateWeeklyScheduleForVariety(
+    variety, allPlanOneDays, allPlanTwoDays, allPlanThreeDays,
+    shuffleIndices, setStepThreeData, mealsPerDay, "set"
+  );
+
+  router.push("/your-plan");
+}`,
+            caption:
+              "Enumerate slot-respecting day combos → build slot-consistent sets → sample K random orderings → sequentially solve with portion locks → keep the ordering with the most valid days per set → persist formatted plans for variety browsing.",
+          },
+
+          media: {
+            type: "image",
+            src: "/media/dialed-ordering-search.svg",
+            alt: "Randomized ordering loop with sequential locks",
+          },
+        },
+
+        {
+          title: "Variety Picker + Weekly Grid UX",
+          context:
+            "Plans get boring unless variety is easy. Users should toggle how much variety they want, swipe through precomputed valid day sets, and schedule precisely.",
+          approach: [
+            "Variety picker selects among stored valid-day sets; can target an ‘X-day’ variety level (e.g., 3, 5, 7 unique days).",
+            "Swipeable plan browser to review all valid days at the chosen level; portion locks preserve grocery consistency.",
+            "Weekly grid integrates with the chosen set: drag-to-reorder, vertical snap to 15-minute intervals, persist `mealTime` to state.",
+          ],
+          impact: [
+            { label: "Adherence", value: "Fresh plans on demand" },
+            { label: "Speed", value: "One-tap swaps" },
+          ],
+          outcome:
+            "A tactile, low-friction planner that keeps meals interesting while keeping prep and shopping predictable.",
+          tradeoffs: [
+            "Precomputed sets require storage and selection heuristics.",
           ],
           technologies: ["@dnd-kit", "Zustand", "Framer Motion"],
           code: {
-            language: "tsx",
-            snippet: `const nearestSlot = (y: number) => {
-  const minutes = Math.round(y / PX_PER_MINUTE / 15) * 15;
-  return clamp(minutes, 0, 24*60);
+            language: "ts",
+            snippet: `// Variety → Weekly Grid (summary, readable)
+
+// 1) Pick a valid-day set or best-effort fallback
+function pickVariety(sets: DayPlan[][], daysWanted: number) {
+  return (
+    sets.find((s) => s.length === daysWanted) ??
+    sets.sort((a, b) => b.length - a.length)[0]
+      ?.slice(0, daysWanted) ??
+    []
+  );
+}
+
+// 2) Apply chosen set to weekly schedule
+function applyChosenSet(days: DayPlan[], setData: (p: any) => void) {
+  const week = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const schedule = Object.fromEntries(
+    week.map((d, i) => [d, days[i % days.length]?.id ?? null])
+  );
+
+  setData({ weeklySchedule: schedule, activeDays: days });
+}
+
+// 3) Snap helper (15-minute increments)
+const snap15 = (t: Date) => {
+  const ms = 15 * 60 * 1000;
+  return new Date(Math.round(t.getTime() / ms) * ms);
 };
-onDragEnd(({ over, delta }) => {
-  const mins = nearestSlot(currentY + delta.y);
-  updateMealTime(mealId, toHHMM(mins));
-});`,
-            caption: "Map pixels to minutes; snap and persist.",
+
+// 4) @dnd-kit onDragEnd → snap + persist mealTime
+function onDragEnd(
+  { active, over, deltaY }: any,
+  state: AppState,
+  setData: (p: any) => void
+) {
+  if (!over) return;
+
+  const { dayId, mealId } = active.data.current;
+  const { slotHeightPx, startOfDay } = state.ui.grid;
+
+  const movedMinutes = Math.round((deltaY / slotHeightPx) * 15);
+  const oldTime =
+    state.daysById[dayId].meals.find((m) => m.id === mealId)?.mealTime ??
+    startOfDay;
+
+  const snapped = snap15(
+    new Date(oldTime).getTime() + movedMinutes * 60 * 1000
+  );
+
+  const meals = state.daysById[dayId].meals.map((m) =>
+    m.id === mealId ? { ...m, mealTime: snapped.toISOString() } : m
+  );
+
+  setData({
+    daysById: {
+      ...state.daysById,
+      [dayId]: { ...state.daysById[dayId], meals },
+    },
+  });
+}`,
+            caption:
+              "Pick a valid-day set, map it to the weekly schedule, and use @dnd-kit to drag meals with snap-to-15-min updates persisted in Zustand.",
           },
+
           media: {
             type: "image",
-            src: "/media/dialed-dnd.svg",
-            alt: "DnD snapping diagram",
+            src: "/media/dialed-variety-grid.svg",
+            alt: "Variety toggle + swipeable plan browser + weekly grid",
           },
         },
-        {
-          title: "Streaming Typewriter → Markdown Swap",
-          context:
-            "Users should see thoughts appear immediately, but still get rich formatting at the end.",
-          approach: [
-            "Local typewriter component appends tokens as they arrive without re-starting.",
-            "On completion, replace with Markdown render of the final content to enable links, lists, and code blocks.",
-          ],
-          impact: [
-            { label: "Perceived latency", value: "Near-zero" },
-            { label: "Readability", value: "High" },
-          ],
-          outcome:
-            "Chat feels alive during streaming and polished once complete.",
-          tradeoffs: ["Two render modes to maintain."],
-          technologies: ["React", "Framer Motion"],
-          code: {
-            language: "tsx",
-            snippet: `<Typewriter text={streamingText} playing />
-{done && <ReactMarkdown>{finalText}</ReactMarkdown>}`,
-            caption: "Typewriter during stream; Markdown after.",
-          },
-          media: {
-            type: "image",
-            src: "/media/dialed-typewriter.svg",
-            alt: "Typewriter → Markdown swap",
-          },
-        },
+
         {
           title: "Async Image Generation Pipeline",
           context:
-            "Don’t block meal cards on image generation; populate later to keep flow snappy.",
+            "Realistic AI images massively bosst the UX when choosing meals, but blocking meal cards on image generation hurts perceived speed.",
           approach: [
-            "Render cards immediately; enqueue image jobs per approved meal.",
-            "When ready, update the meal object in Zustand with the image URL; UI refreshes in place.",
+            "Render meal cards immediately with placeholders; enqueue image jobs per meal (name + ingredients).",
+            "On completion, patch the meal’s image URL in Zustand; cards update in place with no layout shift.",
+            "Idempotent writes keyed by mealId to avoid flicker and retry loops.",
           ],
           impact: [
-            { label: "TTI for results", value: "Immediate" },
-            { label: "Visual appeal", value: "High" },
+            { label: "Perceived speed", value: "≈50% faster first render" },
           ],
-          outcome: "Users approve meals fast; visuals catch up seamlessly.",
-          tradeoffs: ["Eventual consistency for images."],
+          outcome:
+            "Users get amazing AI geenreated images of the meals, so that they can see what they'll be eating, without the UX slowing down.",
+          tradeoffs: [
+            "Requires background job handling and retry policy.",
+            "Images aren't ready immediately, at the whim of the model API",
+          ],
           technologies: [
             "Next.js API Routes",
             "OpenAI Images (or provider)",
@@ -1046,55 +1301,110 @@ onDragEnd(({ over, delta }) => {
           ],
           code: {
             language: "ts",
-            snippet: `// Client
-approveMeal(meal) {
-  store.addApprovedMeal(meal);
-  fetch("/api/generate-image", { method: "POST", body: JSON.stringify({ id: meal.id, name: meal.name }) });
+            snippet: `// mealGeneration.ts (core flow)
+
+// 1) Generate meals via GPT → render cards immediately
+const res = await fetch("/api/meal-brainstorm", {
+  method: "POST",
+  body: JSON.stringify({ prefs, mealsPerDay }),
+});
+const meals: Meal[] = await res.json();
+
+setStepThreeData({
+  generatedMeals: meals,
+  approvedMeals: autoApprove(meals),
+});
+
+// 2) Fire-and-forget background image jobs
+generateImagesForMealsInBackground(meals, setStepThreeData);
+
+// generateImagesForMealsInBackground.ts
+export async function generateImagesForMealsInBackground(
+  meals: Meal[],
+  setStepThreeData: (p: any) => void
+) {
+  const toUpdate = meals.filter((m) => !m.imageUrl);
+
+  await Promise.all(
+    toUpdate.map(async (meal) => {
+      const r = await fetch("/api/generate-meal-images", {
+        method: "POST",
+        body: JSON.stringify({ meal }),
+      });
+      const { id, imageUrl } = await r.json();
+
+      if (imageUrl) {
+        const updated = useAppStore
+          .getState()
+          .stepThreeData.generatedMeals.map((m) =>
+            m.id === id ||
+            m.name.toLowerCase() === meal.name.toLowerCase()
+              ? { ...m, imageUrl }
+              : m
+          );
+
+        setStepThreeData({ generatedMeals: updated });
+      }
+    })
+  );
 }
-// Server (sketch)
-// generate, store, then PATCH state via SSE/webhook or client re-fetch`,
-            caption: "Fire-and-forget image job; update state when ready.",
+
+// 3) EditableMealCard.tsx
+{meal.imageUrl ? (
+  <img
+    src={meal.imageUrl}
+    className="rounded-lg transition-opacity"
+  />
+) : (
+  <div className="animate-shimmer rounded-lg bg-zinc-700" />
+)}
+`,
+            caption:
+              "Generate meals instantly; enqueue background image jobs keyed by mealId; hydrate Zustand with URLs when ready so cards swap placeholders → photos without layout shift.",
           },
+
           media: {
             type: "image",
             src: "/media/dialed-image-async.svg",
-            alt: "Async image flow",
+            alt: "Non-blocking image pipeline",
           },
         },
       ],
     },
+
     results: {
       intro:
-        "Dialed demonstrates how AI and optimization can remove friction from healthy eating while keeping plans realistic.",
+        "Dialed was built to explore how AI and optimization can remove friction from healthy eating while keeping plans realistic. While it never launched publicly, the project demonstrates the kind of user value and engineering depth I aim to deliver.",
       outcomes: [
         {
-          title: "User Value",
+          title: "Intended User Value",
           points: [
-            "Minutes to a complete weekly plan that actually hits targets.",
-            "Portion locking simplifies shopping and prep across days.",
-            "Drag-and-drop scheduling makes adherence practical.",
+            "Generate a complete weekly plan in minutes, tailored to calorie/protein targets.",
+            "Portion locking ensures consistency in shopping and meal prep across days.",
+            "Drag-and-drop scheduling makes adherence practical and flexible.",
           ],
         },
         {
           title: "Engineering Wins",
           points: [
-            "Solver migrated to GLPK.js with deviation-based objective.",
+            "Solver migrated to GLPK.js with a deviation-based optimization objective.",
             "Robust JSON streaming pipeline with phase tags and safe parsing.",
-            "High-polish UI: typewriter streaming, Markdown swap, buttery DnD.",
+            "High-polish UI: typewriter streaming, Markdown rendering, smooth drag-and-drop.",
           ],
         },
         {
           title: "What’s Next",
           points: [
-            "Macro ranges (min/max) and fiber/fat constraints in the solver.",
-            "Export to grocery list and calendar.",
-            "Recipe import and nutrition parsing from URLs.",
+            "Add macro ranges (min/max) and fiber/fat constraints to the solver.",
+            "Export weekly plans to grocery lists and calendars.",
+            "Recipe import and nutrition parsing directly from URLs.",
           ],
         },
       ],
     },
+
     gallery: {
-      intro: "From questionnaire to weekly grid—screens that keep you in flow.",
+      intro: "",
       media: [
         {
           type: "image",

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { MotionParallax } from "@/components/animations/MotionParallax";
 import { MotionReveal } from "@/components/animations/MotionReveal";
 import { Section } from "@/components/ui/Section";
@@ -130,10 +131,12 @@ export function Overview({
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <img
+                    <Image
                       src={overviewData.media.src}
                       alt={overviewData.media.alt || "App preview"}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="384px"
+                      className="object-cover"
                     />
                   )}
                 </div>
