@@ -8,11 +8,11 @@ export interface ExperienceItem {
 
 export const experiences: ExperienceItem[] = [
   {
-    title: "Founder & Solo Developer",
+    title: "Founder & Lead Developer",
     company: "Anchor – Nonprofit Mobile App",
     period: "2025 – Present",
     description:
-      "Built and launched a nonprofit accountability app helping young men overcome pornography addiction. Available free on the App Store, with daily AI-generated content, streak tracking, and anonymous community features.",
+      "Built and launched a nonprofit accountability app addressing pornography addiction. Available free on the App Store, featuring daily AI-generated content, AI moderation, streak tracking, and anonymous community support.",
     highlights: [
       "React Native + Expo",
       "Firebase (Auth, Firestore, Cloud Functions)",
@@ -26,7 +26,7 @@ export const experiences: ExperienceItem[] = [
     company: "RAYN – Clothing Brand",
     period: "2023 – 2025",
     description:
-      "Founded and scaled a direct-to-consumer clothing brand that hit six figures in sales on launch day. Managed everything from product design and supply chain to e-commerce and digital marketing.",
+      "Founded and scaled a direct-to-consumer clothing brand, generating $120K in sales on launch day and over $500K in the first year. Oversaw product design, supply chain, e-commerce development, and digital marketing.",
     highlights: [
       "E-commerce Development",
       "Brand Strategy",
@@ -40,13 +40,14 @@ export const experiences: ExperienceItem[] = [
     company: "ZOLL Medical",
     period: "2019 – 2023",
     description:
-      "Developed embedded software for life-saving medical devices using C++ and Python. Led feature design, implemented real-time data systems, and ensured compliance with FDA regulations.",
+      "Engineered embedded C++/Python software for FDA-cleared medical devices. Contributed to invasive blood pressure (IBP) signal processing and waveform display, implemented core API layers across the codebase, and led design of Bluetooth connectivity features.",
     highlights: [
-      "Embedded C++",
+      "Embedded C++ Development",
       "Python",
-      "Feature Architecture",
-      "Real-time Systems",
-      "FDA Compliance",
+      "Signal Processing & Visualization",
+      "API Architecture",
+      "Bluetooth Feature Design",
+      "FDA-Regulated Development",
     ],
   },
 ];

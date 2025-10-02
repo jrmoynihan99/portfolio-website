@@ -146,6 +146,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           label: "Technical Challenges",
           url: "#technical-challenges",
         },
+        {
+          type: "github",
+          label: "View on GitHub",
+          url: "https://github.com/jrmoynihan99/anchor-accountability",
+        },
       ],
     },
     overview: {
@@ -690,7 +695,7 @@ export const moderateAndPost = onCall(async (req) => {
         {
           type: "github",
           label: "View on GitHub",
-          url: "https://github.com/yourrepo/dialed",
+          url: "https://github.com/jrmoynihan99/meal-planner-ai-app",
         },
       ],
     },
@@ -715,12 +720,12 @@ export const moderateAndPost = onCall(async (req) => {
           problem: {
             title: "What do I eat?",
             description:
-              "Most people freeze at a blank page. They don’t know what foods are healthy, realistic, or fit their tastes. The result is decision fatigue and never making a solid plan.",
+              "Most people don’t know what foods are healthy, realistic, or fit their tastes. Nevermind what will help them make progress toward their goals. The result is decision fatigue and never making a solid plan.",
           },
           solution: {
             title: "Guided Meal Discovery",
             description:
-              "Dialed starts with a short preference questionnaire, then uses AI to generate a curated set of meals with images and recipes. Users simply approve or decline cards, so their plan is built only from foods they actually want to eat.",
+              "Dialed starts with a short preference questionnaire, then uses AI to generate a personalized set of meals with images and recipes. Users simply approve or decline cards, so their plan is built only from foods they actually want to eat.",
             tech: ["Next.js", "OpenAI API", "Zustand"],
             featureLink: "#feature-1,2",
             implementationLink: "#technical-challenge-0",

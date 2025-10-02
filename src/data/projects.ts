@@ -30,14 +30,14 @@ export const projects: Project[] = [
     title: "Anchor",
     slug: "anchor",
     summary:
-      "Anonymous, non-profit accountability app with push notifications, moderation tools, and scheduled AI-generated daily content.",
+      "Nonprofit iOS accountability app built with React Native and Firebase — helping young men fight pornography addiction through anonymous support, AI-generated daily content, and AI moderation.",
     tech: [
       "React",
+      "Typescript",
       "Expo",
       "Firebase",
       "Cloud Functions",
       "AI Integration",
-      "Typescript",
     ],
     media: [
       {
@@ -72,7 +72,7 @@ export const projects: Project[] = [
       {
         type: "github",
         label: "GitHub",
-        href: "https://github.com/you/meal-planner",
+        href: "https://github.com/jrmoynihan99/anchor-accountability",
       },
     ],
     featured: true,
@@ -81,8 +81,8 @@ export const projects: Project[] = [
     title: "Dialed - AI Meal Planner",
     slug: "dialed",
     summary:
-      "Guided planning with streaming GPT + structured JSON and an optimizer to hit calorie/protein targets.",
-    tech: ["Next.js", "TypeScript", "Zustand", "GLPK.js", "OpenAI"],
+      "AI meal planner that uses your targets and preferences to create custom meals with images and recipes, and builds portion-accurate weekly plans with swaps and grocery lists.",
+    tech: ["React", "Next.js", "TypeScript", "Zustand", "GLPK.js", "OpenAI"],
     media: [
       {
         type: "image",
@@ -114,7 +114,7 @@ export const projects: Project[] = [
     slug: "liqglass",
     summary:
       "Modern React/Tailwind component library inspired by IOS 26's Liquid Glass",
-    tech: ["React", "Tailwind"],
+    tech: ["React", "Tailwind", "Vercel"],
     media: [
       {
         type: "image",
@@ -161,6 +161,11 @@ export const projects: Project[] = [
         alt: "Data visualization demo",
       },
     ],
-    links: [{ type: "github", href: "https://github.com/you/viz" }],
+    links: [
+      {
+        type: "github",
+        href: "https://github.com/jrmoynihan99/Smart-Light-Intersection",
+      },
+    ],
   },
 ];

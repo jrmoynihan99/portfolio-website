@@ -20,58 +20,38 @@ export function Features({
   const [underlineActive, setUnderlineActive] = useState(false);
   const [highlightedFeatures, setHighlightedFeatures] = useState<number[]>([]);
 
-  const caseStudy = caseStudies[slug];
-
-  if (!caseStudy) {
-    return null;
-  }
-
-  const featuresData = caseStudy.features;
-
-  // Handle hash navigation to specific features
+  // ✅ Hooks must always run, regardless of data presence
   useEffect(() => {
     const handleHashChange = () => {
-      if (typeof window !== "undefined" && window.location.hash) {
-        const hash = window.location.hash.substring(1);
+      const hash = window.location.hash?.slice(1);
+      const m = hash?.match(/^feature-(.+)$/);
+      if (!m) return;
 
-        // Check for multiple features: #feature-0,1 or #feature-0
-        const multiMatch = hash.match(/^feature-(.+)$/);
+      const indices = m[1]
+        .split(",")
+        .map((s) => parseInt(s.trim(), 10))
+        .filter((n) => !Number.isNaN(n));
 
-        if (multiMatch) {
-          // Split by comma and parse all indices
-          const indices = multiMatch[1]
-            .split(",")
-            .map((s) => parseInt(s.trim(), 10))
-            .filter((n) => !isNaN(n));
+      if (!indices.length) return;
 
-          if (indices.length > 0) {
-            setTimeout(() => {
-              // Scroll to the first feature
-              const element = document.getElementById(`feature-${indices[0]}`);
-              if (element) {
-                element.scrollIntoView({ behavior: "smooth", block: "center" });
-              }
-
-              // Highlight all specified features
-              setHighlightedFeatures(indices);
-
-              // Remove highlights after 2 seconds
-              setTimeout(() => {
-                setHighlightedFeatures([]);
-              }, 2000);
-            }, 100);
-          }
-        }
-      }
+      // Scroll + highlight
+      setTimeout(() => {
+        const el = document.getElementById(`feature-${indices[0]}`);
+        el?.scrollIntoView({ behavior: "smooth", block: "center" });
+        setHighlightedFeatures(indices);
+        setTimeout(() => setHighlightedFeatures([]), 2000);
+      }, 100);
     };
 
     handleHashChange();
     window.addEventListener("hashchange", handleHashChange);
-
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange);
-    };
+    return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
+
+  const caseStudy = caseStudies[slug];
+  if (!caseStudy) return null; // ✅ after hooks
+
+  const featuresData = caseStudy.features;
 
   return (
     <Section

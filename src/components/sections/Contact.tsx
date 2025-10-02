@@ -129,7 +129,7 @@ export function Contact({
             activateUnderline={underlineActive}
             underlineDelay={80}
           >
-            Let's Connect
+            Let’s Connect
           </SectionHeader>
         </MotionReveal>
 
@@ -189,11 +189,11 @@ export function Contact({
             </Card>
 
             <p className="text-xl text-white/70 font-light max-w-2xl mx-auto mb-12 text-center">
-              I'm actively seeking new frontend/full-stack development
+              I’m actively seeking new frontend/full-stack development
               opportunities!
             </p>
 
-            <div className="grid md:grid-cols-2 gap-12 items-start">
+            <div className="grid md:grid-cols-1 gap-12 items-start">
               {/* Contact Form */}
               <div className="order-2 md:order-1">
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -288,7 +288,7 @@ export function Contact({
                   {submitStatus === "success" && (
                     <div className="p-4 bg-green-500/10 border border-green-400/20 rounded-lg">
                       <p className="text-green-400 text-sm">
-                        Thanks for reaching out! I'll review your opportunity
+                        Thanks for reaching out! I’ll review your opportunity
                         and respond within 24 hours.
                       </p>
                     </div>
@@ -303,24 +303,6 @@ export function Contact({
                     </div>
                   )}
                 </form>
-              </div>
-
-              {/* Social Links & Info */}
-              <div className="order-1 md:order-2 text-center md:text-left">
-                <h3 className="text-2xl font-light text-white mb-4">
-                  Let's connect professionally
-                </h3>
-                <p className="text-white/60 mb-8 leading-relaxed">
-                  View my professional profile and code repositories:
-                </p>
-                <div className="flex flex-col gap-4 max-w-xs mx-auto md:mx-0">
-                  <Button href={linkedin} variant="outline" className="w-full">
-                    LinkedIn
-                  </Button>
-                  <Button href={github} variant="outline" className="w-full">
-                    GitHub
-                  </Button>
-                </div>
               </div>
             </div>
 

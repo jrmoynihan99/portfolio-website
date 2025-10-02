@@ -5,7 +5,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { MotionParallax } from "@/components/animations/MotionParallax";
 import { MotionReveal } from "@/components/animations/MotionReveal";
 import { Card } from "@/components/ui/Card";
-import { skillGroups, type SkillLevel } from "@/data/skills";
+import { skillGroups } from "@/data/skills";
 import { BrandIcon } from "@/components/icons/BrandIcon";
 
 function getIconCategory(
@@ -120,7 +120,7 @@ export function Skills({
 
           {/* Groups */}
           <div className="space-y-12">
-            {skillGroups.map((group, gi) => (
+            {skillGroups.map((group) => (
               <div key={group.title}>
                 {/* Subheader */}
                 <MotionReveal direction="up" delay={0}>

@@ -38,7 +38,7 @@ export function HeadshotProgress({
     if (trigger) {
       setShowSweep(true);
       setProgress(0);
-      let start = Date.now();
+      const start = Date.now();
       clearInterval(intervalRef.current!);
       intervalRef.current = setInterval(() => {
         const elapsed = Date.now() - start;

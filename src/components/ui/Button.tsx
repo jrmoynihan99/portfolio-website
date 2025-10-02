@@ -27,8 +27,6 @@ export function Button(props: ButtonBaseProps & PolymorphicProps) {
     ...rest
   } = props as ButtonBaseProps & (AnchorProps | ButtonElProps | DivProps);
 
-  const As: any = as;
-
   const base =
     "inline-flex items-center justify-center px-8 py-3 rounded-xl text-white font-medium transition-all duration-300";
 
@@ -40,9 +38,11 @@ export function Button(props: ButtonBaseProps & PolymorphicProps) {
     link: "text-white/80 hover:text-white group",
   };
 
+  const Component = as as React.ElementType;
+
   return (
-    <As className={clsx(base, stylesMap[variant], className)} {...rest}>
+    <Component className={clsx(base, stylesMap[variant], className)} {...rest}>
       {children}
-    </As>
+    </Component>
   );
 }

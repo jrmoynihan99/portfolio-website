@@ -105,7 +105,6 @@ export function TechnicalChallenges({
           <div className="space-y-6">
             {items.map((c, i) => {
               const isOpen = expanded === i;
-              const hasLegacy = !c.context && (c.problem || c.solution);
               const hasMedia = !!c.media;
               const hasCode = !!c.code;
 

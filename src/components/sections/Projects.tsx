@@ -4,9 +4,9 @@ import { MotionParallax } from "@/components/animations/MotionParallax";
 import { MotionReveal } from "@/components/animations/MotionReveal";
 import { Section } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { FeaturedProjectCard } from "../projects/FeaturedProjectCard";
-import { RegularProjectCard } from "../projects/RegularProjectCard";
-import { MobileProjectCards } from "../projects/MobileProjectCards";
+import { FeaturedProjectCard } from "./projects/FeaturedProjectCard";
+import { RegularProjectCard } from "./projects/RegularProjectCard";
+import { MobileProjectCards } from "./projects/MobileProjectCards";
 import { projects as data } from "@/data/projects";
 
 export function Projects({

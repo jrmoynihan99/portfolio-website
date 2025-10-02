@@ -12,7 +12,7 @@ export interface AboutData {
 
 export const about: AboutData = {
   paragraphs: [
-    "I’m a front-end engineer who thrives on building things from the ground up. After starting my software journey in embedded medical devices, I took a leap into entrepreneurship — launching a clothing brand that hit six figures on day one and building Anchor, a nonprofit app that helps young men quit pornography. Both ventures demanded full ownership, creativity, and execution, and both taught me how much I value the impact of design and UX.",
+    "I’m a front-end engineer who thrives on building things from the ground up. After starting my software journey in embedded medical devices, I took a leap into entrepreneurship — launching a clothing brand that hit six figures on day one and building Anchor, a nonprofit React app that helps young men quit pornography. Both ventures demanded full ownership, creativity, and execution, and both taught me how much I value the impact of design and UX.",
     "Now, as a React/Next engineer, I channel that same entrepreneurial grit and design obsession into software — building AI powered interfaces that are fast, intuitive, and crafted with the same attention to detail I once poured into products and brands.",
   ],
   availabilityLabel: "Open to opportunities",

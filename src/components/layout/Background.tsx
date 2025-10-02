@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { MouseGlowLayer } from "@/components/animations/MouseGlowLayer";
 
 export type BackgroundVariant =
   | "slate"
