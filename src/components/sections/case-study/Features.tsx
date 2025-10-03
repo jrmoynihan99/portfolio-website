@@ -49,8 +49,8 @@ export function Features({
 
   const featuresData = caseStudy.features;
   const gridCols =
-    orientation === "portrait" ? "md:grid-cols-3" : "md:grid-cols-1";
-  const itemsPerRow = orientation === "portrait" ? 3 : 1;
+    orientation === "portrait" ? "md:grid-cols-2" : "md:grid-cols-1";
+  const itemsPerRow = orientation === "portrait" ? 2 : 1;
 
   return (
     <Section
@@ -109,7 +109,7 @@ export function Features({
                       "sm:flex-row gap-3",
                       mediaOnRight ? "sm:flex-row-reverse" : "sm:flex-row",
                       "transition-all duration-500",
-                      isHighlighted && "ring-2 ring-blue-400/50 rounded-3xl"
+                      isHighlighted && "ring-2 ring-blue-400/50 rounded-4xl"
                     )}
                     onMouseEnter={(e) => {
                       const video = e.currentTarget.querySelector("video");
@@ -127,7 +127,7 @@ export function Features({
                     {/* Media Section */}
                     <div
                       className={clsx(
-                        "w-full flex-shrink-0 relative overflow-hidden bg-white/5 rounded-3xl shadow-2xl border-2 border-white/20 p-0",
+                        "w-full flex-shrink-0 relative overflow-hidden bg-white/5 rounded-4xl shadow-2xl border-2 border-white/20 p-0",
                         mediaWidthClass,
                         // Portrait mode: keep h-full behavior to match card height
                         orientation === "portrait" && "h-48 sm:h-full",

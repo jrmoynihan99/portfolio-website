@@ -339,7 +339,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             alt: "Community Feed",
           },
         },
-        {
+        /*{
           title: "Spam Prevention",
           description:
             "Clean UX for limiting the amount of times users can reach out or post to prevent spamming or trolling.",
@@ -350,7 +350,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             poster: "/assets/case-studies/anchor/anchor-spam.jpg", // your existing screenshot
             alt: "Spam prevention interface",
           },
-        },
+        },*/
       ],
     },
     techStack: {

@@ -115,7 +115,7 @@ export function Overview({
                 {/* Right Column: Portrait Media with border */}
                 {overviewData.media && (
                   <div
-                    className="relative rounded-3xl overflow-hidden bg-white/5 shadow-2xl border-2 border-white/20 p-1"
+                    className="relative rounded-4xl overflow-hidden bg-white/5 shadow-2xl border-2 border-white/20 p-1"
                     style={{
                       height: mediaHeight ? `${mediaHeight}px` : "auto",
                       minWidth: "200px",
@@ -130,7 +130,7 @@ export function Overview({
                         loop
                         muted
                         playsInline
-                        className="w-full h-full object-cover rounded-3xl"
+                        className="w-full h-full object-cover rounded-4xl"
                       />
                     ) : (
                       <div className="relative w-full h-full rounded-3xl overflow-hidden">

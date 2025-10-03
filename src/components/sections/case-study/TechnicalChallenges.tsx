@@ -1,12 +1,7 @@
 "use client";
 import React, { useMemo, useState, useEffect, lazy, Suspense } from "react";
 import clsx from "clsx";
-import {
-  ChevronDown,
-  ChevronUp,
-  Maximize2,
-} from "@/components/icons/lucide-icons";
-import Image from "next/image";
+import { ChevronDown, ChevronUp } from "@/components/icons/lucide-icons";
 import { MotionParallax } from "@/components/animations/MotionParallax";
 import { MotionReveal } from "@/components/animations/MotionReveal";
 import { Section } from "@/components/ui/Section";
@@ -15,14 +10,10 @@ import { Card } from "@/components/ui/Card";
 import { Tag } from "@/components/ui/Tag";
 import { caseStudies } from "@/data/case-studies";
 import { MetricBadge } from "./technical-challenges/MetricBadge";
-import { MediaLightbox } from "./technical-challenges/MediaLightbox";
 import { CodeLightbox } from "./technical-challenges/CodeLightbox";
-
 // Lazy load CodePeek to improve initial render performance
 const CodePeek = lazy(() => import("./technical-challenges/CodePeek"));
-
 type Registry = React.RefObject<Record<string, HTMLElement | null>>;
-
 export function TechnicalChallenges({
   registry,
   slug,
@@ -32,21 +23,14 @@ export function TechnicalChallenges({
 }) {
   const [underlineActive, setUnderlineActive] = useState(false);
   const [expanded, setExpanded] = useState<number | null>(null);
-  const [lightbox, setLightbox] = useState<{
-    src: string;
-    alt?: string;
-    type: "image" | "video";
-  } | null>(null);
   const [codeLightbox, setCodeLightbox] = useState<{
     language: string;
     snippet: string;
     caption?: string;
   } | null>(null);
-
   const cs = caseStudies[slug];
   const data = cs?.technicalChallenges;
   const items = useMemo(() => data?.challenges ?? [], [data]);
-
   useEffect(() => {
     const handleHashChange = () => {
       if (typeof window !== "undefined" && window.location.hash) {
@@ -72,9 +56,7 @@ export function TechnicalChallenges({
       window.removeEventListener("hashchange", handleHashChange);
     };
   }, []);
-
   if (!cs || !data) return null;
-
   return (
     <Section
       id="technical-challenges"
@@ -105,9 +87,7 @@ export function TechnicalChallenges({
           <div className="space-y-6">
             {items.map((c, i) => {
               const isOpen = expanded === i;
-              const hasMedia = !!c.media;
               const hasCode = !!c.code;
-
               return (
                 <MotionReveal key={i} direction="up">
                   <Card
@@ -158,7 +138,6 @@ export function TechnicalChallenges({
                         ) : null}
                       </div>
                     </button>
-
                     {/* Collapsible content - Animated */}
                     <div
                       id={`challenge-${i}`}
@@ -184,7 +163,6 @@ export function TechnicalChallenges({
                               </p>
                             </div>
                           )}
-
                           {/* Approach or Solution (legacy) */}
                           {(c.approach?.length || c.solution) && (
                             <div>
@@ -202,7 +180,6 @@ export function TechnicalChallenges({
                               )}
                             </div>
                           )}
-
                           {/* Trade-offs */}
                           {c.tradeoffs?.length ? (
                             <div>
@@ -216,7 +193,6 @@ export function TechnicalChallenges({
                               </ul>
                             </div>
                           ) : null}
-
                           {/* Outcome */}
                           {(c.outcome || c.impact?.length) && (
                             <div>
@@ -228,7 +204,6 @@ export function TechnicalChallenges({
                               )}
                             </div>
                           )}
-
                           {/* Technologies */}
                           {c.technologies?.length ? (
                             <div>
@@ -242,87 +217,33 @@ export function TechnicalChallenges({
                               </div>
                             </div>
                           ) : null}
-
-                          {/* Media + Code - CodePeek only mounts when open */}
-                          {(hasMedia || hasCode) && (
-                            <div
-                              className={clsx(
-                                "grid gap-4",
-                                hasMedia && hasCode
-                                  ? "md:grid-cols-[3fr_7fr]"
-                                  : hasMedia
-                                  ? "md:grid-cols-1 max-w-md"
-                                  : "md:grid-cols-1"
-                              )}
-                            >
-                              {/* Media */}
-                              {hasMedia && (
-                                <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5">
-                                  {c.media!.type === "image" ? (
-                                    <div className="relative h-48 w-full">
-                                      <Image
-                                        src={c.media!.src}
-                                        alt={c.media!.alt || c.title}
-                                        fill
-                                        sizes="(max-width: 768px) 100vw, 300px"
-                                        className="object-cover"
-                                      />
-                                    </div>
-                                  ) : (
-                                    <video
-                                      src={c.media!.src}
-                                      autoPlay
-                                      loop
-                                      muted
-                                      playsInline
-                                      className="h-48 w-full object-cover"
-                                    />
-                                  )}
-                                  <button
-                                    onClick={() =>
-                                      setLightbox({
-                                        src: c.media!.src,
-                                        alt: c.media!.alt,
-                                        type: c.media!.type,
-                                      })
-                                    }
-                                    className="absolute right-2 top-2 inline-flex items-center gap-2 rounded-lg bg-black/50 px-2 py-1 text-xs text-white hover:bg-black/60"
-                                  >
-                                    <Maximize2 className="h-3.5 w-3.5" />
-                                    View
-                                  </button>
-                                </div>
-                              )}
-
-                              {/* Code - Only mounts when open */}
-                              {hasCode && isOpen && (
-                                <Suspense
-                                  fallback={
-                                    <div className="h-48 rounded-2xl border border-white/10 bg-black/40 animate-pulse flex items-center justify-center">
-                                      <span className="text-xs text-white/40">
-                                        Loading code...
-                                      </span>
-                                    </div>
+                          {/* Code - Full Width - Only mounts when open */}
+                          {hasCode && isOpen && (
+                            <div>
+                              <Suspense
+                                fallback={
+                                  <div className="h-48 rounded-2xl border border-white/10 bg-black/40 animate-pulse flex items-center justify-center">
+                                    <span className="text-xs text-white/40">
+                                      Loading code...
+                                    </span>
+                                  </div>
+                                }
+                              >
+                                <CodePeek
+                                  language={c.code!.language.toUpperCase()}
+                                  snippet={c.code!.snippet}
+                                  caption={c.code!.caption}
+                                  onExpand={() =>
+                                    setCodeLightbox({
+                                      language: c.code!.language.toUpperCase(),
+                                      snippet: c.code!.snippet,
+                                      caption: c.code!.caption,
+                                    })
                                   }
-                                >
-                                  <CodePeek
-                                    language={c.code!.language.toUpperCase()}
-                                    snippet={c.code!.snippet}
-                                    caption={c.code!.caption}
-                                    onExpand={() =>
-                                      setCodeLightbox({
-                                        language:
-                                          c.code!.language.toUpperCase(),
-                                        snippet: c.code!.snippet,
-                                        caption: c.code!.caption,
-                                      })
-                                    }
-                                  />
-                                </Suspense>
-                              )}
+                                />
+                              </Suspense>
                             </div>
                           )}
-
                           {/* Links */}
                           {c.links?.length ? (
                             <div className="pt-1">
@@ -350,16 +271,6 @@ export function TechnicalChallenges({
           </div>
         </div>
       </MotionParallax>
-
-      {/* Lightbox */}
-      <MediaLightbox
-        open={!!lightbox}
-        onClose={() => setLightbox(null)}
-        src={lightbox?.src || ""}
-        alt={lightbox?.alt}
-        type={lightbox?.type || "image"}
-      />
-
       {/* Code Lightbox */}
       <CodeLightbox
         open={!!codeLightbox}
