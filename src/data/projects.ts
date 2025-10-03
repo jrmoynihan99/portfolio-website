@@ -42,17 +42,17 @@ export const projects: Project[] = [
     media: [
       {
         type: "image",
-        src: "/media/anchor-1.jpg",
+        src: "/assets/case-studies/anchor/anchor-sos.jpg",
         alt: "Anchor app home screen",
       },
       {
         type: "image",
-        src: "/media/anchor-2.jpg",
+        src: "/assets/case-studies/anchor/anchor-home.jpg",
         alt: "Anchor app goal setting",
       },
       {
         type: "image",
-        src: "/media/anchor-3.jpg",
+        src: "/assets/case-studies/anchor/anchor-messages.jpg",
         alt: "Anchor app notifications",
       },
       {
@@ -146,19 +146,8 @@ export const projects: Project[] = [
     media: [
       {
         type: "image",
-        src: "/media/viz-1.jpg",
+        src: "/assets/case-studies/intersection/intersection.jpg",
         alt: "Data visualization dashboard",
-      },
-      {
-        type: "image",
-        src: "/media/viz-2.jpg",
-        alt: "Interactive chart controls",
-      },
-      {
-        type: "video",
-        src: "/media/viz-demo.mp4",
-        poster: "/media/viz-poster.jpg",
-        alt: "Data visualization demo",
       },
     ],
     links: [

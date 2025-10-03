@@ -49,6 +49,7 @@ export interface CaseStudyFeaturesData {
     media?: {
       type: "image" | "video";
       src: string;
+      poster?: string; // For video poster/thumbnail image
       alt?: string;
     };
   }>;
@@ -115,6 +116,7 @@ export interface CaseStudyGalleryData {
 
 export interface CaseStudy {
   slug: string;
+  orientation: "portrait" | "landscape";
   hero: CaseStudyHeroData;
   overview: CaseStudyOverviewData;
   problemSolution: CaseStudyProblemSolutionData;
@@ -128,6 +130,7 @@ export interface CaseStudy {
 export const caseStudies: Record<string, CaseStudy> = {
   anchor: {
     slug: "anchor",
+    orientation: "portrait",
     hero: {
       title: "Anchor",
       tagline:
@@ -163,9 +166,9 @@ export const caseStudies: Record<string, CaseStudy> = {
         "Protect user privacy through strict anonymity in every interaction",
       ],
       media: {
-        type: "gif",
-        src: "/media/anchor-overview.gif",
-        alt: "Anchor app demonstration",
+        type: "video",
+        src: "/assets/case-studies/anchor/anchor-sos.mp4",
+        alt: "SOS feature demonstration",
       },
     },
     problemSolution: {
@@ -199,7 +202,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             description:
               "Implemented comprehensive content moderation using OpenAI that screens interactions before delivery. Filters harmful content, trolling, and inappropriate responses to protect users when they're most vulnerable.",
             tech: ["OpenAI API", "Approval UX", "Real-time Moderation"],
-            featureLink: "#feature-1", // Or specific anchor like "#feature-anonymity"
+            featureLink: "#feature-2", // Or specific anchor like "#feature-anonymity"
             implementationLink: "#technical-challenge-0",
           },
         },
@@ -218,7 +221,7 @@ export const caseStudies: Record<string, CaseStudy> = {
               "Anonymous Threaded Messaging",
               "Opt-In Chat Permissions",
             ],
-            featureLink: "#feature-4", // Or specific anchor like "#feature-anonymity"
+            featureLink: "#feature-6", // Or specific anchor like "#feature-anonymity"
           },
         },
         {
@@ -232,7 +235,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             description:
               "Added streak tracking, and built scheduled Cloud Functions that generate personalized daily Bible verses and prayers using OpenAI. Provides consistent daily value to encourage regular app usage and spiritual engagement.",
             tech: ["Scheduled Functions", "OpenAI API", "Cron Jobs"],
-            featureLink: "#feature-2,5", // Or specific anchor like "#feature-anonymity"
+            featureLink: "#feature-3,4,5", // Or specific anchor like "#feature-anonymity"
           },
         },
       ],
@@ -247,8 +250,21 @@ export const caseStudies: Record<string, CaseStudy> = {
           icon: "AlertCircle",
           media: {
             type: "video",
-            src: "/media/anchor-sos.jpg",
+            src: "/assets/case-studies/anchor/anchor-sos.mp4",
+            poster: "/assets/case-studies/anchor/anchor-sos.jpg", // your existing screenshot
             alt: "Anonymous SOS feature demonstration",
+          },
+        },
+        {
+          title: "Receive Encouragement",
+          description:
+            "Get immediate anonymous help from other app users in times of temptation and struggle.",
+          icon: "Bell",
+          media: {
+            type: "video",
+            src: "/assets/case-studies/anchor/anchor-encouragement.mp4",
+            poster: "/assets/case-studies/anchor/anchor-encouragement.jpg", // your existing screenshot
+            alt: "Receive encouragement interface",
           },
         },
         {
@@ -258,41 +274,33 @@ export const caseStudies: Record<string, CaseStudy> = {
           icon: "Shield",
           media: {
             type: "video",
-            src: "/media/anchor-moderation.mp4",
-            alt: "AI moderation in action",
+            src: "/assets/case-studies/anchor/anchor-moderation.mp4",
+            poster: "/assets/case-studies/anchor/anchor-moderation.jpg", // your existing screenshot
+            alt: "Moderation demonstration",
           },
         },
         {
-          title: "Daily Bible Verse & Prayer",
+          title: "Verse Of The Day",
           description:
-            "Receive AI-generated personalized prayers and daily scripture to maintain spiritual engagement and build consistent habits beyond crisis moments.",
+            "Receive daily scripture to maintain spiritual engagement and build consistent habits beyond crisis moments.",
           icon: "BookOpen",
           media: {
-            type: "image",
-            src: "/media/anchor-daily.jpg",
-            alt: "Daily devotional content",
+            type: "video",
+            src: "/assets/case-studies/anchor/anchor-verse.mp4",
+            poster: "/assets/case-studies/anchor/anchor-verse.jpg", // your existing screenshot
+            alt: "Daily bible verse content",
           },
         },
         {
-          title: "Anonymous Community",
+          title: "Daily Prayer",
           description:
-            "Share testimonies and resources in a moderated community space. All posts and comments are anonymous and AI-screened for safety.",
-          icon: "Users",
+            "Receive AI-generated personalized prayers to maintain spiritual engagement and build consistent habits beyond crisis moments.",
+          icon: "BookOpen",
           media: {
             type: "video",
-            src: "/media/anchor-community.mp4",
-            alt: "Community feed",
-          },
-        },
-        {
-          title: "Optional Deeper Connection",
-          description:
-            "If both parties consent, continue conversations privately while maintaining anonymity. Control your privacy with options to hide streaks and personal details.",
-          icon: "MessageCircle",
-          media: {
-            type: "image",
-            src: "/media/anchor-messages.jpg",
-            alt: "Private messaging interface",
+            src: "/assets/case-studies/anchor/anchor-prayer.mp4",
+            poster: "/assets/case-studies/anchor/anchor-prayer.jpg", // your existing screenshot
+            alt: "Daily bible verse content",
           },
         },
         {
@@ -301,20 +309,34 @@ export const caseStudies: Record<string, CaseStudy> = {
             "Visual dashboards showing your consistency streaks, check-in history, and goal progress over time. Hide your streak if you prefer to keep it private.",
           icon: "TrendingUp",
           media: {
-            type: "image",
-            src: "/media/anchor-progress.jpg",
-            alt: "Progress tracking dashboard",
+            type: "video",
+            src: "/assets/case-studies/anchor/anchor-streak.mp4",
+            poster: "/assets/case-studies/anchor/anchor-streak.jpg", // your existing screenshot
+            alt: "Streak feature",
           },
         },
         {
-          title: "Notification Customization",
+          title: "Optional Deeper Connection",
           description:
-            "Decide exactly what types of notifications you recieve, including any combination of help requests, encouragements recieved, and private messages.",
-          icon: "Bell",
+            "If both parties consent, continue conversations privately while maintaining anonymity. Control your privacy with options to hide streaks and personal details.",
+          icon: "MessageCircle",
           media: {
-            type: "image",
-            src: "/media/anchor-progress.jpg",
-            alt: "Progress tracking dashboard",
+            type: "video",
+            src: "/assets/case-studies/anchor/anchor-messages.mp4",
+            poster: "/assets/case-studies/anchor/anchor-messages.jpg", // your existing screenshot
+            alt: "Private Messages interface",
+          },
+        },
+        {
+          title: "Community Posts",
+          description:
+            "Share testimonies and resources in a community space. LIke posts, add comments, and make posts of your own, all anonymous and AI-screened for safety.",
+          icon: "Users",
+          media: {
+            type: "video",
+            src: "/assets/case-studies/anchor/anchor-community.mp4",
+            poster: "/assets/case-studies/anchor/anchor-community.jpg", // your existing screenshot
+            alt: "Community Feed",
           },
         },
         {
@@ -323,9 +345,10 @@ export const caseStudies: Record<string, CaseStudy> = {
             "Clean UX for limiting the amount of times users can reach out or post to prevent spamming or trolling.",
           icon: "Shield",
           media: {
-            type: "image",
-            src: "/media/anchor-progress.jpg",
-            alt: "Progress tracking dashboard",
+            type: "video",
+            src: "/assets/case-studies/anchor/anchor-spam.mp4",
+            poster: "/assets/case-studies/anchor/anchor-spam.jpg", // your existing screenshot
+            alt: "Spam prevention interface",
           },
         },
       ],
@@ -679,6 +702,7 @@ export const moderateAndPost = onCall(async (req) => {
   // ========= NEW CASE STUDY: Dialed (AI Meal Planner) =========
   dialed: {
     slug: "dialed",
+    orientation: "landscape",
     hero: {
       title: "Dialed",
       tagline:
@@ -783,13 +807,24 @@ export const moderateAndPost = onCall(async (req) => {
         "Dialed handles the entire meal planning workflow—from targets to recipes—so users don’t have to guess or do the math.",
       features: [
         {
-          title: "Calorie + Protein Targets",
+          title: "Personalized Plans",
           description:
-            "Dialed calculates personalized daily calorie and protein goals as the foundation for every plan. No guesswork, just clarity from the start.",
+            "Dialed calculates maintanence calories for the individual based on provided bio data and activity level using the Mifflin-St Jeor Equation",
           icon: "Gauge",
           media: {
             type: "image",
-            src: "/media/dialed-targets.jpg",
+            src: "/assets/case-studies/dialed/dialed-data.jpg",
+            alt: "Calorie and protein targets UI",
+          },
+        },
+        {
+          title: "Calorie + Protein Targets",
+          description:
+            "Dialed calculates personalized daily calorie and protein goals based on users goals. Clarity from the start.",
+          icon: "Gauge",
+          media: {
+            type: "image",
+            src: "/assets/case-studies/dialed/dialed-goal.jpg",
             alt: "Calorie and protein targets UI",
           },
         },
@@ -800,7 +835,7 @@ export const moderateAndPost = onCall(async (req) => {
           icon: "ListChecks",
           media: {
             type: "image",
-            src: "/media/dialed-questionnaire.jpg",
+            src: "/assets/case-studies/dialed/dialed-questionnaire.jpg",
             alt: "Questionnaire UI",
           },
         },
@@ -848,7 +883,7 @@ export const moderateAndPost = onCall(async (req) => {
             alt: "Meal swap and regeneration",
           },
         },
-        {
+        /*{
           title: "Weekly Grocery List",
           description:
             "Auto-generated shopping list updates with every plan change. Stay organized and shop exactly what you need—no more manual lists.",
@@ -858,7 +893,7 @@ export const moderateAndPost = onCall(async (req) => {
             src: "/media/dialed-grocery.jpg",
             alt: "Grocery list UI",
           },
-        },
+        },*/
         {
           title: "Easy Variety Toggles",
           description:

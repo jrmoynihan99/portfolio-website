@@ -56,14 +56,6 @@ const Results = dynamic(
   { ssr: true }
 );
 
-const Gallery = dynamic(
-  () =>
-    import("@/components/sections/case-study/Gallery").then((m) => ({
-      default: m.Gallery,
-    })),
-  { ssr: true }
-);
-
 // Define case study sections for navigation
 const caseStudySections = [
   { id: "hero", label: "Home" },
@@ -73,7 +65,6 @@ const caseStudySections = [
   { id: "tech", label: "Tech Stack" },
   { id: "technical-challenges", label: "Technical Challenges" },
   { id: "results", label: "Results" },
-  { id: "gallery", label: "Gallery" },
 ];
 
 export default function CaseStudyPage({
@@ -101,7 +92,6 @@ export default function CaseStudyPage({
       <TechStack registry={registry} slug={slug} />
       <TechnicalChallenges registry={registry} slug={slug} />
       <Results registry={registry} slug={slug} />
-      <Gallery registry={registry} slug={slug} />
     </div>
   );
 }

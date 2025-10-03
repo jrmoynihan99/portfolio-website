@@ -8,7 +8,6 @@ export function MediaDisplay({ media }: { media: ProjectMedia }) {
   useEffect(() => {
     if (!videoRef.current || media.type !== "video") return;
     const vid = videoRef.current;
-
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -21,7 +20,6 @@ export function MediaDisplay({ media }: { media: ProjectMedia }) {
       },
       { threshold: 0.25 }
     );
-
     io.observe(vid);
     return () => io.disconnect();
   }, [media.type]);
@@ -30,7 +28,7 @@ export function MediaDisplay({ media }: { media: ProjectMedia }) {
     return (
       <video
         ref={videoRef}
-        className="h-full w-full object-cover"
+        className="h-full w-full object-cover rounded-2xl"
         playsInline
         muted
         loop
@@ -49,7 +47,7 @@ export function MediaDisplay({ media }: { media: ProjectMedia }) {
       alt={media.alt || ""}
       fill
       sizes="(max-width: 768px) 100vw, 50vw"
-      className="object-cover"
+      className="object-cover rounded-2xl"
     />
   );
 }

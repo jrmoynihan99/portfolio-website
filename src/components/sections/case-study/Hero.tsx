@@ -34,7 +34,7 @@ export function CaseStudyHero({
           <MotionReveal direction="up" delay={0}>
             <div className="mb-8 flex items-center justify-center">
               <HeadshotProgress
-                image="anchor"
+                image={slug}
                 size={160}
                 gap={8}
                 border={2}
