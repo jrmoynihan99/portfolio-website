@@ -63,7 +63,7 @@ export const projects: Project[] = [
       },
     ],
     links: [
-      { type: "case", label: "Case Study", href: "/projects/anchor" },
+      { type: "case", label: "Case Study", href: "/case-studies/anchor" },
       {
         type: "appstore",
         label: "App Store",
@@ -101,7 +101,7 @@ export const projects: Project[] = [
       },
     ],
     links: [
-      { type: "case", label: "Case Study", href: "/projects/dialed" },
+      { type: "case", label: "Case Study", href: "/case-studies/dialed" },
       {
         type: "live",
         label: "Demo",

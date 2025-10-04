@@ -15,6 +15,7 @@ import {
   MessageCircle,
   TrendingUp,
   Bell,
+  ArrowRight,
 
   // UI icons (from TechnicalChallenges, etc.)
   ChevronDown,
@@ -42,6 +43,7 @@ export {
   MessageCircle,
   TrendingUp,
   Bell,
+  ArrowRight,
 
   // UI
   ChevronDown,
@@ -69,6 +71,7 @@ export const icons = {
   MessageCircle,
   TrendingUp,
   Bell,
+  ArrowRight,
   ChevronDown,
   ChevronUp,
   Maximize2,
