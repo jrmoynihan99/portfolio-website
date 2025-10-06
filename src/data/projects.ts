@@ -108,6 +108,7 @@ export const projects: Project[] = [
         href: "https://meal-planner-ai-app.vercel.app/",
       },
     ],
+    featured: true,
   },
   {
     title: "LiqGlass Component Library",

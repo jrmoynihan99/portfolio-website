@@ -17,10 +17,24 @@ export interface CaseStudyHeroData {
 export interface CaseStudyOverviewData {
   description: string;
   goals: string[];
+  orientation?: "landscape" | "portrait" | "both"; // NEW: optional orientation
   media?: {
     type: "image" | "video" | "gif";
     src: string;
     alt?: string;
+  };
+  // NEW: Device-specific media
+  mediaByDevice?: {
+    desktop: {
+      type: "image" | "video" | "gif";
+      src: string;
+      alt?: string;
+    };
+    mobile: {
+      type: "image" | "video" | "gif";
+      src: string;
+      alt?: string;
+    };
   };
 }
 
@@ -42,15 +56,32 @@ export interface CaseStudyProblemSolutionData {
 
 export interface CaseStudyFeaturesData {
   intro: string;
+  orientation?: "landscape" | "portrait" | "both"; // NEW: optional, defaults to case study orientation
   features: Array<{
     title: string;
     description: string;
-    icon: string; // Lucide icon name
+    icon: string;
+    // Original single media (backwards compatible)
     media?: {
       type: "image" | "video";
       src: string;
-      poster?: string; // For video poster/thumbnail image
+      poster?: string;
       alt?: string;
+    };
+    // NEW: Multi-device media (optional)
+    mediaByDevice?: {
+      desktop: {
+        type: "image" | "video";
+        src: string;
+        poster?: string;
+        alt?: string;
+      };
+      mobile: {
+        type: "image" | "video";
+        src: string;
+        poster?: string;
+        alt?: string;
+      };
     };
   }>;
 }
@@ -725,17 +756,25 @@ export const moderateAndPost = onCall(async (req) => {
     },
     overview: {
       description:
-        "Dialed is a React/Next.js meal planning app that converts calorie and protein goals into realistic meals, portion-accurate daily plans, and a weekly schedule iwth recipes and a grocery list. Users first select preferences via a guided questionnaire, approve AI-generated meals, then the app builds optimized day plans that hit targets by scaling ingredient portions. Finally, users arrange their week with dynamic variety and customization",
+        "Dialed is a React/Next.js meal planning app that converts calorie and protein goals into realistic meals, portion-accurate daily plans, and a weekly schedule with recipes and a grocery list. Users first select preferences via a guided questionnaire, approve AI-generated meals, then the app builds optimized day plans that hit targets by scaling ingredient portions. Finally, users arrange their week with dynamic variety and customization",
       goals: [
         "Make meal planning fast and amazing with dynamic AI powered meals",
         "Hit daily calorie/protein targets precisely via optimization",
         "Allow users to easily swap in new meals, auto portioned to fit",
         "Give users recipes and a weekly grocery list to remove barriers to following the plan",
       ],
-      media: {
-        type: "gif",
-        src: "/media/dialed-overview.gif",
-        alt: "Dialed meal planner walkthrough",
+      orientation: "both",
+      mediaByDevice: {
+        desktop: {
+          type: "video",
+          src: "/assets/case-studies/dialed/dialed-solver.mp4",
+          alt: "Dialed meal planner walkthrough on desktop",
+        },
+        mobile: {
+          type: "video",
+          src: "/assets/case-studies/dialed/dialed-solver-mobile.mp4",
+          alt: "Dialed meal planner walkthrough on mobile",
+        },
       },
     },
     problemSolution: {
@@ -804,17 +843,27 @@ export const moderateAndPost = onCall(async (req) => {
 
     features: {
       intro:
-        "Dialed handles the entire meal planning workflow—from targets to recipes—so users don’t have to guess or do the math.",
+        "Dialed handles the entire meal planning workflow—from targets to recipes—so users don't have to guess or do the math.",
+      orientation: "both",
       features: [
         {
           title: "Personalized Plans",
           description:
-            "Dialed calculates maintanence calories for the individual based on provided bio data and activity level using the Mifflin-St Jeor Equation",
+            "Dialed calculates maintenance calories for the individual based on provided bio data and activity level using the Mifflin-St Jeor Equation",
           icon: "Gauge",
-          media: {
-            type: "image",
-            src: "/assets/case-studies/dialed/dialed-data.jpg",
-            alt: "Calorie and protein targets UI",
+          mediaByDevice: {
+            desktop: {
+              type: "video",
+              src: "/assets/case-studies/dialed/dialed-data.mp4",
+              poster: "/assets/case-studies/dialed/dialed-data.jpg",
+              alt: "Personalized plan interface on desktop",
+            },
+            mobile: {
+              type: "video",
+              src: "/assets/case-studies/dialed/dialed-data-mobile.mp4",
+              poster: "/assets/case-studies/dialed/dialed-data-mobile.jpg",
+              alt: "Personalized plan interface on mobile",
+            },
           },
         },
         {
@@ -822,10 +871,19 @@ export const moderateAndPost = onCall(async (req) => {
           description:
             "Dialed calculates personalized daily calorie and protein goals based on users goals. Clarity from the start.",
           icon: "Gauge",
-          media: {
-            type: "image",
-            src: "/assets/case-studies/dialed/dialed-goal.jpg",
-            alt: "Calorie and protein targets UI",
+          mediaByDevice: {
+            desktop: {
+              type: "video",
+              src: "/assets/case-studies/dialed/dialed-goal.mp4",
+              poster: "/assets/case-studies/dialed/dialed-goal.jpg",
+              alt: "Goal interface on desktop",
+            },
+            mobile: {
+              type: "video",
+              src: "/assets/case-studies/dialed/dialed-goal-mobile.mp4",
+              poster: "/assets/case-studies/dialed/dialed-goal-mobile.jpg",
+              alt: "Goal interface on mobile",
+            },
           },
         },
         {
@@ -833,10 +891,20 @@ export const moderateAndPost = onCall(async (req) => {
           description:
             "Pick proteins, carbs, veggies, and exclusions. Feeds GPT to generate on-target, realistic meals with recipes.",
           icon: "ListChecks",
-          media: {
-            type: "image",
-            src: "/assets/case-studies/dialed/dialed-questionnaire.jpg",
-            alt: "Questionnaire UI",
+          mediaByDevice: {
+            desktop: {
+              type: "video",
+              src: "/assets/case-studies/dialed/dialed-questionnaire.mp4",
+              poster: "/assets/case-studies/dialed/dialed-questionnaire.jpg",
+              alt: "Questionnaire interface on desktop",
+            },
+            mobile: {
+              type: "video",
+              src: "/assets/case-studies/dialed/dialed-questionnaire-mobile.mp4",
+              poster:
+                "/assets/case-studies/dialed/dialed-questionnaire-mobile.jpg",
+              alt: "Questionnaire interface on mobile",
+            },
           },
         },
         {
@@ -844,21 +912,39 @@ export const moderateAndPost = onCall(async (req) => {
           description:
             "AI-generated meals arrive as cards with images and recipes. Approve to keep, skip to replace—no clutter, no overwhelm.",
           icon: "Sparkles",
-          media: {
-            type: "video",
-            src: "/media/dialed-meals.mp4",
-            alt: "Meal cards approval",
+          mediaByDevice: {
+            desktop: {
+              type: "video",
+              src: "/assets/case-studies/dialed/dialed-meals.mp4",
+              poster: "/assets/case-studies/dialed/dialed-meals.jpg",
+              alt: "Meal Generation interface on desktop",
+            },
+            mobile: {
+              type: "video",
+              src: "/assets/case-studies/dialed/dialed-meals-mobile.mp4",
+              poster: "/assets/case-studies/dialed/dialed-meals-mobile.jpg",
+              alt: "Meal Generation interface on mobile",
+            },
           },
         },
         {
           title: "Portion-Accurate Day Builder",
           description:
-            "A custom solver scales meal ingredients to hit calorie and protein targets exactly, respecting fixed vs scalable items.",
+            "A custom solver scales meal ingredients to hit calorie and protein targets exactly, respecting fixed vs scalable ingredient items.",
           icon: "Scale",
-          media: {
-            type: "image",
-            src: "/media/dialed-optimizer.jpg",
-            alt: "Optimization results",
+          mediaByDevice: {
+            desktop: {
+              type: "video",
+              src: "/assets/case-studies/dialed/dialed-solver.mp4",
+              poster: "/assets/case-studies/dialed/dialed-solver.jpg",
+              alt: "Solver loading interface on desktop",
+            },
+            mobile: {
+              type: "video",
+              src: "/assets/case-studies/dialed/dialed-solver-mobile.mp4",
+              poster: "/assets/case-studies/dialed/dialed-solver-mobile.jpg",
+              alt: "Solver loading interface on mobile",
+            },
           },
         },
         {
@@ -866,43 +952,39 @@ export const moderateAndPost = onCall(async (req) => {
           description:
             "Arrange unique days on a weekly grid. Drag to reorder, snap meals to precise times, and assign days in seconds.",
           icon: "CalendarDays",
-          media: {
-            type: "video",
-            src: "/media/dialed-weekly.mp4",
-            alt: "Weekly grid DnD",
+          mediaByDevice: {
+            desktop: {
+              type: "video",
+              src: "/assets/case-studies/dialed/dialed-planner.mp4",
+              poster: "/assets/case-studies/dialed/dialed-planner.jpg",
+              alt: "Weekly planner interface on desktop",
+            },
+            mobile: {
+              type: "video",
+              src: "/assets/case-studies/dialed/dialed-planner-mobile.mp4",
+              poster: "/assets/case-studies/dialed/dialed-planner-mobile.jpg",
+              alt: "Weekly planner interface on mobile",
+            },
           },
         },
-        {
-          title: "Instant Meal Swaps",
-          description:
-            "Never get bored—approve a new meal or swap from your saved set, and Dialed instantly regenerates daily plans, recipes, and your grocery list.",
-          icon: "ArrowPath",
-          media: {
-            type: "video",
-            src: "/media/dialed-swap.mp4",
-            alt: "Meal swap and regeneration",
-          },
-        },
-        /*{
-          title: "Weekly Grocery List",
-          description:
-            "Auto-generated shopping list updates with every plan change. Stay organized and shop exactly what you need—no more manual lists.",
-          icon: "ShoppingCart",
-          media: {
-            type: "image",
-            src: "/media/dialed-grocery.jpg",
-            alt: "Grocery list UI",
-          },
-        },*/
         {
           title: "Easy Variety Toggles",
           description:
             "Dialed keeps plans fresh without chaos. Use simple variety controls to shuffle through all valid daily plans while keeping portions locked and shopping consistent.",
           icon: "Shuffle",
-          media: {
-            type: "video",
-            src: "/media/dialed-variety.mp4",
-            alt: "Variety toggle demo",
+          mediaByDevice: {
+            desktop: {
+              type: "video",
+              src: "/assets/case-studies/dialed/dialed-variety.mp4",
+              poster: "/assets/case-studies/dialed/dialed-variety.jpg",
+              alt: "Variety interface on desktop",
+            },
+            mobile: {
+              type: "video",
+              src: "/assets/case-studies/dialed/dialed-variety-mobile.mp4",
+              poster: "/assets/case-studies/dialed/dialed-variety-mobile.jpg",
+              alt: "Variety interface on mobile",
+            },
           },
         },
       ],

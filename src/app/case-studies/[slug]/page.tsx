@@ -1,11 +1,15 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { Background, BackgroundVariant } from "@/components/layout/Background";
 import { SiteNav } from "@/components/layout/SiteNav";
 import { BackButton } from "@/components/layout/BackButton";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { CaseStudyHero } from "@/components/sections/case-study/Hero";
+import { FeaturesToggle } from "@/components/sections/case-study/FeaturesToggle";
+import { OverviewToggle } from "@/components/sections/case-study/OverviewToggle";
+import { shouldShowFeaturesToggle } from "@/components/sections/case-study/Features";
+import { shouldShowOverviewToggle } from "@/components/sections/case-study/Overview";
 
 // Lazy load all sections below the fold
 const Overview = dynamic(
@@ -15,7 +19,6 @@ const Overview = dynamic(
     })),
   { ssr: true }
 );
-
 const ProblemSolution = dynamic(
   () =>
     import("@/components/sections/case-study/ProblemSolution").then((m) => ({
@@ -23,7 +26,6 @@ const ProblemSolution = dynamic(
     })),
   { ssr: true }
 );
-
 const Features = dynamic(
   () =>
     import("@/components/sections/case-study/Features").then((m) => ({
@@ -31,7 +33,6 @@ const Features = dynamic(
     })),
   { ssr: true }
 );
-
 const TechStack = dynamic(
   () =>
     import("@/components/sections/case-study/TechStack").then((m) => ({
@@ -39,7 +40,6 @@ const TechStack = dynamic(
     })),
   { ssr: true }
 );
-
 const TechnicalChallenges = dynamic(
   () =>
     import("@/components/sections/case-study/TechnicalChallenges").then(
@@ -47,7 +47,6 @@ const TechnicalChallenges = dynamic(
     ),
   { ssr: true }
 );
-
 const Results = dynamic(
   () =>
     import("@/components/sections/case-study/Results").then((m) => ({
@@ -76,22 +75,56 @@ export default function CaseStudyPage({
   const active = useActiveSection(registry);
   const { slug } = React.use(params);
 
+  // State for view modes
+  const [overviewViewMode, setOverviewViewMode] = useState<
+    "desktop" | "mobile"
+  >("desktop");
+  const [featuresViewMode, setFeaturesViewMode] = useState<
+    "desktop" | "mobile"
+  >("mobile");
+
+  const showOverviewToggle = shouldShowOverviewToggle(slug);
+  const showFeaturesToggle = shouldShowFeaturesToggle(slug);
+
   return (
     <div className="relative min-h-screen">
       <Background variant={slug as BackgroundVariant} />
       <BackButton href="/#projects" />
       <SiteNav active={active} sections={caseStudySections} />
 
-      {/* Hero loads immediately */}
       <CaseStudyHero registry={registry} slug={slug} />
-
-      {/* All other sections lazy load */}
-      <Overview registry={registry} slug={slug} />
+      <Overview
+        registry={registry}
+        slug={slug}
+        viewMode={overviewViewMode}
+        onViewModeChange={setOverviewViewMode}
+      />
       <ProblemSolution registry={registry} slug={slug} />
-      <Features registry={registry} slug={slug} />
+      <Features
+        registry={registry}
+        slug={slug}
+        viewMode={featuresViewMode}
+        onViewModeChange={setFeaturesViewMode}
+      />
       <TechStack registry={registry} slug={slug} />
       <TechnicalChallenges registry={registry} slug={slug} />
       <Results registry={registry} slug={slug} />
+
+      {/* Floating toggles - rendered at page level */}
+      {showOverviewToggle && (
+        <OverviewToggle
+          viewMode={overviewViewMode}
+          onViewModeChange={setOverviewViewMode}
+          registry={registry}
+        />
+      )}
+      {showFeaturesToggle && (
+        <FeaturesToggle
+          viewMode={featuresViewMode}
+          onViewModeChange={setFeaturesViewMode}
+          registry={registry}
+        />
+      )}
     </div>
   );
 }

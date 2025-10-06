@@ -56,7 +56,7 @@ export function Projects({
 
           {/* Regular projects grid */}
           {regular.length > 0 && (
-            <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-6">
+            <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-6">
               {regular.map((project, i) => {
                 // Calculate column position (0 = left, 1 = middle, 2 = right)
                 const col = i % 3;

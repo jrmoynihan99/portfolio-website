@@ -7,7 +7,7 @@ import type { Project } from "@/data/projects";
 
 export function FeaturedProjectCard({ project }: { project: Project }) {
   return (
-    <Card className="overflow-hidden group hover:bg-white/10 hover:border-white/20 transition-all duration-300">
+    <Card className="overflow-hidden group hover:bg-white/10 hover:border-white/20 transition-all duration-300 mb-8">
       <div className="grid lg:grid-cols-2 gap-8 p-6 md:p-8">
         {/* Left: Project Info */}
         <div className="flex flex-col justify-center">

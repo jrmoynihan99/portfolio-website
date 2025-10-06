@@ -24,6 +24,8 @@ import {
   X,
   Copy,
   Check,
+  Monitor,
+  Smartphone,
 } from "lucide-react";
 
 // Export them
@@ -52,6 +54,8 @@ export {
   X,
   Copy,
   Check,
+  Monitor,
+  Smartphone,
 };
 
 // Also export as a map for dynamic access in Features.tsx
@@ -78,6 +82,8 @@ export const icons = {
   X,
   Copy,
   Check,
+  Monitor,
+  Smartphone,
 } as const;
 
 export type IconName = keyof typeof icons;
