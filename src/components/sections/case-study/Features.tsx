@@ -14,7 +14,7 @@ import Image from "next/image";
 export function Features({
   registry,
   slug,
-  onViewModeChange,
+  // onViewModeChange, // (unused)
   viewMode,
 }: {
   registry: React.RefObject<Record<string, HTMLElement | null>>;
@@ -22,38 +22,34 @@ export function Features({
   onViewModeChange?: (mode: "desktop" | "mobile") => void;
   viewMode?: "desktop" | "mobile";
 }) {
+  // ==== DO NOT RETURN BEFORE HOOKS (avoid conditional hooks) ====
+  const caseStudy = caseStudies[slug];
+  const missing = !caseStudy;
+
+  // State
   const [underlineActive, setUnderlineActive] = useState(false);
   const [highlightedFeatures, setHighlightedFeatures] = useState<number[]>([]);
-  const [internalViewMode, setInternalViewMode] = useState<
-    "desktop" | "mobile"
-  >("mobile");
-  const [isSectionVisible, setIsSectionVisible] = useState(false);
+  const [internalViewMode] = useState<"desktop" | "mobile">("desktop");
 
-  // Controlled vs internal
-  const activeViewMode = viewMode ?? internalViewMode;
-  const setViewMode = onViewModeChange ?? setInternalViewMode;
-
+  // Motion controls (single persistent node, no remount)
   const prefersReducedMotion = useReducedMotion();
   const controls = useAnimation();
   const animatingRef = useRef(false);
 
-  // Case study data
-  const caseStudy = caseStudies[slug];
-  if (!caseStudy) return null;
+  // Derived data (safe defaults when missing)
+  const activeViewMode = viewMode ?? internalViewMode;
+  const caseStudyOrientation = caseStudy?.orientation || "portrait";
+  const featuresData = caseStudy?.features;
+  const featuresOrientation = featuresData?.orientation || caseStudyOrientation;
 
-  const caseStudyOrientation = caseStudy.orientation || "portrait";
-  const featuresData = caseStudy.features;
-  const featuresOrientation = featuresData.orientation || caseStudyOrientation;
-
-  // Orientation derived from view mode when "both"
-  const computedOrientation =
+  const computedOrientation: "portrait" | "landscape" =
     featuresOrientation === "both"
       ? activeViewMode === "desktop"
         ? "landscape"
         : "portrait"
-      : featuresOrientation;
+      : (featuresOrientation as "portrait" | "landscape");
 
-  // We keep a "visual" orientation that lags during the cross-fade
+  // Visual state (lags during transition)
   const [visualOrientation, setVisualOrientation] = useState<
     "portrait" | "landscape"
   >(computedOrientation);
@@ -61,46 +57,36 @@ export function Features({
     activeViewMode
   );
 
-  // Cross-fade on changes WITHOUT remounting children
+  // Cross-fade/scale timeline (out → swap → in), no remount
   useEffect(() => {
     if (
       visualOrientation === computedOrientation &&
       visualViewMode === activeViewMode
     )
       return;
-
     if (prefersReducedMotion) {
-      // Instant swap when reduced motion
       setVisualOrientation(computedOrientation);
       setVisualViewMode(activeViewMode);
       return;
     }
-
-    // Prevent overlapping animations
     if (animatingRef.current) return;
     animatingRef.current = true;
 
     (async () => {
-      // Phase 1: fade/scale out
       await controls.start({
         opacity: 0,
         scale: 0.98,
         filter: "blur(2px)",
         transition: { duration: 0.16, ease: [0.22, 0.61, 0.36, 1] },
       });
-
-      // Swap classes/layout while hidden (no remount!)
       setVisualOrientation(computedOrientation);
       setVisualViewMode(activeViewMode);
-
-      // Phase 2: fade/scale in
       await controls.start({
         opacity: 1,
         scale: 1,
         filter: "blur(0px)",
         transition: { duration: 0.22, ease: [0.22, 0.61, 0.36, 1] },
       });
-
       animatingRef.current = false;
     })();
   }, [
@@ -112,7 +98,7 @@ export function Features({
     visualViewMode,
   ]);
 
-  // Hash-based highlight (#feature-0,2,3)
+  // Hash highlight
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash?.slice(1);
@@ -135,36 +121,13 @@ export function Features({
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
-  // Intersection observer for visibility (unchanged)
-  useEffect(() => {
-    let observer: IntersectionObserver | null = null;
-    let attempts = 0;
-    const maxAttempts = 50;
-
-    const checkAndObserve = () => {
-      attempts++;
-      const section = registry.current?.["features"];
-      if (!section && attempts < maxAttempts) {
-        setTimeout(checkAndObserve, 100);
-        return;
-      }
-      if (!section) return;
-
-      observer = new IntersectionObserver(
-        ([entry]) => setIsSectionVisible(entry.isIntersecting),
-        { threshold: 0, rootMargin: "-10% 0px -10% 0px" }
-      );
-      observer.observe(section);
-    };
-
-    checkAndObserve();
-    return () => observer?.disconnect();
-  }, [registry]);
-
-  // Grid layout derived from *visual* orientation (so we don't remount on swap)
+  // Grid layout from visual orientation
   const gridCols =
     visualOrientation === "portrait" ? "md:grid-cols-2" : "md:grid-cols-1";
   const itemsPerRow = visualOrientation === "portrait" ? 2 : 1;
+
+  // If data missing, render nothing AFTER hooks (no conditional hooks)
+  if (missing || !featuresData) return null;
 
   return (
     <Section
@@ -174,7 +137,6 @@ export function Features({
     >
       <MotionParallax range={30}>
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
           <MotionReveal
             direction="up"
             delay={0}
@@ -190,7 +152,6 @@ export function Features({
             </SectionHeader>
           </MotionReveal>
 
-          {/* Intro */}
           <MotionReveal direction="up" delay={60}>
             <div className="mb-8">
               <p className="text-lg md:text-xl text-white/70 leading-relaxed text-center">
@@ -199,9 +160,8 @@ export function Features({
             </div>
           </MotionReveal>
 
-          {/* Grid: single mounted node that animates but never remounts */}
+          {/* Persistent animated wrapper */}
           <motion.div
-            // IMPORTANT: no key here — we keep this node mounted
             animate={controls}
             initial={false}
             style={{ willChange: "opacity, transform, filter" }}
@@ -217,7 +177,6 @@ export function Features({
                 feature.icon as keyof typeof icons
               ] as React.ComponentType<{ className?: string }> | undefined;
 
-              // Choose media by *visual* device mode, fallback to default
               const activeMedia = feature.mediaByDevice
                 ? feature.mediaByDevice[visualViewMode]
                 : feature.media;
@@ -272,9 +231,7 @@ export function Features({
                           </div>
                         ) : (
                           <video
-                            key={
-                              activeMedia.src /* change source without remounting parent */
-                            }
+                            key={activeMedia.src}
                             src={activeMedia.src}
                             poster={activeMedia.poster}
                             loop
@@ -323,17 +280,15 @@ export function Features({
   );
 }
 
-// Export helper to determine if toggle should show
+// Helper
 export function shouldShowFeaturesToggle(slug: string): boolean {
   const cs = caseStudies[slug];
   if (!cs) return false;
-
   const featuresData = cs.features;
   const featuresOrientation =
     featuresData.orientation || cs.orientation || "portrait";
   const hasDeviceSpecificMedia = featuresData.features.some(
     (f) => f.mediaByDevice
   );
-
   return featuresOrientation === "both" && hasDeviceSpecificMedia;
 }

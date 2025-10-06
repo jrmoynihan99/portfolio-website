@@ -13,7 +13,7 @@ import { caseStudies } from "@/data/case-studies";
 export function Overview({
   registry,
   slug,
-  onViewModeChange,
+  // onViewModeChange, // (unused)
   viewMode,
 }: {
   registry: React.RefObject<Record<string, HTMLElement | null>>;
@@ -21,26 +21,27 @@ export function Overview({
   onViewModeChange?: (mode: "desktop" | "mobile") => void;
   viewMode?: "desktop" | "mobile";
 }) {
+  // ==== DO NOT RETURN BEFORE HOOKS ====
+  const caseStudy = caseStudies[slug];
+  const missing = !caseStudy;
+
+  // State
   const [underlineActive, setUnderlineActive] = useState(false);
-  const [internalViewMode, setInternalViewMode] = useState<
-    "desktop" | "mobile"
-  >("desktop");
+  const [internalViewMode] = useState<"desktop" | "mobile">("desktop");
   const [mediaHeight, setMediaHeight] = useState<number | null>(null);
   const leftColumnRef = useRef<HTMLDivElement>(null);
   const goalsColumnRef = useRef<HTMLDivElement>(null);
 
-  // Controlled vs internal
+  // Motion controls
+  const prefersReducedMotion = useReducedMotion();
+  const controls = useAnimation();
+
+  // Derived data (safe defaults)
   const activeViewMode = viewMode ?? internalViewMode;
-  const setViewMode = onViewModeChange ?? setInternalViewMode;
+  const csOrientation = caseStudy?.orientation || "portrait";
+  const overviewData = caseStudy?.overview;
+  const overviewOrientation = overviewData?.orientation || csOrientation;
 
-  const caseStudy = caseStudies[slug];
-  if (!caseStudy) return null;
-
-  const caseStudyOrientation = caseStudy.orientation || "portrait";
-  const overviewData = caseStudy.overview;
-  const overviewOrientation = overviewData.orientation || caseStudyOrientation;
-
-  // Orientation that *should* be displayed (based on external toggle)
   const computedOrientation: "portrait" | "landscape" =
     overviewOrientation === "both"
       ? activeViewMode === "desktop"
@@ -48,9 +49,7 @@ export function Overview({
         : "portrait"
       : (overviewOrientation as "portrait" | "landscape");
 
-  // Animation setup (no remount)
-  const prefersReducedMotion = useReducedMotion();
-  const controls = useAnimation();
+  // Visual state used during animation
   const [visualOrientation, setVisualOrientation] = useState<
     "portrait" | "landscape"
   >(computedOrientation);
@@ -59,7 +58,7 @@ export function Overview({
   );
   const animatingRef = useRef(false);
 
-  // Cross-fade/scale timeline: out → swap → in
+  // Cross-fade/scale timeline
   useEffect(() => {
     if (
       visualOrientation === computedOrientation &&
@@ -81,17 +80,14 @@ export function Overview({
         filter: "blur(2px)",
         transition: { duration: 0.16, ease: [0.22, 0.61, 0.36, 1] },
       });
-
       setVisualOrientation(computedOrientation);
       setVisualViewMode(activeViewMode);
-
       await controls.start({
         opacity: 1,
         scale: 1,
         filter: "blur(0px)",
         transition: { duration: 0.22, ease: [0.22, 0.61, 0.36, 1] },
       });
-
       animatingRef.current = false;
     })();
   }, [
@@ -103,12 +99,12 @@ export function Overview({
     visualViewMode,
   ]);
 
-  // Choose media based on *visual* mode to avoid swapping mid-fade
-  const activeMedia = overviewData.mediaByDevice
+  // Media by visual mode
+  const activeMedia = overviewData?.mediaByDevice
     ? overviewData.mediaByDevice[visualViewMode]
-    : overviewData.media;
+    : overviewData?.media;
 
-  // Resize logic should track the *visual* orientation currently shown
+  // Resize: measure the column matching the *visual* orientation
   useEffect(() => {
     const refToObserve =
       visualOrientation === "portrait"
@@ -116,20 +112,20 @@ export function Overview({
         : goalsColumnRef.current;
     if (!refToObserve) return;
 
-    const updateMediaHeight = () => {
-      setMediaHeight(refToObserve?.offsetHeight ?? null);
-    };
+    const update = () => setMediaHeight(refToObserve?.offsetHeight ?? null);
 
-    updateMediaHeight();
-    window.addEventListener("resize", updateMediaHeight);
-    const resizeObserver = new ResizeObserver(updateMediaHeight);
+    update();
+    window.addEventListener("resize", update);
+    const resizeObserver = new ResizeObserver(update);
     resizeObserver.observe(refToObserve);
-
     return () => {
-      window.removeEventListener("resize", updateMediaHeight);
+      window.removeEventListener("resize", update);
       resizeObserver.disconnect();
     };
-  }, [caseStudy, visualOrientation]);
+  }, [visualOrientation]);
+
+  // Render nothing AFTER hooks if missing data
+  if (missing || !overviewData) return null;
 
   return (
     <Section
@@ -139,7 +135,7 @@ export function Overview({
     >
       <MotionParallax range={30}>
         <div className="max-w-5xl mx-auto">
-          {/* Section Header */}
+          {/* Header */}
           <MotionReveal
             direction="up"
             delay={0}
@@ -163,18 +159,15 @@ export function Overview({
               style={{ willChange: "opacity, transform, filter" }}
             >
               {visualOrientation === "portrait" ? (
-                // Portrait: content left, media right (media height matches left column)
+                // Portrait layout
                 <div className="flex flex-col lg:flex-row gap-12 mb-16 lg:items-start">
-                  {/* Left Column: Description + Goals */}
+                  {/* Left: Description + Goals */}
                   <div ref={leftColumnRef} className="space-y-12 flex-1">
-                    {/* Description */}
                     <div>
                       <p className="text-lg md:text-xl text-white/70 leading-relaxed">
                         {overviewData.description}
                       </p>
                     </div>
-
-                    {/* Goals */}
                     <div>
                       <h3 className="text-2xl md:text-3xl text-white/90 font-light mb-8">
                         Project Goals
@@ -183,7 +176,7 @@ export function Overview({
                         {overviewData.goals.map((goal, index) => (
                           <Card key={index} padding="p-6" className="group">
                             <div className="flex items-start gap-4">
-                              <div className="shrink-0 w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white/60 font-medium text-sm group-hover:bg.white/20 transition-colors">
+                              <div className="shrink-0 w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white/60 font-medium text-sm group-hover:bg-white/20 transition-colors">
                                 {index + 1}
                               </div>
                               <p className="text-white/80 leading-relaxed pt-1">
@@ -196,7 +189,7 @@ export function Overview({
                     </div>
                   </div>
 
-                  {/* Right Column: Portrait Media with border */}
+                  {/* Right: Portrait media */}
                   {activeMedia && (
                     <div
                       className="relative rounded-4xl overflow-hidden bg-white/5 shadow-2xl border-2 border-white/20 p-1"
@@ -232,18 +225,14 @@ export function Overview({
                   )}
                 </div>
               ) : (
-                // Landscape: description + media row, then goals below
+                // Landscape layout
                 <div className="space-y-12 mb-16">
-                  {/* Description + Media Row */}
                   <div className="flex flex-col lg:flex-row gap-12 lg:items-start">
-                    {/* Description */}
                     <div className="flex-1">
                       <p className="text-lg md:text-xl text-white/70 leading-relaxed">
                         {overviewData.description}
                       </p>
                     </div>
-
-                    {/* Landscape Media */}
                     {activeMedia && (
                       <div
                         className={clsx(
@@ -278,7 +267,6 @@ export function Overview({
                     )}
                   </div>
 
-                  {/* Goals - Full Width */}
                   <div ref={goalsColumnRef}>
                     <h3 className="text-2xl md:text-3xl text-white/90 font-light mb-8">
                       Project Goals
@@ -287,7 +275,7 @@ export function Overview({
                       {overviewData.goals.map((goal, index) => (
                         <Card key={index} padding="p-6" className="group">
                           <div className="flex items-start gap-4">
-                            <div className="shrink-0 w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white/60 font-medium text-sm group-hover:bg.white/20 transition-colors">
+                            <div className="shrink-0 w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white/60 font-medium text-sm group-hover:bg-white/20 transition-colors">
                               {index + 1}
                             </div>
                             <p className="text-white/80 leading-relaxed pt-1">
@@ -308,15 +296,13 @@ export function Overview({
   );
 }
 
-// Export helper to determine if toggle should show
+// Helper
 export function shouldShowOverviewToggle(slug: string): boolean {
   const cs = caseStudies[slug];
   if (!cs) return false;
-
   const overviewData = cs.overview;
   const overviewOrientation =
     overviewData.orientation || cs.orientation || "portrait";
   const hasDeviceSpecificMedia = !!overviewData.mediaByDevice;
-
   return overviewOrientation === "both" && hasDeviceSpecificMedia;
 }
