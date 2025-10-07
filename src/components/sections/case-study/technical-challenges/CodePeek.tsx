@@ -17,12 +17,12 @@ export default function CodePeek({
   onExpand,
 }: CodePeekProps) {
   return (
-    <div className="mt-4 rounded-2xl border border-white/10 bg-black/40">
+    <div className="mt-4 rounded-2xl border border-white/10 bg-black/40 max-w-full overflow-hidden">
       <div className="flex items-center justify-between px-3 py-2">
-        <span className="text-xs uppercase tracking-wider text-white/50">
+        <span className="text-xs uppercase tracking-wider text-white/50 truncate">
           {language}
         </span>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <CopyButton text={snippet} />
           {onExpand && (
             <button
@@ -36,26 +36,38 @@ export default function CodePeek({
           )}
         </div>
       </div>
-      <SyntaxHighlighter
-        language={language.toLowerCase()}
-        style={vscDarkPlus}
-        customStyle={{
-          margin: 0,
-          padding: "0.75rem",
-          background: "transparent",
-          fontSize: "12.5px",
-          lineHeight: "1.6",
-          maxHeight: "12rem",
-          borderRadius: 0,
-        }}
-        codeTagProps={{
-          style: {
-            fontFamily: "inherit",
-          },
-        }}
-      >
-        {snippet}
-      </SyntaxHighlighter>
+
+      {/* Scroll container prevents page-wide overflow on mobile */}
+      <div className="max-w-full overflow-x-auto overscroll-x-contain">
+        <SyntaxHighlighter
+          language={language.toLowerCase()}
+          style={vscDarkPlus}
+          wrapLongLines
+          customStyle={{
+            margin: 0,
+            padding: "0.75rem",
+            background: "transparent",
+            fontSize: "12.5px",
+            lineHeight: "1.6",
+            maxHeight: "12rem",
+            borderRadius: 0,
+            width: "100%",
+            overflowX: "auto",
+            boxSizing: "border-box",
+          }}
+          codeTagProps={{
+            style: {
+              fontFamily: "inherit",
+              whiteSpace: "pre-wrap", // allow wrapping when needed
+              wordBreak: "break-word",
+              overflowWrap: "anywhere", // break ultra-long tokens
+            },
+          }}
+        >
+          {snippet}
+        </SyntaxHighlighter>
+      </div>
+
       {caption && (
         <div className="border-t border-white/10 px-3 py-2 text-xs text-white/50">
           {caption}
