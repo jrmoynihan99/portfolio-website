@@ -25,30 +25,27 @@ export function Features({
   // ==== DO NOT RETURN BEFORE HOOKS (avoid conditional hooks) ====
   const caseStudy = caseStudies[slug];
   const missing = !caseStudy;
-
   // State
   const [underlineActive, setUnderlineActive] = useState(false);
   const [highlightedFeatures, setHighlightedFeatures] = useState<number[]>([]);
   const [internalViewMode] = useState<"desktop" | "mobile">("desktop");
-
   // Motion controls (single persistent node, no remount)
   const prefersReducedMotion = useReducedMotion();
   const controls = useAnimation();
   const animatingRef = useRef(false);
-
+  // SAFARI FIX: Add reRenderKey to force layout recalculation
+  const [reRenderKey, setReRenderKey] = useState(0);
   // Derived data (safe defaults when missing)
   const activeViewMode = viewMode ?? internalViewMode;
   const caseStudyOrientation = caseStudy?.orientation || "portrait";
   const featuresData = caseStudy?.features;
   const featuresOrientation = featuresData?.orientation || caseStudyOrientation;
-
   const computedOrientation: "portrait" | "landscape" =
     featuresOrientation === "both"
       ? activeViewMode === "desktop"
         ? "landscape"
         : "portrait"
       : (featuresOrientation as "portrait" | "landscape");
-
   // Visual state (lags during transition)
   const [visualOrientation, setVisualOrientation] = useState<
     "portrait" | "landscape"
@@ -56,7 +53,6 @@ export function Features({
   const [visualViewMode, setVisualViewMode] = useState<"desktop" | "mobile">(
     activeViewMode
   );
-
   // Cross-fade/scale timeline (out → swap → in), no remount
   useEffect(() => {
     if (
@@ -67,11 +63,11 @@ export function Features({
     if (prefersReducedMotion) {
       setVisualOrientation(computedOrientation);
       setVisualViewMode(activeViewMode);
+      setReRenderKey((prev) => prev + 1); // SAFARI FIX: Force reflow
       return;
     }
     if (animatingRef.current) return;
     animatingRef.current = true;
-
     (async () => {
       await controls.start({
         opacity: 0,
@@ -81,6 +77,7 @@ export function Features({
       });
       setVisualOrientation(computedOrientation);
       setVisualViewMode(activeViewMode);
+      setReRenderKey((prev) => prev + 1); // SAFARI FIX: Force reflow
       await controls.start({
         opacity: 1,
         scale: 1,
@@ -97,7 +94,6 @@ export function Features({
     visualOrientation,
     visualViewMode,
   ]);
-
   // Hash highlight
   useEffect(() => {
     const handleHashChange = () => {
@@ -120,15 +116,12 @@ export function Features({
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
-
   // Grid layout from visual orientation
   const gridCols =
     visualOrientation === "portrait" ? "md:grid-cols-2" : "md:grid-cols-1";
   const itemsPerRow = visualOrientation === "portrait" ? 2 : 1;
-
   // If data missing, render nothing AFTER hooks (no conditional hooks)
   if (missing || !featuresData) return null;
-
   return (
     <Section
       id="features"
@@ -151,7 +144,6 @@ export function Features({
               Key Features
             </SectionHeader>
           </MotionReveal>
-
           <MotionReveal direction="up" delay={60}>
             <div className="mb-8">
               <p className="text-lg md:text-xl text-white/70 leading-relaxed text-center">
@@ -159,7 +151,6 @@ export function Features({
               </p>
             </div>
           </MotionReveal>
-
           {/* Persistent animated wrapper */}
           <motion.div
             animate={controls}
@@ -172,18 +163,14 @@ export function Features({
               const col = index % itemsPerRow;
               const mediaOnRight = row % 2 === 0;
               const isHighlighted = highlightedFeatures.includes(index);
-
               const IconComponent = icons[
                 feature.icon as keyof typeof icons
               ] as React.ComponentType<{ className?: string }> | undefined;
-
               const activeMedia = feature.mediaByDevice
                 ? feature.mediaByDevice[visualViewMode]
                 : feature.media;
-
               const mediaWidthClass =
                 visualOrientation === "portrait" ? "sm:w-2/5" : "sm:w-1/2";
-
               return (
                 <MotionReveal key={index} direction="up" delay={col * 80}>
                   <div
@@ -208,25 +195,24 @@ export function Features({
                       }
                     }}
                   >
-                    {/* Media */}
+                    {/* Media - SAFARI FIX: Let media maintain natural aspect ratio */}
                     <div
+                      key={`media-${index}-${reRenderKey}`}
                       className={clsx(
-                        "w-full flex-shrink-0 relative overflow-hidden bg-white/5 rounded-4xl shadow-2xl border-2 border-white/20 p-0",
-                        mediaWidthClass,
-                        visualOrientation === "portrait" && "h-48 sm:h-full",
-                        visualOrientation === "landscape" &&
-                          "h-48 sm:h-auto sm:aspect-video"
+                        "flex-shrink-0 relative overflow-hidden bg-white/5 rounded-4xl shadow-2xl border-2 border-white/20 p-0",
+                        mediaWidthClass
                       )}
                     >
                       {activeMedia ? (
                         activeMedia.type === "image" ? (
-                          <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                          <div className="relative w-full rounded-2xl overflow-hidden">
                             <Image
                               src={activeMedia.src}
                               alt={activeMedia.alt || feature.title}
-                              fill
+                              width={1000}
+                              height={1000}
                               sizes="(max-width: 640px) 100vw, 50vw"
-                              className="object-cover group-hover:scale-105 transition-transform duration-500"
+                              className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-500"
                             />
                           </div>
                         ) : (
@@ -237,18 +223,17 @@ export function Features({
                             loop
                             muted
                             playsInline
-                            className="w-full h-full object-cover rounded-2xl"
+                            className="w-full h-auto rounded-2xl"
                           />
                         )
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center rounded-2xl">
+                        <div className="w-full aspect-video bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center rounded-2xl">
                           {IconComponent && (
                             <IconComponent className="w-16 h-16 text-white/20" />
                           )}
                         </div>
                       )}
                     </div>
-
                     {/* Content */}
                     <Card
                       padding="p-6 md:p-8"
@@ -279,7 +264,6 @@ export function Features({
     </Section>
   );
 }
-
 // Helper
 export function shouldShowFeaturesToggle(slug: string): boolean {
   const cs = caseStudies[slug];
