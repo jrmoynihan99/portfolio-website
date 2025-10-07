@@ -9,7 +9,6 @@ import { Section } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Card } from "@/components/ui/Card";
 import { caseStudies } from "@/data/case-studies";
-
 export function Overview({
   registry,
   slug,
@@ -151,9 +150,43 @@ export function Overview({
               {visualOrientation === "portrait" ? (
                 // Portrait layout
                 <div className="flex flex-col lg:flex-row gap-12 mb-16 lg:items-start">
-                  {/* Left: Description + Goals */}
+                  {/* Left: Description + Goals - on mobile when viewing mobile mode, text wraps around media */}
                   <div ref={leftColumnRef} className="space-y-12 flex-1">
-                    <div>
+                    {/* Description with floating media on mobile */}
+                    <div className="md:block">
+                      {/* Media floats on mobile screens only, in mobile view mode */}
+                      {activeMedia && (
+                        <div
+                          key={`portrait-media-mobile-${reRenderKey}`}
+                          className="md:hidden float-right ml-4 mb-4 relative rounded-3xl overflow-hidden bg-white/5 shadow-2xl border-2 border-white/20 p-1 flex-shrink-0"
+                          style={{
+                            width: "140px",
+                          }}
+                        >
+                          {activeMedia.type === "video" ||
+                          activeMedia.type === "gif" ? (
+                            <video
+                              key={activeMedia.src}
+                              src={activeMedia.src}
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="w-full h-auto object-cover rounded-3xl"
+                            />
+                          ) : (
+                            <div className="relative w-full aspect-[9/16] rounded-2xl overflow-hidden">
+                              <Image
+                                src={activeMedia.src}
+                                alt={activeMedia.alt || "App preview"}
+                                fill
+                                sizes="140px"
+                                className="object-cover"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      )}
                       <p className="text-lg md:text-xl text-white/70 leading-relaxed">
                         {overviewData.description}
                       </p>
@@ -178,11 +211,11 @@ export function Overview({
                       </div>
                     </div>
                   </div>
-                  {/* Right: Portrait media - SAFARI FIX: Let media render naturally */}
+                  {/* Right: Portrait media - hidden on mobile screens, shown on md+ */}
                   {activeMedia && (
                     <div
-                      key={`portrait-media-${reRenderKey}`}
-                      className="relative rounded-4xl overflow-hidden bg-white/5 shadow-2xl border-2 border-white/20 p-1 flex-shrink-0"
+                      key={`portrait-media-desktop-${reRenderKey}`}
+                      className="hidden md:block relative rounded-4xl overflow-hidden bg-white/5 shadow-2xl border-2 border-white/20 p-1 flex-shrink-0"
                       style={{
                         height: mediaHeight ? `${mediaHeight}px` : "auto",
                         minWidth: "200px",

@@ -14,7 +14,6 @@ import Image from "next/image";
 export function Features({
   registry,
   slug,
-  // onViewModeChange, // (unused)
   viewMode,
 }: {
   registry: React.RefObject<Record<string, HTMLElement | null>>;
@@ -116,10 +115,44 @@ export function Features({
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
-  // Grid layout from visual orientation
+  // Grid layout from visual orientation (for md+)
   const gridCols =
     visualOrientation === "portrait" ? "md:grid-cols-2" : "md:grid-cols-1";
   const itemsPerRow = visualOrientation === "portrait" ? 2 : 1;
+  // ---- Mobile-view-on-mobile two-column support ----
+  // Use the selected mock (not the animated visual) to avoid timing issues.
+  const showMobile2Col = (viewMode ?? internalViewMode) === "mobile";
+  // Track each feature card's content height so media column matches it.
+  const mobileContentRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [mobileHeights, setMobileHeights] = useState<number[]>([]);
+  useEffect(() => {
+    if (!showMobile2Col) return;
+    const els = mobileContentRefs.current;
+    if (!els?.length) return;
+    const updateIdx = (i: number) => {
+      const h = els[i]?.offsetHeight || 0;
+      setMobileHeights((prev) => {
+        const next = prev.slice();
+        next[i] = h;
+        return next;
+      });
+    };
+    const ros = els.map((el, i) => {
+      if (!el) return null;
+      const ro = new ResizeObserver(() => updateIdx(i));
+      ro.observe(el);
+      // initial
+      updateIdx(i);
+      return ro;
+    });
+    const onResize = () => els.forEach((_, i) => updateIdx(i));
+    window.addEventListener("resize", onResize);
+    return () => {
+      ros.forEach((ro) => ro?.disconnect());
+      window.removeEventListener("resize", onResize);
+    };
+    // include length + key to rebind if list changes or we force reflow
+  }, [showMobile2Col, featuresData?.features.length, reRenderKey]);
   // If data missing, render nothing AFTER hooks (no conditional hooks)
   if (missing || !featuresData) return null;
   return (
@@ -169,17 +202,41 @@ export function Features({
               const activeMedia = feature.mediaByDevice
                 ? feature.mediaByDevice[visualViewMode]
                 : feature.media;
+              // Only apply width helper on md+; base (mobile) we use 2-col grid when showMobile2Col
               const mediaWidthClass =
                 visualOrientation === "portrait" ? "sm:w-2/5" : "sm:w-1/2";
+
+              // For mobile mock view alternation logic:
+              // - On small screens: alternate every feature
+              //   index 0 → LEFT, index 1 → RIGHT, index 2 → LEFT, index 3 → RIGHT
+              // - On md+ screens: alternate every row
+              //   row 0 (index 0,1) → LEFT, row 1 (index 2,3) → RIGHT, row 2 (index 4,5) → LEFT
+              const mobileMediaOnRight = index % 2 === 1;
+              const desktopMobileRow = Math.floor(index / 2);
+              const desktopMobileMediaOnRight = desktopMobileRow % 2 === 1;
+
               return (
                 <MotionReveal key={index} direction="up" delay={col * 80}>
                   <div
                     id={`feature-${index}`}
                     className={clsx(
-                      "flex flex-col h-full group",
-                      "sm:flex-row gap-3",
-                      mediaOnRight ? "sm:flex-row-reverse" : "sm:flex-row",
-                      "transition-all duration-500",
+                      // Base mobile layout:
+                      showMobile2Col
+                        ? clsx(
+                            "grid grid-cols-2 items-stretch gap-3",
+                            // Small screens: apply order-2 for odd indices
+                            mobileMediaOnRight && "[&>:first-child]:order-2",
+                            // md+ screens: explicitly set order based on row
+                            desktopMobileMediaOnRight
+                              ? "md:[&>:first-child]:order-2"
+                              : "md:[&>:first-child]:order-none"
+                          )
+                        : clsx(
+                            "flex flex-col sm:flex-row gap-3",
+                            // On md+ preserve existing alternating layout
+                            mediaOnRight && "sm:flex-row-reverse"
+                          ),
+                      "group transition-all duration-500",
                       isHighlighted && "ring-2 ring-blue-400/50 rounded-4xl"
                     )}
                     onMouseEnter={(e) => {
@@ -195,24 +252,41 @@ export function Features({
                       }
                     }}
                   >
-                    {/* Media - SAFARI FIX: Let media maintain natural aspect ratio */}
+                    {/* Media - maintains natural ratio on md+, height-matched on mobile 2-col */}
                     <div
                       key={`media-${index}-${reRenderKey}`}
                       className={clsx(
-                        "flex-shrink-0 relative overflow-hidden bg-white/5 rounded-4xl shadow-2xl border-2 border-white/20 p-0",
-                        mediaWidthClass
+                        "relative overflow-hidden bg-white/5 rounded-4xl shadow-2xl border-2 border-white/20 p-0 min-w-0",
+                        !showMobile2Col && mediaWidthClass
                       )}
+                      style={
+                        showMobile2Col
+                          ? {
+                              // Match the content column height on small screens
+                              height:
+                                mobileHeights[index] != null
+                                  ? `${mobileHeights[index]}px`
+                                  : undefined,
+                            }
+                          : undefined
+                      }
                     >
                       {activeMedia ? (
                         activeMedia.type === "image" ? (
-                          <div className="relative w-full rounded-2xl overflow-hidden">
+                          <div className="relative w-full h-full rounded-2xl overflow-hidden">
                             <Image
                               src={activeMedia.src}
                               alt={activeMedia.alt || feature.title}
                               width={1000}
                               height={1000}
                               sizes="(max-width: 640px) 100vw, 50vw"
-                              className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-500"
+                              className={clsx(
+                                "w-full",
+                                showMobile2Col
+                                  ? "h-full object-cover"
+                                  : "h-auto object-contain",
+                                "group-hover:scale-105 transition-transform duration-500"
+                              )}
                             />
                           </div>
                         ) : (
@@ -223,7 +297,12 @@ export function Features({
                             loop
                             muted
                             playsInline
-                            className="w-full h-auto rounded-2xl"
+                            className={clsx(
+                              "rounded-2xl",
+                              showMobile2Col
+                                ? "w-full h-full object-cover"
+                                : "w-full h-auto"
+                            )}
                           />
                         )
                       ) : (
@@ -238,9 +317,12 @@ export function Features({
                     <Card
                       padding="p-6 md:p-8"
                       className={clsx(
-                        "flex-1 hover:bg-white/[0.07] transition-all flex flex-col justify-center",
+                        "flex flex-col justify-center min-w-0",
+                        "hover:bg-white/[0.07] transition-all",
                         isHighlighted && "bg-white/[0.1]"
                       )}
+                      // capture ref for height-matching on mobile 2-col
+                      //ref={(el) => (mobileContentRefs.current[index] = el)}
                     >
                       <div className="mb-3 group-hover:scale-110 transition-transform origin-left">
                         {IconComponent && (
@@ -264,6 +346,7 @@ export function Features({
     </Section>
   );
 }
+
 // Helper
 export function shouldShowFeaturesToggle(slug: string): boolean {
   const cs = caseStudies[slug];
