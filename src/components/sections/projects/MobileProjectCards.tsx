@@ -9,7 +9,34 @@ interface MobileProjectCardsProps {
 
 export function MobileProjectCards({ projects }: MobileProjectCardsProps) {
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
+  const [maxHeight, setMaxHeight] = useState<number | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Measure the tallest card
+  useEffect(() => {
+    const measureCards = () => {
+      const heights = cardRefs.current
+        .filter((ref) => ref !== null)
+        .map((ref) => ref!.offsetHeight);
+
+      if (heights.length > 0) {
+        const tallest = Math.max(...heights);
+        setMaxHeight(tallest);
+      }
+    };
+
+    // Measure after a short delay to ensure all content is rendered
+    const timer = setTimeout(measureCards, 300);
+
+    // Re-measure on window resize
+    window.addEventListener("resize", measureCards);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", measureCards);
+    };
+  }, [projects]);
 
   // Handle scroll snap for mobile
   const scrollToProject = (index: number) => {
@@ -40,7 +67,7 @@ export function MobileProjectCards({ projects }: MobileProjectCardsProps) {
   }, [projects.length]);
 
   return (
-    <>
+    <MotionReveal direction="up" delay={0}>
       {/* Horizontal scroll container */}
       <div
         ref={scrollContainerRef}
@@ -48,10 +75,17 @@ export function MobileProjectCards({ projects }: MobileProjectCardsProps) {
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {projects.map((project, index) => (
-          <div key={project.title} className="flex-none w-[85vw] snap-center">
-            <MotionReveal direction="up" delay={100 + index * 50}>
-              <MobileProjectCard project={project} />
-            </MotionReveal>
+          <div
+            key={project.title}
+            ref={(el) => {
+              cardRefs.current[index] = el;
+            }}
+            className="flex-none w-[85vw] snap-center"
+            style={{
+              minHeight: maxHeight ? `${maxHeight}px` : "auto",
+            }}
+          >
+            <MobileProjectCard project={project} />
           </div>
         ))}
       </div>
@@ -69,6 +103,6 @@ export function MobileProjectCards({ projects }: MobileProjectCardsProps) {
           />
         ))}
       </div>
-    </>
+    </MotionReveal>
   );
 }

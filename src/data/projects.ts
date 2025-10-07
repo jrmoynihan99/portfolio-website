@@ -20,9 +20,10 @@ export interface Project {
   slug?: string;
   summary: string;
   tech: string[];
-  media: ProjectMedia[]; // Changed to array for gallery
+  media: ProjectMedia[];
+  mediaLayout?: "mobile-stack" | "hybrid"; // New field
   links?: ProjectLink[];
-  featured?: boolean; // Added back for layout control
+  featured?: boolean;
 }
 
 export const projects: Project[] = [
@@ -83,21 +84,18 @@ export const projects: Project[] = [
     summary:
       "AI meal planner that uses your targets and preferences to create custom meals with images and recipes, and builds portion-accurate weekly plans with swaps and grocery lists.",
     tech: ["React", "Next.js", "TypeScript", "Zustand", "GLPK.js", "OpenAI"],
+    mediaLayout: "hybrid", // Specify hybrid layout
     media: [
+      // Desktop screenshots (landscape)
       {
         type: "image",
-        src: "/media/meal-planner-1.jpg",
-        alt: "AI Meal Planner dashboard",
+        src: "/assets/case-studies/dialed/dialed-meals.jpg",
+        alt: "Dialed desktop dashboard",
       },
       {
         type: "image",
-        src: "/media/meal-planner-2.jpg",
-        alt: "Meal optimization interface",
-      },
-      {
-        type: "image",
-        src: "/media/meal-planner-3.jpg",
-        alt: "Recipe suggestions",
+        src: "/assets/case-studies/dialed/dialed-planner-mobile.jpg",
+        alt: "Dialed mobile view",
       },
     ],
     links: [
@@ -119,23 +117,16 @@ export const projects: Project[] = [
     media: [
       {
         type: "image",
-        src: "/media/collab-1.jpg",
+        src: "/assets/LiqGlass.webp",
         alt: "Realtime collaboration interface",
-      },
-      {
-        type: "image",
-        src: "/media/collab-2.jpg",
-        alt: "User presence indicators",
-      },
-      {
-        type: "image",
-        src: "/media/collab-3.jpg",
-        alt: "Live cursor tracking",
       },
     ],
     links: [
       { type: "live", label: "Demo", href: "https://collab-demo.com" },
-      { type: "github", href: "https://github.com/you/collab" },
+      {
+        type: "github",
+        href: "https://github.com/jrmoynihan99/LiqGlass-Component-Library",
+      },
     ],
   },
   {

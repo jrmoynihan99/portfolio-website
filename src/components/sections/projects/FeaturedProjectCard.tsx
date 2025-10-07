@@ -6,6 +6,8 @@ import { ProjectLinkButton } from "./ProjectLinkButton";
 import type { Project } from "@/data/projects";
 
 export function FeaturedProjectCard({ project }: { project: Project }) {
+  const isMobileStack = project.mediaLayout !== "hybrid";
+
   return (
     <Card className="overflow-hidden group hover:bg-white/10 hover:border-white/20 transition-all duration-300 mb-8">
       <div className="grid lg:grid-cols-2 gap-8 p-6 md:p-8">
@@ -29,25 +31,58 @@ export function FeaturedProjectCard({ project }: { project: Project }) {
           </div>
         </div>
 
-        {/* Right: Stacked Mobile Screens */}
+        {/* Right: Media Display */}
         <div className="relative h-[500px] flex items-center justify-center">
-          {/* Show up to 3 media items in a stacked layout with varying heights */}
-          {project.media.slice(0, 3).map((media, index) => (
-            <div
-              key={index}
-              className="absolute rounded-3xl overflow-hidden bg-white/5 shadow-2xl border-2 border-white/10 transition-all duration-300 group-hover:shadow-3xl"
-              style={{
-                width: "200px",
-                aspectRatio: "9/19.5",
-                transform: `translateX(${(index - 1) * 180}px) translateY(${
-                  [0, -20, 15][index]
-                }px)`,
-                zIndex: index === 1 ? 3 : index === 0 ? 2 : 1,
-              }}
-            >
-              <MediaDisplay media={media} />
-            </div>
-          ))}
+          {isMobileStack ? (
+            // Original mobile stack layout (for Anchor)
+            <>
+              {project.media.slice(0, 3).map((media, index) => (
+                <div
+                  key={index}
+                  className="absolute rounded-3xl overflow-hidden bg-white/5 shadow-2xl border-2 border-white/10 transition-all duration-300 group-hover:shadow-3xl"
+                  style={{
+                    width: "200px",
+                    aspectRatio: "9/19.5",
+                    transform: `translateX(${(index - 1) * 180}px) translateY(${
+                      [0, -20, 15][index]
+                    }px)`,
+                    zIndex: index === 1 ? 3 : index === 0 ? 2 : 1,
+                  }}
+                >
+                  <MediaDisplay media={media} />
+                </div>
+              ))}
+            </>
+          ) : (
+            // Hybrid layout (for Dialed) - desktop left, mobile right
+            <>
+              {/* Desktop view - left side, large landscape, moved up */}
+              <div
+                className="absolute rounded-xl overflow-hidden bg-white/5 shadow-2xl border-2 border-white/10 transition-all duration-300 group-hover:shadow-3xl"
+                style={{
+                  width: "420px",
+                  aspectRatio: "16/10",
+                  transform: "translateX(-80px) translateY(0px)",
+                  zIndex: 1,
+                }}
+              >
+                <MediaDisplay media={project.media[0]} />
+              </div>
+
+              {/* Mobile view - right side, tall portrait */}
+              <div
+                className="absolute rounded-3xl overflow-hidden bg-white/5 shadow-2xl border-2 border-white/10 transition-all duration-300 group-hover:shadow-3xl"
+                style={{
+                  height: "420px",
+                  aspectRatio: "9/19.5",
+                  transform: "translateX(180px) translateY(10px)",
+                  zIndex: 2,
+                }}
+              >
+                <MediaDisplay media={project.media[1]} />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </Card>

@@ -790,7 +790,7 @@ export const moderateAndPost = onCall(async (req) => {
             description:
               "Dialed starts with a short preference questionnaire, then uses AI to generate a personalized set of meals with images and recipes. Users simply approve or decline cards, so their plan is built only from foods they actually want to eat.",
             tech: ["Next.js", "OpenAI API", "Zustand"],
-            featureLink: "#feature-1,2",
+            featureLink: "#feature-2,3",
             implementationLink: "#technical-challenge-0",
           },
         },
@@ -805,7 +805,7 @@ export const moderateAndPost = onCall(async (req) => {
             description:
               "Dialed calculates calorie and protein targets upfront, then uses a custom solver to portion meals automatically. Users never touch the math—meals scale to hit targets precisely, every day, with their chosen meals per day.",
             tech: ["TypeScript", "GLPK.js", "Linear Programming"],
-            featureLink: "#feature-0,3",
+            featureLink: "#feature-4,1",
             implementationLink: "#technical-challenge-1",
           },
         },
@@ -820,7 +820,6 @@ export const moderateAndPost = onCall(async (req) => {
             description:
               "Once a meal is portioned in a position (e.g., lunch), it stays consistent across the week. Dialed then generates as many unique daily plans as possible using all users approved meals",
             tech: ["Solver constraints", "Zustand store"],
-            featureLink: "#feature-3",
             implementationLink: "#technical-challenge-2",
           },
         },
@@ -835,7 +834,6 @@ export const moderateAndPost = onCall(async (req) => {
             description:
               "With Dialed, variety is built in. Approve a new meal or select from your approved set and swap it in for any existing meal. The solver instantly regenerates complete daily plans with updated recipes and grocery lists—no manual recalculation required.",
             tech: ["Next.js", "Zustand", "Solver integration"],
-            featureLink: "#feature-7",
           },
         },
       ],
@@ -1022,11 +1020,7 @@ export const moderateAndPost = onCall(async (req) => {
         },
         {
           title: "Development",
-          technologies: [
-            "React Testing Library",
-            "Vitest/Jest (planned)",
-            "Storybook (planned)",
-          ],
+          technologies: ["Vitest/Jest (planned)", "Storybook (planned)"],
         },
       ],
     },
