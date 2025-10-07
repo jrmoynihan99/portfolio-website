@@ -9,6 +9,7 @@ import { Section } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Card } from "@/components/ui/Card";
 import { caseStudies } from "@/data/case-studies";
+
 export function Overview({
   registry,
   slug,
@@ -23,28 +24,34 @@ export function Overview({
   // ==== DO NOT RETURN BEFORE HOOKS ====
   const caseStudy = caseStudies[slug];
   const missing = !caseStudy;
+
   // State
   const [underlineActive, setUnderlineActive] = useState(false);
   const [internalViewMode] = useState<"desktop" | "mobile">("desktop");
   const [mediaHeight, setMediaHeight] = useState<number | null>(null);
   const leftColumnRef = useRef<HTMLDivElement>(null);
   const goalsColumnRef = useRef<HTMLDivElement>(null);
+
   // Motion controls
   const prefersReducedMotion = useReducedMotion();
   const controls = useAnimation();
+
   // SAFARI FIX: Add reRenderKey to force layout recalculation
   const [reRenderKey, setReRenderKey] = useState(0);
+
   // Derived data (safe defaults)
   const activeViewMode = viewMode ?? internalViewMode;
   const csOrientation = caseStudy?.orientation || "portrait";
   const overviewData = caseStudy?.overview;
   const overviewOrientation = overviewData?.orientation || csOrientation;
+
   const computedOrientation: "portrait" | "landscape" =
     overviewOrientation === "both"
       ? activeViewMode === "desktop"
         ? "landscape"
         : "portrait"
       : (overviewOrientation as "portrait" | "landscape");
+
   // Visual state used during animation
   const [visualOrientation, setVisualOrientation] = useState<
     "portrait" | "landscape"
@@ -53,6 +60,7 @@ export function Overview({
     activeViewMode
   );
   const animatingRef = useRef(false);
+
   // Cross-fade/scale timeline
   useEffect(() => {
     if (
@@ -60,14 +68,17 @@ export function Overview({
       visualViewMode === activeViewMode
     )
       return;
+
     if (prefersReducedMotion) {
       setVisualOrientation(computedOrientation);
       setVisualViewMode(activeViewMode);
       setReRenderKey((prev) => prev + 1); // SAFARI FIX: Force reflow
       return;
     }
+
     if (animatingRef.current) return;
     animatingRef.current = true;
+
     (async () => {
       await controls.start({
         opacity: 0,
@@ -75,15 +86,18 @@ export function Overview({
         filter: "blur(2px)",
         transition: { duration: 0.16, ease: [0.22, 0.61, 0.36, 1] },
       });
+
       setVisualOrientation(computedOrientation);
       setVisualViewMode(activeViewMode);
       setReRenderKey((prev) => prev + 1); // SAFARI FIX: Force reflow
+
       await controls.start({
         opacity: 1,
         scale: 1,
         filter: "blur(0px)",
         transition: { duration: 0.22, ease: [0.22, 0.61, 0.36, 1] },
       });
+
       animatingRef.current = false;
     })();
   }, [
@@ -94,10 +108,12 @@ export function Overview({
     visualOrientation,
     visualViewMode,
   ]);
+
   // Media by visual mode
   const activeMedia = overviewData?.mediaByDevice
     ? overviewData.mediaByDevice[visualViewMode]
     : overviewData?.media;
+
   // Resize: measure the column matching the *visual* orientation
   useEffect(() => {
     const refToObserve =
@@ -105,18 +121,29 @@ export function Overview({
         ? leftColumnRef.current
         : goalsColumnRef.current;
     if (!refToObserve) return;
-    const update = () => setMediaHeight(refToObserve?.offsetHeight ?? null);
+
+    const update = () => {
+      setMediaHeight(refToObserve?.offsetHeight ?? null);
+      // SAFARI FIX: Force reflow after state update
+      if (refToObserve) {
+        void refToObserve.offsetHeight;
+      }
+    };
     update();
+
     window.addEventListener("resize", update);
     const resizeObserver = new ResizeObserver(update);
     resizeObserver.observe(refToObserve);
+
     return () => {
       window.removeEventListener("resize", update);
       resizeObserver.disconnect();
     };
-  }, [visualOrientation]);
+  }, [visualOrientation, visualViewMode]);
+
   // Render nothing AFTER hooks if missing data
   if (missing || !overviewData) return null;
+
   return (
     <Section
       id="overview"
@@ -140,6 +167,7 @@ export function Overview({
               Overview
             </SectionHeader>
           </MotionReveal>
+
           <MotionReveal direction="up">
             {/* Persistent container that animates but never remounts */}
             <motion.div
@@ -172,18 +200,18 @@ export function Overview({
                               loop
                               muted
                               playsInline
+                              style={{ aspectRatio: "9 / 19.5" }}
                               className="w-full h-auto object-cover rounded-3xl"
                             />
                           ) : (
-                            <div className="relative w-full aspect-[9/16] rounded-2xl overflow-hidden">
-                              <Image
-                                src={activeMedia.src}
-                                alt={activeMedia.alt || "App preview"}
-                                fill
-                                sizes="140px"
-                                className="object-cover"
-                              />
-                            </div>
+                            <Image
+                              src={activeMedia.src}
+                              alt={activeMedia.alt || "App preview"}
+                              width={140}
+                              height={273}
+                              sizes="140px"
+                              className="w-full h-auto object-cover rounded-2xl"
+                            />
                           )}
                         </div>
                       )}
@@ -191,6 +219,7 @@ export function Overview({
                         {overviewData.description}
                       </p>
                     </div>
+
                     <div>
                       <h3 className="text-2xl md:text-3xl text-white/90 font-light mb-8">
                         Project Goals
@@ -211,39 +240,42 @@ export function Overview({
                       </div>
                     </div>
                   </div>
+
                   {/* Right: Portrait media - hidden on mobile screens, shown on md+ */}
                   {activeMedia && (
                     <div
                       key={`portrait-media-desktop-${reRenderKey}`}
-                      className="hidden md:block relative rounded-4xl overflow-hidden bg-white/5 shadow-2xl border-2 border-white/20 p-1 flex-shrink-0"
-                      style={{
-                        height: mediaHeight ? `${mediaHeight}px` : "auto",
-                        minWidth: "200px",
-                        maxWidth: "384px",
-                      }}
+                      className="hidden md:block flex-shrink-0"
+                      style={{ width: "clamp(220px, 28vw, 384px)" }}
                     >
-                      {activeMedia.type === "video" ||
-                      activeMedia.type === "gif" ? (
-                        <video
-                          key={activeMedia.src}
-                          src={activeMedia.src}
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                          className="w-full h-full object-cover rounded-4xl"
-                        />
-                      ) : (
-                        <div className="relative w-full h-full rounded-3xl overflow-hidden">
+                      <div
+                        className="relative rounded-4xl overflow-hidden bg-white/5 shadow-2xl border-2 border-white/20 p-1"
+                        style={{
+                          aspectRatio: "9 / 19.5", // keep the phone shape
+                          maxHeight: mediaHeight ?? undefined, // cap to the text column height
+                        }}
+                      >
+                        {activeMedia.type === "video" ||
+                        activeMedia.type === "gif" ? (
+                          <video
+                            key={activeMedia.src}
+                            src={activeMedia.src}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="w-full h-full rounded-4xl object-cover" // OK now because the box ratio matches
+                          />
+                        ) : (
                           <Image
                             src={activeMedia.src}
                             alt={activeMedia.alt || "App preview"}
                             fill
                             sizes="384px"
-                            className="object-cover"
+                            className="object-cover rounded-4xl"
                           />
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -256,6 +288,7 @@ export function Overview({
                         {overviewData.description}
                       </p>
                     </div>
+
                     {/* SAFARI FIX: Let media render at natural aspect ratio */}
                     {activeMedia && (
                       <div
@@ -292,6 +325,7 @@ export function Overview({
                       </div>
                     )}
                   </div>
+
                   <div ref={goalsColumnRef}>
                     <h3 className="text-2xl md:text-3xl text-white/90 font-light mb-8">
                       Project Goals
@@ -320,6 +354,7 @@ export function Overview({
     </Section>
   );
 }
+
 // Helper
 export function shouldShowOverviewToggle(slug: string): boolean {
   const cs = caseStudies[slug];
