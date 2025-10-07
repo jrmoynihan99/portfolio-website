@@ -24,16 +24,20 @@ export function Features({
   // ==== DO NOT RETURN BEFORE HOOKS (avoid conditional hooks) ====
   const caseStudy = caseStudies[slug];
   const missing = !caseStudy;
+
   // State
   const [underlineActive, setUnderlineActive] = useState(false);
   const [highlightedFeatures, setHighlightedFeatures] = useState<number[]>([]);
   const [internalViewMode] = useState<"desktop" | "mobile">("desktop");
+
   // Motion controls (single persistent node, no remount)
   const prefersReducedMotion = useReducedMotion();
   const controls = useAnimation();
   const animatingRef = useRef(false);
+
   // SAFARI FIX: Add reRenderKey to force layout recalculation
   const [reRenderKey, setReRenderKey] = useState(0);
+
   // Derived data (safe defaults when missing)
   const activeViewMode = viewMode ?? internalViewMode;
   const caseStudyOrientation = caseStudy?.orientation || "portrait";
@@ -45,6 +49,7 @@ export function Features({
         ? "landscape"
         : "portrait"
       : (featuresOrientation as "portrait" | "landscape");
+
   // Visual state (lags during transition)
   const [visualOrientation, setVisualOrientation] = useState<
     "portrait" | "landscape"
@@ -52,6 +57,7 @@ export function Features({
   const [visualViewMode, setVisualViewMode] = useState<"desktop" | "mobile">(
     activeViewMode
   );
+
   // Cross-fade/scale timeline (out → swap → in), no remount
   useEffect(() => {
     if (
@@ -59,12 +65,14 @@ export function Features({
       visualViewMode === activeViewMode
     )
       return;
+
     if (prefersReducedMotion) {
       setVisualOrientation(computedOrientation);
       setVisualViewMode(activeViewMode);
       setReRenderKey((prev) => prev + 1); // SAFARI FIX: Force reflow
       return;
     }
+
     if (animatingRef.current) return;
     animatingRef.current = true;
     (async () => {
@@ -93,6 +101,7 @@ export function Features({
     visualOrientation,
     visualViewMode,
   ]);
+
   // Hash highlight
   useEffect(() => {
     const handleHashChange = () => {
@@ -115,13 +124,16 @@ export function Features({
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
+
   // Grid layout from visual orientation (for md+)
   const gridCols =
     visualOrientation === "portrait" ? "md:grid-cols-2" : "md:grid-cols-1";
   const itemsPerRow = visualOrientation === "portrait" ? 2 : 1;
+
   // ---- Mobile-view-on-mobile two-column support ----
-  // Use the selected mock (not the animated visual) to avoid timing issues.
-  const showMobile2Col = (viewMode ?? internalViewMode) === "mobile";
+  // ✅ The ONLY change: derive from visualViewMode (lagged) to prevent pre-flip.
+  const showMobile2Col = visualViewMode === "mobile"; // <-- CHANGED
+
   // Track each feature card's content height so media column matches it.
   const mobileContentRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [mobileHeights, setMobileHeights] = useState<number[]>([]);
@@ -153,8 +165,10 @@ export function Features({
     };
     // include length + key to rebind if list changes or we force reflow
   }, [showMobile2Col, featuresData?.features.length, reRenderKey]);
+
   // If data missing, render nothing AFTER hooks (no conditional hooks)
   if (missing || !featuresData) return null;
+
   return (
     <Section
       id="features"
@@ -177,6 +191,7 @@ export function Features({
               Key Features
             </SectionHeader>
           </MotionReveal>
+
           <MotionReveal direction="up" delay={60}>
             <div className="mb-8">
               <p className="text-lg md:text-xl text-white/70 leading-relaxed text-center">
@@ -184,6 +199,7 @@ export function Features({
               </p>
             </div>
           </MotionReveal>
+
           {/* Persistent animated wrapper */}
           <motion.div
             animate={controls}
@@ -208,9 +224,7 @@ export function Features({
 
               // For mobile mock view alternation logic:
               // - On small screens: alternate every feature
-              //   index 0 → LEFT, index 1 → RIGHT, index 2 → LEFT, index 3 → RIGHT
               // - On md+ screens: alternate every row
-              //   row 0 (index 0,1) → LEFT, row 1 (index 2,3) → RIGHT, row 2 (index 4,5) → LEFT
               const mobileMediaOnRight = index % 2 === 1;
               const desktopMobileRow = Math.floor(index / 2);
               const desktopMobileMediaOnRight = desktopMobileRow % 2 === 1;
@@ -224,16 +238,13 @@ export function Features({
                       showMobile2Col
                         ? clsx(
                             "grid grid-cols-2 items-stretch gap-3",
-                            // Small screens: apply order-2 for odd indices
                             mobileMediaOnRight && "[&>:first-child]:order-2",
-                            // md+ screens: explicitly set order based on row
                             desktopMobileMediaOnRight
                               ? "md:[&>:first-child]:order-2"
                               : "md:[&>:first-child]:order-none"
                           )
                         : clsx(
                             "flex flex-col sm:flex-row gap-3",
-                            // On md+ preserve existing alternating layout
                             mediaOnRight && "sm:flex-row-reverse"
                           ),
                       "group transition-all duration-500",
