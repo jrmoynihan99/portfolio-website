@@ -68,7 +68,7 @@ export const projects: Project[] = [
       {
         type: "appstore",
         label: "App Store",
-        href: "https://apps.apple.com/your-app",
+        href: "https://apps.apple.com/us/app/anchor-quit-porn-together/id6752869901",
       },
       {
         type: "github",

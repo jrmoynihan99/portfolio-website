@@ -173,7 +173,7 @@ export const caseStudies: Record<string, CaseStudy> = {
         {
           type: "appStore",
           label: "View on App Store",
-          url: "https://apps.apple.com/your-app",
+          url: "https://apps.apple.com/us/app/anchor-quit-porn-together/id6752869901",
         },
         {
           type: "technicalChallenges",
