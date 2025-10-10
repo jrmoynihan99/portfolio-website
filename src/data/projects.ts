@@ -122,7 +122,11 @@ export const projects: Project[] = [
       },
     ],
     links: [
-      { type: "live", label: "Demo", href: "https://collab-demo.com" },
+      {
+        type: "live",
+        label: "Demo",
+        href: "https://liq-glass-component-library.vercel.app/",
+      },
       {
         type: "github",
         href: "https://github.com/jrmoynihan99/LiqGlass-Component-Library",
