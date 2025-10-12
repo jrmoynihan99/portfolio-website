@@ -54,14 +54,14 @@ npm run start
 src/
   components/    # Reusable UI + section components
   data/          # Case studies, projects, skills
-  app/           # Next.js 14 app router pages
+  app/           # Next.js app router pages
 ```
 
 ---
 
 ## 📦 Tech Stack
 
-- **Frontend**: Next.js 14, React, TypeScript
+- **Frontend**: Next.js, React, TypeScript
 - **Styling**: Tailwind CSS, Framer Motion
 - **Deployment**: Vercel
 - **Other Tools**: ESLint, Prettier
@@ -70,4 +70,4 @@ src/
 
 ## 📜 About
 
-This project was built by Jason Moynihan to as a personal portfolio project.
+This project was built by Jason Moynihan as a personal portfolio project.
