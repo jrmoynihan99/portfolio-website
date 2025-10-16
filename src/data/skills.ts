@@ -18,6 +18,8 @@ export const skillGroups: SkillGroup[] = [
       { name: "React", level: "Expert", icon: "react" },
       { name: "Next.js", level: "Expert", icon: "next.js" },
       { name: "TypeScript", level: "Expert", icon: "typescript" },
+      { name: "HTML", level: "Expert", icon: "html" },
+      { name: "CSS", level: "Expert", icon: "css" },
       { name: "Tailwind CSS", level: "Expert", icon: "tailwind css" },
       { name: "Framer Motion", level: "Proficient", icon: "framer motion" },
       { name: "Zustand", level: "Proficient", icon: "zustand" },
@@ -35,10 +37,8 @@ export const skillGroups: SkillGroup[] = [
     title: "Backend & DevOps",
     items: [
       { name: "Node.js", level: "Proficient", icon: "node.js" },
-      { name: "Express", level: "Proficient", icon: "express" },
       { name: "Vercel", level: "Proficient", icon: "vercel" },
       { name: "Rest", level: "Familiar" }, // conceptual -> fallback
-      { name: "Java", level: "Familiar", icon: "java" },
       { name: "Firebase", level: "Expert", icon: "firebase" },
       {
         name: "Next.js API Routes",
@@ -77,7 +77,6 @@ export const skillGroups: SkillGroup[] = [
       { name: "Agile/Scrum", level: "Proficient" }, // conceptual -> fallback
       { name: "CI/CD", level: "Expert" }, // conceptual -> fallback
       { name: "Shopify", level: "Expert", icon: "shopify" },
-      { name: "Stripe", level: "Expert", icon: "stripe" },
       { name: "Product & Brand", level: "Expert" }, // conceptual -> fallback
       { name: "Prompt Engineering", level: "Proficient" }, // conceptual -> fallback
     ],
