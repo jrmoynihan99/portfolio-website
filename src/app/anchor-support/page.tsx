@@ -27,7 +27,8 @@ export default function AnchorSupportPage() {
 
         {/* Description */}
         <p className="text-lg md:text-xl text-white/70 mb-12 max-w-lg mx-auto">
-          Need help or have questions? I'm here to support you on your journey.
+          Need help or have questions? I&apos;m here to support you on your
+          journey.
         </p>
 
         {/* Contact Card */}
