@@ -20,6 +20,7 @@ export const skillGroups: SkillGroup[] = [
       { name: "TypeScript", level: "Expert", icon: "typescript" },
       { name: "HTML", level: "Expert", icon: "html" },
       { name: "CSS", level: "Expert", icon: "css" },
+      { name: "JavaScript", level: "Expert", icon: "javascript" },
       { name: "Tailwind CSS", level: "Expert", icon: "tailwind css" },
       { name: "Framer Motion", level: "Proficient", icon: "framer motion" },
       { name: "Zustand", level: "Proficient", icon: "zustand" },
