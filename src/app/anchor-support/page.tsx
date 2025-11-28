@@ -90,19 +90,6 @@ export default function AnchorSupportPage() {
             <li>Your notification tokens</li>
             <li>All app data associated with your user ID</li>
           </ul>
-
-          <h3 className="text-lg font-semibold text-white mb-3">Need Help?</h3>
-
-          <p className="text-white/70 leading-relaxed max-w-lg mx-auto">
-            If you're unable to delete your account in the app, contact me at{" "}
-            <a
-              href="mailto:jrmoynihan99@gmail.com"
-              className="text-blue-300 underline underline-offset-2 hover:text-blue-200"
-            >
-              jrmoynihan99@gmail.com
-            </a>
-            .
-          </p>
         </div>
 
         {/* Footer */}
