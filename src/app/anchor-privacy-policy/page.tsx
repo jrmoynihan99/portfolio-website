@@ -56,10 +56,13 @@ export default function AnchorPrivacyPage() {
               function:
             </p>
             <ul className="list-disc pl-6 space-y-2 leading-relaxed">
-              <li>Firebase authentication (email for account recovery only)</li>
-              <li>Anonymous messages and encouragement you choose to send</li>
               <li>
-                Basic app usage data to prevent abuse and improve functionality
+                Optional Authentication (guest accounts do not require email or
+                password)
+              </li>
+              <li>
+                Anonymous messages, encouragement, posts, and all other user
+                generated content
               </li>
             </ul>
             <p className="leading-relaxed mt-4">
@@ -109,6 +112,16 @@ export default function AnchorPrivacyPage() {
               You can delete your account at any time, which will remove all
               associated data. You have complete control over what you share and
               when.
+            </p>
+          </section>
+
+          {/* AI Moderation */}
+          <section>
+            <h2 className="text-2xl font-semibold text-white mb-4">Notice</h2>
+            <p className="leading-relaxed">
+              All pleas for help, encouragements, comments, and community posts
+              are moderated using Open AI's API. The api has no context in
+              regards to what account sent the message.
             </p>
           </section>
 
